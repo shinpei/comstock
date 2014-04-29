@@ -21,12 +21,16 @@ func main() {
 		home := os.Getenv("HOME");
 		shell := os.Getenv("SHELL");
 		var shellHistoryFilename string = home;
+		var handler ShellHandler = nil;
 		if strings.Contains(shell, "zsh") {
 			shellHistoryFilename += "/.zsh_history";
+			handler = &ZshHandler{};
 		} else if strings.Contains(shell, "bash") {
 			shellHistoryFilename += "/.bash_history";
+			handler = &BashHandler{};
 		}
 		println(shellHistoryFilename);
+		println(handler.readLastHistory());
 		cmd := exec.Command("tail", "-n", "1", shellHistoryFilename);
 		out, err := cmd.Output();
 		if err != nil {
