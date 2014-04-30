@@ -28,11 +28,10 @@ func main() {
 			handler = &BashHandler{};
 		}
 		println(shellHistoryFilename);
-		line, err := handler.readLastHistory(shellHistoryFilename);
+		line, err := handler.ReadLastHistory(shellHistoryFilename);
 		if err != nil {
 			log.Fatal(err);
 		}
-		println("returned string:");
 		println(line);
 	}
 

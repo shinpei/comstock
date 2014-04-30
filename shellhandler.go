@@ -4,10 +4,11 @@ import (
 	"log"
 	"bufio"
 	"io"
+	"fmt"
 )
 
 type ShellHandler interface {
-	readLastHistory (historyfile string) (string, error)
+	ReadLastHistory (historyfile string) (string, error)
 }
 
 type ZshHandler struct {
@@ -17,7 +18,8 @@ type BashHandler struct{
 	
 }
 
-func (this *ZshHandler) readLastHistory (filename string) ( ret string, err error) {
+// TODO: support -l option
+func tail (filename string) (ret string, err error) {
 	var (
 		fi *os.File
 		line []byte
@@ -37,7 +39,7 @@ func (this *ZshHandler) readLastHistory (filename string) ( ret string, err erro
 		}
 		preline = line;
 		if !hasMoreInLine { 
-			// do something
+			// do something is required, but don't know yet..
 		}
 	}
 	if err == io.EOF {
@@ -47,7 +49,18 @@ func (this *ZshHandler) readLastHistory (filename string) ( ret string, err erro
 	return ;
 }
 
-func (this *BashHandler) readLastHistory(filename string) (line string, err error) {
-	line = "";
+func (this *ZshHandler) ReadLastHistory (filename string) ( line string, err error) {
+	var (
+		ret string
+		timestamp int
+		linenum int
+	)
+	ret, err = tail(filename);
+	fmt.Sscanf(ret, ": %d:%d;%s\n", &timestamp, &linenum, &line);
+	return;
+}
+
+func (this *BashHandler) ReadLastHistory(filename string) (line string, err error) {
+	line, err = tail(filename);
 	return;
 }
