@@ -3,10 +3,8 @@ package main
 import (
 	"github.com/codegangsta/cli"
 	"os"
-	"os/exec"
-	"log"
-	"fmt"
 	"strings"
+	"log"
 )
 
 var tasks = []string{"cook", "clean"}
@@ -30,13 +28,12 @@ func main() {
 			handler = &BashHandler{};
 		}
 		println(shellHistoryFilename);
-		println(handler.readLastHistory());
-		cmd := exec.Command("tail", "-n", "1", shellHistoryFilename);
-		out, err := cmd.Output();
+		line, err := handler.readLastHistory(shellHistoryFilename);
 		if err != nil {
 			log.Fatal(err);
 		}
-		fmt.Printf("Output is %s\n", out);
+		println("returned string:");
+		println(line);
 	}
 
 	app.Commands = []cli.Command {
@@ -65,8 +62,6 @@ func main() {
 			},
 		},
 	};
-			
-
 
 	app.Run(os.Args);
 }
