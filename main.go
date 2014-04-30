@@ -15,7 +15,7 @@ func main() {
 	app.Name = "comstock"
 	app.Usage = "save your command"
 	app.Action = func (c *cli.Context) {
-		println("comstock: error: command is missing");
+		println("comstock: error: command is missing. For more details, see 'comstock -h'");
 	}
 
 	app.Commands = []cli.Command {
@@ -62,6 +62,13 @@ func main() {
 			Usage: "Push stocked command to cloud",
 			Action: func(c *cli.Context) {
 				println("pushed");
+			},
+		},
+		{
+			Name: "pop",
+			Usage: "Pop last stocked command",
+			Action:func (c *cli.Context) {
+				println("poped");
 			},
 		},
 	};
