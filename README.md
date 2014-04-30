@@ -8,9 +8,9 @@ saved command 'brew doctor'
 
 ## Install
 
-'''
+```
 go get github.com/shinpei/comstock
-'''
+```
 
 
 ## Lisence, contact info, contribute
