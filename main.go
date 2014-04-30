@@ -5,6 +5,7 @@ import (
 	"os"
 	"strings"
 	"log"
+	"fmt"
 )
 
 func main() {
@@ -39,7 +40,7 @@ func main() {
 					log.Fatal(err);
 				}
 				//comstock.Stock(line)
-				println(line)
+				fmt.Printf("saved command '%s'\n", line);
 			},
 			BashComplete: func(c *cli.Context) {
 				if len(c.Args()) > 0 {
