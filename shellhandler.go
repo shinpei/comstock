@@ -19,13 +19,13 @@ type BashHandler struct{
 }
 
 // TODO: support -l option
-func tail (filename string) (ret string, err error) {
+func tail (filename string, numberLines int) (ret []string, err error) {
 	var (
 		fi *os.File
 		line []byte
-		preline []byte
 		hasMoreInLine bool
 	)
+
 	if fi, err = os.Open(filename); err != nil {
 		log.Fatal(err);
 		return;
@@ -37,7 +37,10 @@ func tail (filename string) (ret string, err error) {
 			// EOF comes here also
 			break;
 		}
-		preline = line;
+		if len(ret) == numberLines {
+			ret = ret[1:len(ret)]
+		}
+		ret = append(ret, string(line[:]));
 		if !hasMoreInLine { 
 			// do something is required, but don't know yet..
 		}
@@ -45,22 +48,28 @@ func tail (filename string) (ret string, err error) {
 	if err == io.EOF {
 		err = nil;
 	}
-	ret = string(preline[:]);
 	return ;
 }
 
 func (this *ZshHandler) ReadLastHistory (filename string) ( line string, err error) {
 	var (
-		ret string
+		ret []string
 		timestamp int
 		linenum int
 	)
-	ret, err = tail(filename);
-	fmt.Sscanf(ret, ": %d:%d;%s\n", &timestamp, &linenum, &line);
+	ret, err = tail(filename, 2);
+	//format
+	// ': xxxxxxxxxx:x;cmd\n'
+	fmt.Sscanf(ret[0], ": %d:%d;%v\n", &timestamp, &linenum, &line);
+	line = ret[0][15:]; // FIXME: slice number should be more smart
 	return;
 }
 
 func (this *BashHandler) ReadLastHistory(filename string) (line string, err error) {
-	line, err = tail(filename);
+	var (
+		ret []string
+	)
+	ret, err = tail(filename, 3);
+	line = ret[1]
 	return;
 }
