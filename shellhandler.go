@@ -69,7 +69,7 @@ func (this *BashHandler) ReadLastHistory(filename string) (line string, err erro
 	var (
 		ret []string
 	)
-	ret, err = tail(filename, 3);
-	line = ret[1]
+	ret, err = tail(filename, 2);
+	line = ret[0];
 	return;
 }
