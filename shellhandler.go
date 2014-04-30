@@ -8,17 +8,16 @@ import (
 )
 
 type ShellHandler interface {
-	ReadLastHistory (historyfile string) (string, error)
+	ReadLastHistory (historyfile string) (*Command, error);
 }
+	
 
 type ZshHandler struct {
 }
 
 type BashHandler struct{
-	
 }
 
-// TODO: support -l option
 func tail (filename string, numberLines int) (ret []string, err error) {
 	var (
 		fi *os.File
@@ -51,7 +50,7 @@ func tail (filename string, numberLines int) (ret []string, err error) {
 	return ;
 }
 
-func (this *ZshHandler) ReadLastHistory (filename string) ( line string, err error) {
+func (this *ZshHandler) ReadLastHistory (filename string) (cmd *Command, err error) {
 	var (
 		ret []string
 		timestamp int
@@ -60,16 +59,18 @@ func (this *ZshHandler) ReadLastHistory (filename string) ( line string, err err
 	ret, err = tail(filename, 2);
 	//format
 	// ': xxxxxxxxxx:x;cmd\n'
-	fmt.Sscanf(ret[0], ": %d:%d;%v\n", &timestamp, &linenum, &line);
-	line = ret[0][15:]; // FIXME: slice number should be more smart
+	var ignore string;
+	fmt.Sscanf(ret[0], ": %d:%d;%s\n", &timestamp, &linenum, &ignore);
+	cmd = &Command {Cmd: ret[0][15:], Timestamp: timestamp}; // FIXME: slice number should be more smart
 	return;
 }
 
-func (this *BashHandler) ReadLastHistory(filename string) (line string, err error) {
+func (this *BashHandler) ReadLastHistory(filename string) (cmd *Command, err error) {
 	var (
 		ret []string
 	)
 	ret, err = tail(filename, 2);
-	line = ret[0];
+	cmd = &Command {Cmd: ret[0]};
 	return;
 }
+
