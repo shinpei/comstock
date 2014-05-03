@@ -7,7 +7,7 @@ import (
 	"fmt"
 )
 
-type ShellHandler interface {
+type Shell interface {
 	ReadLastHistory (historyfile string) (*Command, error);
 }
 	

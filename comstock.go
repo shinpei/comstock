@@ -6,15 +6,18 @@ import (
 	"strings"
 	"log"
 	"fmt"
+
 )
 
 const (
 	Version string = "0.0.1"
 	AppName string = "comstock"
+	ComstockConfigFilename string = "comstock.yaml"
 )
 
 type Comstock struct {
 	App *cli.App
+	connectionEnabled bool
 }
 
 func NewComstock() *Comstock {
@@ -36,7 +39,7 @@ func NewComstock() *Comstock {
 				home := os.Getenv("HOME");
 				shell := os.Getenv("SHELL");
 				var shellHistoryFilename string = home;
-				var handler ShellHandler = nil;
+				var handler Shell = nil;
 				if strings.Contains(shell, "zsh") {
 					shellHistoryFilename += "/.zsh_history";
 					handler = &ZshHandler{};
@@ -90,5 +93,20 @@ func (this *Comstock) Run (args []string) {
 }
 
 func (this *Comstock) Stock(command string) {
+	// save to the local storage
+	if this.connectionEnabled {
+		// push to the internet
+		this.PushToRemote();
+	} else {
+		this.PushToLocal();
+	}
 	println(command);
+}
+func (this *Comstock) PushToRemote() {
+
+}
+
+func (this *Comstock) PushToLocal() {
+	
+
 }
