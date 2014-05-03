@@ -1,7 +1,7 @@
 package main
 
 import (
-	"bufio"
+	"io/ioutil"
 	"log"
 	"os"
 )
@@ -23,31 +23,25 @@ type FileStorager struct {
 
 func (fs *FileStorager) Open() (err error) {
 
-	var storageFile string = "comstock.storage"
-	fs.Fp, err = os.Open(storageFile)
-	if err != nil {
-		fs.Fp, err = os.Create(storageFile)
-		if err != nil {
-			log.Fatal(err)
-		}
-	}
-	log.Println("storage opened:" + storageFile)
-
 	return
 }
 
 func (fs *FileStorager) Push(cmd *Command) {
+	filename := "comstock.txt"
 
-	w := bufio.NewWriter(fs.Fp)
-	num, _ := w.WriteString(cmd.Cmd())
-	w.Flush()
-	log.Println(num)
-	fs.Fp.Close()
+	data, _ := ioutil.ReadFile(filename)
+
+	cmdByte := []byte(cmd.Cmd())
+	data = append(data, cmdByte...)
+	if err := ioutil.WriteFile(filename, data, 0644); err != nil {
+		log.Printf("writestring problem")
+		log.Fatal(err)
+	}
+
 	return
 }
 
 func (fs *FileStorager) Close() (err error) {
-	fs.Fp.Close()
 	return
 }
 
