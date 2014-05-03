@@ -1,6 +1,10 @@
 package main
 
 type Command struct {
-	Cmd       string
+	cmd       string
 	Timestamp int
+}
+
+func (c *Command) Cmd() string {
+	return c.cmd
 }

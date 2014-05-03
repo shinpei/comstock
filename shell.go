@@ -50,7 +50,7 @@ func tail(filename string, numberLines int) (ret []string, err error) {
 	return
 }
 
-func (this *ZshHandler) ReadLastHistory(filename string) (cmd *Command, err error) {
+func (z *ZshHandler) ReadLastHistory(filename string) (cmd *Command, err error) {
 	var (
 		ret       []string
 		timestamp int
@@ -61,15 +61,15 @@ func (this *ZshHandler) ReadLastHistory(filename string) (cmd *Command, err erro
 	// ': xxxxxxxxxx:x;cmd\n'
 	var ignore string
 	fmt.Sscanf(ret[0], ": %d:%d;%s\n", &timestamp, &linenum, &ignore)
-	cmd = &Command{Cmd: ret[0][15:], Timestamp: timestamp} // FIXME: slice number should be more smart
+	cmd = &Command{cmd: ret[0][15:], Timestamp: timestamp} // FIXME: slice number should be more smart
 	return
 }
 
-func (this *BashHandler) ReadLastHistory(filename string) (cmd *Command, err error) {
+func (b *BashHandler) ReadLastHistory(filename string) (cmd *Command, err error) {
 	var (
 		ret []string
 	)
 	ret, err = tail(filename, 2)
-	cmd = &Command{Cmd: ret[0]}
+	cmd = &Command{cmd: ret[0]}
 	return
 }

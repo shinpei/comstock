@@ -14,13 +14,27 @@ const (
 	ComstockConfigFilename string = "comstock.yaml"
 )
 
+var (
+	com *Comstock
+)
+
 type Comstock struct {
 	App               *cli.App
 	connectionEnabled bool
-	localStorage      LocalStorage /* local storage */
+	lStorager         LocalStorager /* local storage */
 }
 
 func NewComstock() *Comstock {
+	f := &FileStorager{}
+	f.Open()
+	return &Comstock{
+		App:               initApp(),
+		lStorager:         &FileStorager{},
+		connectionEnabled: false,
+	}
+}
+
+func initApp() *cli.App {
 	app := cli.NewApp()
 	app.EnableBashCompletion = true
 	app.Version = Version
@@ -29,12 +43,16 @@ func NewComstock() *Comstock {
 	app.Action = func(c *cli.Context) {
 		println("comstock: error: command is missing. For more details, see 'comstock -h'")
 	}
-
 	app.Commands = []cli.Command{
 		{
-			Name:      "save",
+			Name:      "stock",
 			ShortName: "s",
-			Usage:     "save former command ",
+			Usage:     "Stock the former command into appropriate storage",
+			Action:    nil,
+		},
+		{
+			Name:  "save",
+			Usage: "Alias for 'stock'",
 			Action: func(c *cli.Context) {
 				home := os.Getenv("HOME")
 				shell := os.Getenv("SHELL")
@@ -51,7 +69,7 @@ func NewComstock() *Comstock {
 				if err != nil {
 					log.Fatal(err)
 				}
-				//comstock.Stock(line)
+				com.Stock(cmd)
 				fmt.Printf("saved command '%s'\n", cmd.Cmd)
 			},
 			BashComplete: func(c *cli.Context) {
@@ -85,22 +103,23 @@ func NewComstock() *Comstock {
 		},
 	}
 
-	return &Comstock{App: app}
+	return app
 }
 
 func (c *Comstock) Run(args []string) {
 	c.App.Run(args)
+	c.Close()
 }
 
-func (c *Comstock) Stock(command string) {
+func (c *Comstock) Stock(cmd *Command) {
 	// save to the local storage
 	if c.connectionEnabled {
 		// push to the internet
 		c.PushToRemote()
 	} else {
-		c.PushToLocal(command)
+		c.PushToLocal(cmd)
 	}
-	println(command)
+	println(cmd.Cmd())
 }
 
 // Push
@@ -108,7 +127,11 @@ func (c *Comstock) PushToRemote() {
 
 }
 
-func (c *Comstock) PushToLocal(cmd string) {
+func (c *Comstock) PushToLocal(cmd *Command) {
 
-	c.localStorage.Push(cmd)
+	c.lStorager.Push(cmd)
+}
+
+func (c *Comstock) Close() {
+	c.lStorager.Close()
 }
