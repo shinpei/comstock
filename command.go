@@ -1,7 +1,6 @@
-package main 
-
+package main
 
 type Command struct {
-	Cmd string
-	Timestamp int;
+	Cmd       string
+	Timestamp int
 }

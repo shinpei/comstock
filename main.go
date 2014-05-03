@@ -5,6 +5,6 @@ import (
 )
 
 func main() {
-	comstock := NewComstock();
-	comstock.Run(os.Args);
+	comstock := NewComstock()
+	comstock.Run(os.Args)
 }
