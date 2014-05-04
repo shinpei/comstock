@@ -1,6 +1,8 @@
 package main
 
 import (
+	"bufio"
+	"code.google.com/p/gopass"
 	"fmt"
 	"github.com/codegangsta/cli"
 	"log"
@@ -22,6 +24,11 @@ type Comstock struct {
 	App *cli.App
 
 	storager Storager // storage
+	logined  bool
+}
+
+func (c *Comstock) Logined() bool {
+	return c.logined
 }
 
 func NewComstock() *Comstock {
@@ -30,6 +37,7 @@ func NewComstock() *Comstock {
 	return &Comstock{
 		App:      initApp(),
 		storager: &FileStorager{},
+		logined:  false,
 	}
 }
 
@@ -40,6 +48,7 @@ func initApp() *cli.App {
 	app.Name = AppName
 	app.Usage = "save your command to the cloud"
 	app.Action = func(c *cli.Context) {
+
 		println("comstock: error: command is missing. For more details, see 'comstock -h'")
 	}
 	app.Commands = []cli.Command{
@@ -101,6 +110,21 @@ func initApp() *cli.App {
 				println("poped")
 			},
 		},
+		{
+			Name:  "login",
+			Usage: "login to the cloud",
+			Action: func(c *cli.Context) {
+				if !com.Logined() {
+					scanner := bufio.NewScanner(os.Stdin)
+					fmt.Printf("username:")
+					scanner.Scan()
+					username := scanner.Text()
+					fmt.Printf("password:")
+					password, _ := gopass.GetPass("")
+					com.Login(username, password)
+				}
+			},
+		},
 	}
 
 	return app
@@ -143,5 +167,14 @@ func (c *Comstock) List() {
 	// c.storager.PullCommands()
 	if err := c.storager.List(); err != nil {
 		log.Fatal(err)
+	}
+}
+
+func (c *Comstock) Login(username string, password string) string {
+	if c.Logined() {
+		return "access token"
+	} else {
+		println("logging in...")
+		return "access success"
 	}
 }

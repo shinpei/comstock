@@ -1,5 +1,8 @@
 ## Comstock: store your favorite command
 
+Comstock is a cloud-based command stocking tool. On this repository, we're providing cli application. comstock-cli can be used as normal tool without network connection. It'll sync when it gets internet connection.
+
+
 ```
 $ brew doctor
 $ comstock save
