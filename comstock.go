@@ -19,18 +19,17 @@ var (
 )
 
 type Comstock struct {
-	App               *cli.App
-	connectionEnabled bool
-	lStorager         LocalStorager /* local storage */
+	App *cli.App
+
+	storager Storager /* local storage */
 }
 
 func NewComstock() *Comstock {
 	f := &FileStorager{}
 	f.Open()
 	return &Comstock{
-		App:               initApp(),
-		lStorager:         &FileStorager{},
-		connectionEnabled: false,
+		App:      initApp(),
+		storager: &FileStorager{},
 	}
 }
 
@@ -70,7 +69,6 @@ func initApp() *cli.App {
 					log.Fatal(err)
 				}
 				com.Stock(cmd)
-				fmt.Printf("saved command '%s'\n", cmd.Cmd)
 			},
 			BashComplete: func(c *cli.Context) {
 				if len(c.Args()) > 0 {
@@ -113,13 +111,16 @@ func (c *Comstock) Run(args []string) {
 
 func (c *Comstock) Stock(cmd *Command) {
 	// save to the local storage
-	if c.connectionEnabled {
-		// push to the internet
-		c.PushToRemote()
-	} else {
-		c.PushToLocal(cmd)
-	}
-	println(cmd.Cmd())
+	c.storager.Push(cmd)
+	/*
+		{
+			// push to the internet
+			c.PushToRemote()
+		} else {
+			c.PushToLocal(cmd)
+		}
+	*/
+	fmt.Printf("[%s]Saved command '%s'\n", c.storager.StorageType(), cmd.Cmd())
 }
 
 // Push
@@ -129,9 +130,9 @@ func (c *Comstock) PushToRemote() {
 
 func (c *Comstock) PushToLocal(cmd *Command) {
 
-	c.lStorager.Push(cmd)
+	c.storager.Push(cmd)
 }
 
 func (c *Comstock) Close() {
-	c.lStorager.Close()
+	c.storager.Close()
 }
