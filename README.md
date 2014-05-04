@@ -2,6 +2,11 @@
 
 Comstock is a cloud-based command stocking tool. On this repository, we're providing cli application. comstock-cli can be used as normal tool without network connection. It'll sync when it gets internet connection.
 
+<!--
+## Motivation
+We have a plenty of convenient command line tools nowadays, such as `git`, `brew`, `chef`,  Thanks to github, providing commands become a fame for developers, making good tools is now a orner.
+-->
+
 ## Use as local tool
 ```
 $ brew doctor
@@ -22,6 +27,7 @@ $ comstock push
 ```
 go get github.com/shinpei/comstock
 ```
+
 
 
 ## Lisence, contact info, contribute
