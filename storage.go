@@ -1,48 +1,77 @@
 package main
 
 import (
+	"bufio"
+	"fmt"
 	"io/ioutil"
-	"log"
 	"os"
+)
+
+const (
+	storagerFile string = "comstock.txt"
 )
 
 type Storager interface {
 	Open() error
 	Close() error
-	Push(cmd *Command)
-
+	Push(cmd *Command) error
+	Pull() error
+	List() error
 	// getter
 	StorageType() string
 }
+
+/* FileStorager is a storager which store commands for the local file.
+ * file to use can be configurable, and should be devidable
+ */
 
 type FileStorager struct {
 	//localstorage
 	Fp *os.File
 }
 
+// Common interface for storager,
+// Although FileStorager doesn't have one.
 func (fs *FileStorager) Open() (err error) {
 
 	return
 }
+
+// Return static string which represents storager type
 func (fs *FileStorager) StorageType() string {
 	return "FileStorage"
 }
-func (fs *FileStorager) Push(cmd *Command) {
-	filename := "comstock.txt"
 
-	data, _ := ioutil.ReadFile(filename)
+// Store the command
+func (fs *FileStorager) Push(cmd *Command) (err error) {
 
+	data, _ := ioutil.ReadFile(storagerFile)
 	cmdByte := []byte(cmd.Cmd())
-	data = append(data, string("\n")...)
+	cmdByte = append(cmdByte, string("\n")...)
 	data = append(data, cmdByte...)
-	if err := ioutil.WriteFile(filename, data, 0644); err != nil {
-		log.Printf("writestring problem")
-		log.Fatal(err)
+	err = ioutil.WriteFile(storagerFile, data, 0644)
+	return
+}
+
+// Close the storge connection
+func (fs *FileStorager) Close() (err error) {
+	return
+}
+
+// List all commands
+func (fs *FileStorager) List() (err error) {
+	var fi *os.File
+	fi, err = os.Open(storagerFile)
+	scanner := bufio.NewScanner(fi)
+	var idx int = 0
+	for scanner.Scan() {
+		idx++
+		fmt.Printf("%d: %s\n", idx, scanner.Text())
 	}
 	return
 }
 
-func (fs *FileStorager) Close() (err error) {
+func (fs *FileStorager) Pull() (err error) {
 	return
 }
 

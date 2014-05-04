@@ -21,7 +21,7 @@ var (
 type Comstock struct {
 	App *cli.App
 
-	storager Storager /* local storage */
+	storager Storager // storage
 }
 
 func NewComstock() *Comstock {
@@ -53,6 +53,7 @@ func initApp() *cli.App {
 			Name:  "save",
 			Usage: "Alias for 'stock'",
 			Action: func(c *cli.Context) {
+
 				home := os.Getenv("HOME")
 				shell := os.Getenv("SHELL")
 				var shellHistoryFilename string = home
@@ -81,7 +82,8 @@ func initApp() *cli.App {
 			ShortName: "l",
 			Usage:     "List stocked command",
 			Action: func(c *cli.Context) {
-				println("listed")
+				//				args := c.Args()
+				com.List()
 			},
 		},
 		{
@@ -135,4 +137,11 @@ func (c *Comstock) PushToLocal(cmd *Command) {
 
 func (c *Comstock) Close() {
 	c.storager.Close()
+}
+
+func (c *Comstock) List() {
+	// c.storager.PullCommands()
+	if err := c.storager.List(); err != nil {
+		log.Fatal(err)
+	}
 }
