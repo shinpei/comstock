@@ -53,14 +53,8 @@ func initApp() *cli.App {
 	}
 	app.Commands = []cli.Command{
 		{
-			Name:      "stock",
-			ShortName: "s",
-			Usage:     "Stock the former command into appropriate storage",
-			Action:    nil,
-		},
-		{
 			Name:  "save",
-			Usage: "Alias for 'stock'",
+			Usage: "Save previous command",
 			Action: func(c *cli.Context) {
 
 				home := os.Getenv("HOME")
@@ -112,7 +106,7 @@ func initApp() *cli.App {
 		},
 		{
 			Name:  "login",
-			Usage: "login to the cloud",
+			Usage: "Login to the cloud",
 			Action: func(c *cli.Context) {
 				if !com.Logined() {
 					scanner := bufio.NewScanner(os.Stdin)
