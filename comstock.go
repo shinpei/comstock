@@ -56,15 +56,14 @@ func initApp() *cli.App {
 			Name:  "save",
 			Usage: "Save previous command",
 			Action: func(c *cli.Context) {
-
-				home := os.Getenv("HOME")
-				shell := os.Getenv("SHELL")
+				env := CreateEnv()
+				home := env.HomePath()
 				var shellHistoryFilename string = home
 				var handler Shell = nil
-				if strings.Contains(shell, "zsh") {
+				if strings.Contains(env.Shell(), "zsh") {
 					shellHistoryFilename += "/.zsh_history"
 					handler = &ZshHandler{}
-				} else if strings.Contains(shell, "bash") {
+				} else if strings.Contains(env.Shell(), "bash") {
 					shellHistoryFilename += "/.bash_history"
 					handler = &BashHandler{}
 				}
@@ -110,10 +109,10 @@ func initApp() *cli.App {
 			Action: func(c *cli.Context) {
 				if !com.Logined() {
 					scanner := bufio.NewScanner(os.Stdin)
-					fmt.Printf("username:")
+					fmt.Printf("Your registered email address? : ")
 					scanner.Scan()
 					username := scanner.Text()
-					fmt.Printf("password:")
+					fmt.Printf("And password? :")
 					password, _ := gopass.GetPass("")
 					com.Login(username, password)
 				}

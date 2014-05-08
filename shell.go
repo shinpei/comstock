@@ -61,7 +61,7 @@ func (z *ZshHandler) ReadLastHistory(filename string) (cmd *Command, err error) 
 	// ': xxxxxxxxxx:x;cmd\n'
 	var ignore string
 	fmt.Sscanf(ret[0], ": %d:%d;%s\n", &timestamp, &linenum, &ignore)
-	cmd = &Command{cmd: ret[0][15:], Timestamp: timestamp} // FIXME: slice number should be more smart
+	cmd = CreateCommand(ret[0][15:])
 	return
 }
 
