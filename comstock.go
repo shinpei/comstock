@@ -11,9 +11,8 @@ import (
 )
 
 const (
-	Version                string = "0.0.1"
-	AppName                string = "comstock"
-	ComstockConfigFilename string = "comstock.yaml"
+	Version string = "0.0.1"
+	AppName string = "comstock"
 )
 
 var (
@@ -25,6 +24,7 @@ type Comstock struct {
 
 	storager Storager // storage
 	logined  bool
+	config   Config
 }
 
 func (c *Comstock) Logined() bool {
@@ -54,6 +54,7 @@ func initApp() *cli.App {
 	app.Commands = []cli.Command{
 		{
 			Name:  "save",
+			Short: "sv",
 			Usage: "Save previous command",
 			Action: func(c *cli.Context) {
 				env := CreateEnv()
@@ -80,18 +81,18 @@ func initApp() *cli.App {
 			},
 		},
 		{
-			Name:      "list",
-			ShortName: "l",
-			Usage:     "List stocked command",
+			Name:        "list",
+			ShortName:   "ls",
+			Description: "Show the list of stocked commands",
+			Usage:       "List stocked command",
 			Action: func(c *cli.Context) {
 				//				args := c.Args()
 				com.List()
 			},
 		},
 		{
-			Name:      "push",
-			ShortName: "p",
-			Usage:     "Push stocked command to cloud",
+			Name:  "push",
+			Usage: "Push stocked command to cloud",
 			Action: func(c *cli.Context) {
 				println("pushed")
 			},
@@ -116,6 +117,13 @@ func initApp() *cli.App {
 					password, _ := gopass.GetPass("")
 					com.Login(username, password)
 				}
+			},
+		},
+		{
+			Name:  "config",
+			Usage: "Get and set comstock options",
+			Action: func(c *cli.Context) {
+				com.ShowConfig()
 			},
 		},
 	}
@@ -170,4 +178,8 @@ func (c *Comstock) Login(username string, password string) string {
 		println("logging in...")
 		return "access success"
 	}
+}
+
+func (c *Comstock) ShowConfig() {
+	println("Showing config")
 }
