@@ -1,14 +1,24 @@
 package main
 
+import (
+	"code.google.com/p/gcfg"
+)
+
 type Config struct {
-	compath string
-	comroot string
+	Local struct {
+		Type        string
+		StoragePath string
+	}
 }
 
 const (
-	ComstockConfigFilename string = "comstock.yaml"
+	CompathDefault    string = ".comstock"
+	ConfigFileDefault string = ".comconfig"
 )
 
 func LoadConfig() *Config {
-	return &Config{}
+	var cfg Config
+	_ = gcfg.ReadFileInto(&cfg, ConfigFileDefault)
+	println(cfg.Local.Type)
+	return &cfg
 }

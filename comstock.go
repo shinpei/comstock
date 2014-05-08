@@ -53,9 +53,9 @@ func initApp() *cli.App {
 	}
 	app.Commands = []cli.Command{
 		{
-			Name:  "save",
-			Short: "sv",
-			Usage: "Save previous command",
+			Name:      "save",
+			ShortName: "sv",
+			Usage:     "Save previous command",
 			Action: func(c *cli.Context) {
 				env := CreateEnv()
 				home := env.HomePath()
@@ -87,6 +87,7 @@ func initApp() *cli.App {
 			Usage:       "List stocked command",
 			Action: func(c *cli.Context) {
 				//				args := c.Args()
+
 				com.List()
 			},
 		},
@@ -123,6 +124,7 @@ func initApp() *cli.App {
 			Name:  "config",
 			Usage: "Get and set comstock options",
 			Action: func(c *cli.Context) {
+				LoadConfig()
 				com.ShowConfig()
 			},
 		},
