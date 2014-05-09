@@ -9,6 +9,12 @@ type Config struct {
 		Type        string
 		StoragePath string
 	}
+	Remote struct {
+		Type        string
+		StoragePath string
+	}
+	Alias struct {
+	}
 }
 
 const (

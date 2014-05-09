@@ -43,12 +43,11 @@ func NewComstock() *Comstock {
 
 func initApp() *cli.App {
 	app := cli.NewApp()
-	app.EnableBashCompletion = true
+	//app.EnableBashCompletion = true
 	app.Version = Version
 	app.Name = AppName
 	app.Usage = "save your command to the cloud"
 	app.Action = func(c *cli.Context) {
-
 		println("comstock: error: command is missing. For more details, see 'comstock -h'")
 	}
 	app.Commands = []cli.Command{
@@ -86,7 +85,6 @@ func initApp() *cli.App {
 			Description: "Show the list of stocked commands",
 			Usage:       "List stocked command",
 			Action: func(c *cli.Context) {
-				//				args := c.Args()
 
 				com.List()
 			},
