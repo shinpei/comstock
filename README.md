@@ -12,6 +12,8 @@ We have a plenty of convenient command line tools nowadays, such as `git`, `brew
 $ brew doctor
 $ comstock save
 saved command 'brew doctor'
+$ comstock list
+$ comstock run 1
 ```
 
 <!--

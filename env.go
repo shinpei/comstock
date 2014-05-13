@@ -56,7 +56,8 @@ func CreateComstockPath(path string) (err error) {
 		case "Y", "y", "":
 			break
 		case "N", "n":
-			//TODO: make tmp file as compath
+			//TODO: make local dir as
+
 			return
 		default:
 			println("Please enter y or n")

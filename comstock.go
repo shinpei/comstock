@@ -41,7 +41,6 @@ func NewComstock() *Comstock {
 		config = LoadConfig(configPath)
 		fmt.Println("Config loaded")
 	}
-
 	return &Comstock{
 		App:      initApp(),
 		storager: &FileStorager{},
@@ -96,6 +95,18 @@ func initApp() *cli.App {
 			Action: func(c *cli.Context) {
 
 				com.List()
+			},
+		},
+		{
+			Name:      "run",
+			ShortName: "r",
+			Usage:     "Exec command with #number",
+			Action: func(c *cli.Context) {
+				if len(c.Args()) == 0 {
+					println("'run' requires #number argument, e.g., 'comstock run 1'")
+					return
+				}
+				println("Hello", c.Args()[0])
 			},
 		},
 		{
