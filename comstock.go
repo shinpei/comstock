@@ -192,9 +192,10 @@ func (c *Comstock) List() {
 
 func (c *Comstock) Login(username string, password string) string {
 	if c.Logined() {
+
 		return "access token"
 	} else {
-		println("knock knock..., Success!")
+		println("We're preparing this func...")
 		return "access success"
 	}
 }
