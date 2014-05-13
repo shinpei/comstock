@@ -13,6 +13,7 @@ $ brew doctor
 $ comstock save
 saved command 'brew doctor'
 $ comstock list
+1: brew doctor
 $ comstock run 1
 ```
 
