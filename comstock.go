@@ -20,11 +20,11 @@ var (
 )
 
 type Comstock struct {
-	App *cli.App
-
+	App      *cli.App
 	storager Storager // storage
 	logined  bool
 	config   Config
+	env      *Env
 }
 
 func (c *Comstock) Logined() bool {
@@ -34,10 +34,13 @@ func (c *Comstock) Logined() bool {
 func NewComstock() *Comstock {
 	f := &FileStorager{}
 	f.Open()
+	env := CreateEnv()
+
 	return &Comstock{
 		App:      initApp(),
 		storager: &FileStorager{},
 		logined:  false,
+		env:      env,
 	}
 }
 
@@ -56,14 +59,13 @@ func initApp() *cli.App {
 			ShortName: "sv",
 			Usage:     "Save previous command",
 			Action: func(c *cli.Context) {
-				env := CreateEnv()
-				home := env.HomePath()
+				home := com.env.HomePath()
 				var shellHistoryFilename string = home
 				var handler Shell = nil
-				if strings.Contains(env.Shell(), "zsh") {
+				if strings.Contains(com.env.Shell(), "zsh") {
 					shellHistoryFilename += "/.zsh_history"
 					handler = &ZshHandler{}
-				} else if strings.Contains(env.Shell(), "bash") {
+				} else if strings.Contains(com.env.Shell(), "bash") {
 					shellHistoryFilename += "/.bash_history"
 					handler = &BashHandler{}
 				}
