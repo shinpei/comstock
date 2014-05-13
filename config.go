@@ -2,6 +2,7 @@ package main
 
 import (
 	"code.google.com/p/gcfg"
+	"log"
 )
 
 type Config struct {
@@ -22,9 +23,15 @@ const (
 	ConfigFileDefault string = ".comconfig"
 )
 
-func LoadConfig() *Config {
+func LoadConfig(path string) *Config {
 	var cfg Config
-	_ = gcfg.ReadFileInto(&cfg, ConfigFileDefault)
-	println(cfg.Local.Type)
+	if path == "" {
+		path = ConfigFileDefault
+	}
+
+	err := gcfg.ReadFileInto(&cfg, path)
+	if err != nil {
+		log.Fatal(err)
+	}
 	return &cfg
 }

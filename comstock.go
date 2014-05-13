@@ -23,7 +23,7 @@ type Comstock struct {
 	App      *cli.App
 	storager Storager // storage
 	logined  bool
-	config   Config
+	config   *Config
 	env      *Env
 }
 
@@ -35,12 +35,19 @@ func NewComstock() *Comstock {
 	f := &FileStorager{}
 	f.Open()
 	env := CreateEnv()
+	var config *Config
+	configPath := env.compath + "/" + ConfigFileDefault
+	if IsFileExist(configPath) {
+		config = LoadConfig(configPath)
+		fmt.Println("Config loaded")
+	}
 
 	return &Comstock{
 		App:      initApp(),
 		storager: &FileStorager{},
 		logined:  false,
 		env:      env,
+		config:   config,
 	}
 }
 
@@ -124,7 +131,6 @@ func initApp() *cli.App {
 			Name:  "config",
 			Usage: "Get and set comstock options",
 			Action: func(c *cli.Context) {
-				LoadConfig()
 				com.ShowConfig()
 			},
 		},
