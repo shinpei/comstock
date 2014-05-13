@@ -194,7 +194,7 @@ func (c *Comstock) Login(username string, password string) string {
 	if c.Logined() {
 		return "access token"
 	} else {
-		println("logging in...")
+		println("knock knock..., Success!")
 		return "access success"
 	}
 }

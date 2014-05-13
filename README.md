@@ -7,7 +7,7 @@ Comstock is a cloud-based command stocking tool. On this repository, we're provi
 We have a plenty of convenient command line tools nowadays, such as `git`, `brew`, `chef`,  Thanks to github, providing commands become a fame for developers, making good tools is now a orner.
 -->
 
-## Use as local tool
+## Usage
 ```
 $ brew doctor
 $ comstock save
@@ -17,13 +17,17 @@ $ comstock list
 $ comstock run 1
 ```
 
-<!--
-## Stock command to the cloud
+## Sync with Cloud
+All you need is do 'login' command.
 ```
 $ comstock login
-$ comstock push
+Your registered email address, or username? : shinpei
+And password? :
+knock knock..., Success!
+$ brew doctor
+$ comstock save
+saved command 'brew doctor'
 ```
--->
 
 ## Install
 
