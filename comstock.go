@@ -7,7 +7,6 @@ import (
 	"github.com/codegangsta/cli"
 	"log"
 	"os"
-	"strings"
 )
 
 const (
@@ -65,21 +64,7 @@ func initApp() *cli.App {
 			ShortName: "sv",
 			Usage:     "Save previous command",
 			Action: func(c *cli.Context) {
-				home := com.env.HomePath()
-				var shellHistoryFilename string = home
-				var handler Shell = nil
-				if strings.Contains(com.env.Shell(), "zsh") {
-					shellHistoryFilename += "/.zsh_history"
-					handler = &ZshHandler{}
-				} else if strings.Contains(com.env.Shell(), "bash") {
-					shellHistoryFilename += "/.bash_history"
-					handler = &BashHandler{}
-				}
-				cmd, err := handler.ReadLastHistory(shellHistoryFilename)
-				if err != nil {
-					log.Fatal(err)
-				}
-				com.Stock(cmd)
+				Save()
 			},
 			BashComplete: func(c *cli.Context) {
 				if len(c.Args()) > 0 {

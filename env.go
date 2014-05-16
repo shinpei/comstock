@@ -22,15 +22,16 @@ func CreateEnv() *Env {
 	homeDir := user.HomeDir
 	compath := ""
 
-	if compath = os.Getenv("COMSTOCK_PATH"); compath != "" {
-		println("it's set to " + compath)
-	} else {
+	if compath = os.Getenv("COMSTOCK_PATH"); compath == "" {
+		// if it's empty, load default path, ~/.comstock
 		compath = homeDir + "/" + CompathDefault
 	}
+
 	if !IsFileExist(compath) {
 		// we need to init comstock
 		CreateComstockPath(compath)
 	}
+
 	// TODO: verify comstock version
 
 	return &Env{
