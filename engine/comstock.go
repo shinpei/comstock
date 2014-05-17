@@ -1,11 +1,11 @@
-package comstock
+package engine
 
 import (
 	"bufio"
 	"code.google.com/p/gopass"
+
 	"fmt"
 	"github.com/codegangsta/cli"
-	"github.com/shinpei/comstock/command"
 	"log"
 	"os"
 )

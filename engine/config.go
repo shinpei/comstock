@@ -1,4 +1,4 @@
-package comstock
+package engine
 
 import (
 	"code.google.com/p/gcfg"

@@ -1,7 +1,7 @@
 package command
 
 import (
-	"github.com/shinpei/comstock"
+	"github.com/shinpei/comstock/engine"
 	"log"
 	"strings"
 )
