@@ -140,7 +140,7 @@ func initApp() *cli.App {
 		},
 		{
 			Name:  "config",
-			Usage: "Get and set comstock options",
+			Usage: "Show comstock configuration",
 			Action: func(c *cli.Context) {
 
 				eng.ShowConfig()

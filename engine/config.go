@@ -19,6 +19,7 @@ type Config struct {
 		Name string
 		Mail string
 	}
+	path string
 }
 
 const (
@@ -36,6 +37,13 @@ func LoadConfig(path string) *Config {
 	if err != nil {
 		log.Fatal(err)
 	}
+	//
+	cfg.path = path
+
+	// Set defaults
+	if cfg.Local.Type == "" {
+		cfg.Local.Type = "file"
+	}
 	return &cfg
 }
 
@@ -52,4 +60,7 @@ func (c *Config) ShowConfig() {
 	printConfig("user.name", c.User.Name)
 	printConfig("user.mail", c.User.Mail)
 
+}
+func (c *Config) Path() string {
+	return c.path
 }
