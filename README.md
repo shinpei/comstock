@@ -14,8 +14,10 @@ $ comstock save
 saved command 'brew doctor'
 $ comstock list
 1: brew doctor
-$ comstock run 1
+$ comstock get 1
+brew doctor
 ```
+
 
 ## Sync with Cloud
 All you need is do 'login' command.
