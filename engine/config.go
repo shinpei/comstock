@@ -37,7 +37,8 @@ func LoadConfig(path string) *Config {
 	if err != nil {
 		log.Fatal(err)
 	}
-	//
+
+	// set other values
 	cfg.path = path
 
 	// Set defaults
@@ -61,6 +62,7 @@ func (c *Config) ShowConfig() {
 	printConfig("user.mail", c.User.Mail)
 
 }
+
 func (c *Config) Path() string {
 	return c.path
 }
