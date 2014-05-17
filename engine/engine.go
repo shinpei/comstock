@@ -7,7 +7,6 @@ import (
 	"github.com/codegangsta/cli"
 	"log"
 	"os"
-	"strings"
 )
 
 const (
@@ -15,6 +14,8 @@ const (
 	AppName string = "comstock"
 )
 
+// this is TODO.
+// How can we pass thunk to cli?
 var (
 	eng *Engine
 )
@@ -32,8 +33,6 @@ func (e *Engine) Logined() bool {
 }
 
 func NewEngine() *Engine {
-	f := &FileStorager{}
-	f.Open()
 	env := CreateEnv()
 	var config *Config
 	configPath := env.compath + "/" + ConfigFileDefault
@@ -43,7 +42,7 @@ func NewEngine() *Engine {
 	}
 	eng = &Engine{
 		App:      initApp(),
-		storager: &FileStorager{},
+		storager: CreateFileStorager(env.compath),
 		logined:  false,
 		env:      env,
 		config:   config,
@@ -97,20 +96,6 @@ func initApp() *cli.App {
 			},
 		},
 		{
-			Name:  "push",
-			Usage: "Push stocked command to cloud",
-			Action: func(c *cli.Context) {
-				println("pushed")
-			},
-		},
-		{
-			Name:  "pop",
-			Usage: "Pop last stocked command",
-			Action: func(c *cli.Context) {
-				println("poped")
-			},
-		},
-		{
 			Name:  "login",
 			Usage: "Login to the cloud",
 			Action: func(c *cli.Context) {
@@ -144,7 +129,7 @@ func (e *Engine) Run(args []string) {
 
 func (e *Engine) Stock(cmd *Command) {
 	// save to the local storage
-	e.storager.Push(cmd)
+	e.storager.Push(e.env.compath, cmd)
 	/*
 		{
 			// push to the internet
@@ -154,16 +139,6 @@ func (e *Engine) Stock(cmd *Command) {
 		}
 	*/
 	fmt.Printf("[%s]Saved command '%s'\n", e.storager.StorageType(), cmd.Cmd())
-}
-
-// Push
-func (e *Engine) PushToRemote() {
-
-}
-
-func (e *Engine) PushToLocal(cmd *Command) {
-
-	e.storager.Push(cmd)
 }
 
 func (e *Engine) Close() {
@@ -189,21 +164,4 @@ func (e *Engine) Login(username string, password string) string {
 
 func (e *Engine) ShowConfig() {
 	println("Showing config")
-}
-
-func (e *Engine) Save(home string, shell string) {
-	var shellHistoryFilename string = home
-	var handler Shell = nil
-	if strings.Contains(shell, "zsh") {
-		shellHistoryFilename += "/.zsh_history"
-		handler = &ZshHandler{}
-	} else if strings.Contains(shell, "bash") {
-		shellHistoryFilename += "/.bash_history"
-		handler = &BashHandler{}
-	}
-	cmd, err := handler.ReadLastHistory(shellHistoryFilename)
-	if err != nil {
-		log.Fatal(err)
-	}
-	eng.Stock(cmd)
 }
