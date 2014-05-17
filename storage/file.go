@@ -46,7 +46,7 @@ func (fs *FileStorager) StorageType() string {
 func (fs *FileStorager) Push(path string, cmd *model.Command) (err error) {
 
 	data, _ := ioutil.ReadFile(fs.filepath)
-	cmdByte := []byte(cmd.Cmd())
+	cmdByte := []byte(cmd.Cmd)
 	cmdByte = append(cmdByte, string("\n")...)
 	data = append(data, cmdByte...)
 	err = ioutil.WriteFile(fs.filepath, data, 0644)

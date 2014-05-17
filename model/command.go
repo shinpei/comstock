@@ -10,20 +10,12 @@ const (
 )
 
 type Command struct {
-	cmd       string
-	timestamp string
-}
-
-func (c *Command) Cmd() string {
-	return c.cmd
-}
-
-func (c *Command) SetCmd(cmd string) {
-	c.cmd = cmd
+	Cmd       string
+	Timestamp string
 }
 
 func CreateCommand(cmd string) *Command {
 
-	return &Command{cmd: cmd, timestamp: time.Now().Format(RFC3339)}
+	return &Command{Cmd: cmd, Timestamp: time.Now().Format(RFC3339)}
 
 }

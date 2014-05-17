@@ -105,7 +105,7 @@ func initApp() *cli.App {
 				}
 				num, _ := strconv.Atoi(c.Args()[0])
 				cmd := eng.FetchCommandFromNumber(num)
-				println(cmd.Cmd())
+				println(cmd.Cmd)
 			},
 		},
 		{
@@ -119,7 +119,7 @@ func initApp() *cli.App {
 				}
 				num, _ := strconv.Atoi(c.Args()[0])
 				cmd := eng.FetchCommandFromNumber(num)
-				println(cmd.Cmd())
+				println(cmd.Cmd)
 
 			},
 		},
@@ -167,7 +167,7 @@ func (e *Engine) Stock(cmd *model.Command) {
 			e.PushToLocal(cmd)
 		}
 	*/
-	fmt.Printf("[%s]Saved command '%s'\n", e.storager.StorageType(), cmd.Cmd())
+	fmt.Printf("[%s]Saved command '%s'\n", e.storager.StorageType(), cmd.Cmd)
 }
 
 func (e *Engine) Close() {

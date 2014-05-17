@@ -30,6 +30,11 @@ func (ms *MongoStorager) StorageType() string {
 
 }
 
+type Person struct {
+	Name  string
+	Phone string
+}
+
 //store command
 func (ms *MongoStorager) Push(path string, cmd *model.Command) (err error) {
 	session, err := mgo.Dial("localhost")
@@ -40,9 +45,9 @@ func (ms *MongoStorager) Push(path string, cmd *model.Command) (err error) {
 	session.SetMode(mgo.Monotonic, true)
 	c := session.DB(MongoDatabaseName).C(MongoCollectionName)
 	err = c.Insert(cmd)
-	println("Insert done")
-
-	println(cmd)
+	if err != nil {
+		log.Fatal("Couldn't insert")
+	}
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -66,16 +71,18 @@ func (ms *MongoStorager) List() (err error) {
 	defer session.Close()
 	session.SetMode(mgo.Monotonic, true)
 	c := session.DB(MongoDatabaseName).C(MongoCollectionName)
-	ensureIndex(c)
+	//	ensureIndex(c)
 
-	var results []model.Command
-	scmd := &model.Command{}
-	err = c.Find(scmd).All(&results)
-	if err != nil {
-		log.Fatal("Couldn't fetch ")
+	var result model.Command
+	iter := c.Find(nil).Limit(100).Iter()
+	var idx = 1
+	for iter.Next(&result) {
+		fmt.Printf("%d: %s\n", idx, result.Cmd)
+		idx++
 	}
-	fmt.Println("result: ", results[0].Cmd())
-
+	if err = iter.Close(); err != nil {
+		log.Fatal(err)
+	}
 	return
 }
 
