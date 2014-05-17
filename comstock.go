@@ -5,6 +5,7 @@ import (
 	"code.google.com/p/gopass"
 	"fmt"
 	"github.com/codegangsta/cli"
+	"github.com/shinpei/command"
 	"log"
 	"os"
 )
@@ -64,7 +65,7 @@ func initApp() *cli.App {
 			ShortName: "sv",
 			Usage:     "Save previous command",
 			Action: func(c *cli.Context) {
-				Save()
+				command.Save()
 			},
 			BashComplete: func(c *cli.Context) {
 				if len(c.Args()) > 0 {
