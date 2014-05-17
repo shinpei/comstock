@@ -41,13 +41,14 @@ func NewEngine() *Engine {
 		config = LoadConfig(configPath)
 		fmt.Println("Config loaded")
 	}
-	return &Engine{
+	eng = &Engine{
 		App:      initApp(),
 		storager: &FileStorager{},
 		logined:  false,
 		env:      env,
 		config:   config,
 	}
+	return eng
 }
 
 func initApp() *cli.App {
