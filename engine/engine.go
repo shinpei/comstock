@@ -27,7 +27,7 @@ type Engine struct {
 }
 
 func (e *Engine) Logined() bool {
-	return c.logined
+	return e.logined
 }
 
 func NewEngine() *Engine {
@@ -142,16 +142,16 @@ func (e *Engine) Run(args []string) {
 
 func (e *Engine) Stock(cmd *Command) {
 	// save to the local storage
-	c.storager.Push(cmd)
+	e.storager.Push(cmd)
 	/*
 		{
 			// push to the internet
-			c.PushToRemote()
+			e.PushToRemote()
 		} else {
-			c.PushToLocal(cmd)
+			e.PushToLocal(cmd)
 		}
 	*/
-	fmt.Printf("[%s]Saved command '%s'\n", c.storager.StorageType(), cmd.Cmd())
+	fmt.Printf("[%s]Saved command '%s'\n", e.storager.StorageType(), cmd.Cmd())
 }
 
 // Push
@@ -161,22 +161,22 @@ func (e *Engine) PushToRemote() {
 
 func (e *Engine) PushToLocal(cmd *Command) {
 
-	c.storager.Push(cmd)
+	e.storager.Push(cmd)
 }
 
 func (e *Engine) Close() {
-	c.storager.Close()
+	e.storager.Close()
 }
 
 func (e *Engine) List() {
-	// c.storager.PullCommands()
-	if err := c.storager.List(); err != nil {
+	// e.storager.PullCommands()
+	if err := e.storager.List(); err != nil {
 		log.Fatal(err)
 	}
 }
 
 func (e *Engine) Login(username string, password string) string {
-	if c.Logined() {
+	if e.Logined() {
 
 		return "access token"
 	} else {
