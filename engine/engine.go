@@ -52,7 +52,6 @@ func NewEngine() *Engine {
 
 func initApp() *cli.App {
 	app := cli.NewApp()
-	//app.EnableBashCompletion = true
 	app.Version = Version
 	app.Name = AppName
 	app.Usage = "save your command to the cloud"
