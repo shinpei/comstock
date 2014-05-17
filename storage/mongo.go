@@ -5,6 +5,7 @@ import (
 	"github.com/shinpei/comstock/model"
 	"labix.org/v2/mgo"
 	"log"
+	"time"
 )
 
 type MongoStorager struct {
@@ -37,9 +38,10 @@ type Person struct {
 
 //store command
 func (ms *MongoStorager) Push(path string, cmd *model.Command) (err error) {
-	session, err := mgo.Dial("localhost")
+	hostname := MongoHost
+	session, err := mgo.DialWithTimeout("mongodb://"+hostname, time.Duration(3)*time.Second)
 	if err != nil {
-		log.Fatal("Couldn't dial")
+		log.Fatal("Couldn't dial to ", hostname, ", ", err)
 	}
 	defer session.Close()
 	session.SetMode(mgo.Monotonic, true)
@@ -64,9 +66,9 @@ func (ms *MongoStorager) FetchCommandFromNumber(num int) (cmd *model.Command) {
 }
 func (ms *MongoStorager) List() (err error) {
 	hostname := MongoHost
-	session, err := mgo.Dial(hostname)
+	session, err := mgo.DialWithTimeout("mongodb://"+hostname, time.Duration(3)*time.Second)
 	if err != nil {
-		log.Fatal("Couldn't dial " + hostname)
+		log.Fatal("Couldn't dial to ", hostname, ", ", err)
 	}
 	defer session.Close()
 	session.SetMode(mgo.Monotonic, true)
