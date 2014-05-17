@@ -44,8 +44,9 @@ func NewEngine() *Engine {
 		fmt.Println("Config loaded")
 	}
 	eng = &Engine{
-		App:      initApp(),
-		storager: storage.CreateFileStorager(env.compath),
+		App: initApp(),
+		//		storager: storage.CreateFileStorager(env.compath),
+		storager: storage.CreateMongoStorager(),
 		logined:  false,
 		env:      env,
 		config:   config,
