@@ -41,7 +41,6 @@ func NewEngine() *Engine {
 	configPath := env.compath + "/" + ConfigFileDefault
 	if IsFileExist(configPath) {
 		config = LoadConfig(configPath)
-		fmt.Println("Config loaded")
 	}
 	eng = &Engine{
 		App: initApp(),
@@ -134,6 +133,7 @@ func initApp() *cli.App {
 			Name:  "config",
 			Usage: "Get and set comstock options",
 			Action: func(c *cli.Context) {
+
 				eng.ShowConfig()
 			},
 		},
@@ -183,7 +183,7 @@ func (e *Engine) Login(username string, password string) string {
 }
 
 func (e *Engine) ShowConfig() {
-	println("Showing config")
+	e.config.ShowConfig()
 }
 
 func (e *Engine) FetchCommandFromNumber(num int) (cmd *model.Command) {

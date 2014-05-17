@@ -2,25 +2,28 @@ package engine
 
 import (
 	"code.google.com/p/gcfg"
+	"fmt"
 	"log"
 )
 
 type Config struct {
 	Local struct {
-		Type        string
-		StoragePath string
+		Type string
+		URI  string
 	}
 	Remote struct {
-		Type        string
-		StoragePath string
+		Type string
+		URI  string
 	}
-	Alias struct {
+	User struct {
+		Name string
+		Mail string
 	}
 }
 
 const (
 	CompathDefault    string = ".comstock"
-	ConfigFileDefault string = ".comconfig"
+	ConfigFileDefault string = "config"
 )
 
 func LoadConfig(path string) *Config {
@@ -34,4 +37,19 @@ func LoadConfig(path string) *Config {
 		log.Fatal(err)
 	}
 	return &cfg
+}
+
+func printConfig(key string, val string) {
+	if val != "" {
+		fmt.Printf("%s=%s\n", key, val)
+	}
+}
+func (c *Config) ShowConfig() {
+	printConfig("local.type", c.Local.Type)
+	printConfig("local.uri", c.Local.URI)
+	printConfig("remote.type", c.Remote.Type)
+	printConfig("remote.uri", c.Remote.URI)
+	printConfig("user.name", c.User.Name)
+	printConfig("user.mail", c.User.Mail)
+
 }
