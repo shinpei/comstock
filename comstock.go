@@ -1,11 +1,11 @@
-package main
+package comstock
 
 import (
 	"bufio"
 	"code.google.com/p/gopass"
 	"fmt"
 	"github.com/codegangsta/cli"
-	"github.com/shinpei/command"
+	"github.com/shinpei/comstock/command"
 	"log"
 	"os"
 )
@@ -65,7 +65,7 @@ func initApp() *cli.App {
 			ShortName: "sv",
 			Usage:     "Save previous command",
 			Action: func(c *cli.Context) {
-				command.Save()
+				command.Save(com, com.env.HomePath(), com.env.Shell())
 			},
 			BashComplete: func(c *cli.Context) {
 				if len(c.Args()) > 0 {

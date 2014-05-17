@@ -1,19 +1,19 @@
 package command
 
 import (
+	"github.com/shinpei/comstock"
 	"log"
 	"strings"
 )
 
-func Save() {
-	home := com.env.HomePath()
+func Save(com *comstock.Comstock, home string, shell string) {
 	var shellHistoryFilename string = home
-	var handler Shell = nil
+	var handler comstock.Shell = nil
 	Save()
-	if strings.Contains(com.env.Shell(), "zsh") {
+	if strings.Contains(shell, "zsh") {
 		shellHistoryFilename += "/.zsh_history"
 		handler = &ZshHandler{}
-	} else if strings.Contains(com.env.Shell(), "bash") {
+	} else if strings.Contains(shell, "bash") {
 		shellHistoryFilename += "/.bash_history"
 		handler = &BashHandler{}
 	}
@@ -21,5 +21,5 @@ func Save() {
 	if err != nil {
 		log.Fatal(err)
 	}
-	com.Stock(cmd)
+	//	com.Stock(cmd)
 }
