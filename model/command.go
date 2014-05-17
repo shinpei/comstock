@@ -1,4 +1,4 @@
-package engine
+package model
 
 import (
 	"time"
@@ -16,6 +16,10 @@ type Command struct {
 
 func (c *Command) Cmd() string {
 	return c.cmd
+}
+
+func (c *Command) SetCmd(cmd string) {
+	c.cmd = cmd
 }
 
 func CreateCommand(cmd string) *Command {

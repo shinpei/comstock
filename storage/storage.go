@@ -1,8 +1,9 @@
-package engine
+package storage
 
 import (
 	"bufio"
 	"fmt"
+	"github.com/shinpei/comstock/model"
 	"io/ioutil"
 	"log"
 	"os"
@@ -15,10 +16,10 @@ const (
 type Storager interface {
 	Open() error
 	Close() error
-	Push(path string, cmd *Command) error
+	Push(path string, cmd *model.Command) error
 	Pull() error
 	List() error
-	FetchCommandFromNumber(num int) (cmd *Command)
+	FetchCommandFromNumber(num int) (cmd *model.Command)
 	// getter
 	StorageType() string
 }
@@ -53,7 +54,7 @@ func (fs *FileStorager) StorageType() string {
 }
 
 // Store the command
-func (fs *FileStorager) Push(path string, cmd *Command) (err error) {
+func (fs *FileStorager) Push(path string, cmd *model.Command) (err error) {
 
 	data, _ := ioutil.ReadFile(fs.filepath)
 	cmdByte := []byte(cmd.Cmd())
@@ -85,7 +86,7 @@ func (fs *FileStorager) Pull() (err error) {
 	return
 }
 
-func (fs *FileStorager) FetchCommandFromNumber(num int) (cmd *Command) {
+func (fs *FileStorager) FetchCommandFromNumber(num int) (cmd *model.Command) {
 	var fi *os.File
 	// TODO
 	fi, _ = os.Open(fs.filepath)
@@ -94,7 +95,8 @@ func (fs *FileStorager) FetchCommandFromNumber(num int) (cmd *Command) {
 	for scanner.Scan() {
 		idx++
 		if idx == num {
-			return &Command{cmd: scanner.Text()}
+			cmd = model.CreateCommand(scanner.Text())
+			return
 		}
 	}
 	log.Fatal("Not exist for your specified number=" + string(num))

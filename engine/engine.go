@@ -5,6 +5,8 @@ import (
 	"code.google.com/p/gopass"
 	"fmt"
 	"github.com/codegangsta/cli"
+	"github.com/shinpei/comstock/model"
+	"github.com/shinpei/comstock/storage"
 	"log"
 	"os"
 	"strconv"
@@ -23,7 +25,7 @@ var (
 
 type Engine struct {
 	App      *cli.App
-	storager Storager // storage
+	storager storage.Storager // storage
 	logined  bool
 	config   *Config
 	env      *Env
@@ -43,7 +45,7 @@ func NewEngine() *Engine {
 	}
 	eng = &Engine{
 		App:      initApp(),
-		storager: CreateFileStorager(env.compath),
+		storager: storage.CreateFileStorager(env.compath),
 		logined:  false,
 		env:      env,
 		config:   config,
@@ -94,7 +96,7 @@ func initApp() *cli.App {
 				}
 				num, _ := strconv.Atoi(c.Args()[0])
 				cmd := eng.FetchCommandFromNumber(num)
-				println(cmd.cmd)
+				println(cmd.Cmd())
 			},
 		},
 		{
@@ -108,7 +110,7 @@ func initApp() *cli.App {
 				}
 				num, _ := strconv.Atoi(c.Args()[0])
 				cmd := eng.FetchCommandFromNumber(num)
-				println(cmd.cmd)
+				println(cmd.Cmd())
 
 			},
 		},
@@ -144,7 +146,7 @@ func (e *Engine) Run(args []string) {
 	e.Close()
 }
 
-func (e *Engine) Stock(cmd *Command) {
+func (e *Engine) Stock(cmd *model.Command) {
 	// save to the local storage
 	e.storager.Push(e.env.compath, cmd)
 	/*
@@ -183,7 +185,7 @@ func (e *Engine) ShowConfig() {
 	println("Showing config")
 }
 
-func (e *Engine) FetchCommandFromNumber(num int) (cmd *Command) {
+func (e *Engine) FetchCommandFromNumber(num int) (cmd *model.Command) {
 	cmd = e.storager.FetchCommandFromNumber(num)
 	return
 }

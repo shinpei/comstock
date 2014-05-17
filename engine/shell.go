@@ -3,13 +3,14 @@ package engine
 import (
 	"bufio"
 	"fmt"
+	"github.com/shinpei/comstock/model"
 	"io"
 	"log"
 	"os"
 )
 
 type Shell interface {
-	ReadLastHistory(historyfile string) (*Command, error)
+	ReadLastHistory(historyfile string) (*model.Command, error)
 }
 
 type ZshHandler struct {
@@ -50,7 +51,7 @@ func tail(filename string, numberLines int) (ret []string, err error) {
 	return
 }
 
-func (z *ZshHandler) ReadLastHistory(filename string) (cmd *Command, err error) {
+func (z *ZshHandler) ReadLastHistory(filename string) (cmd *model.Command, err error) {
 	var (
 		ret       []string
 		timestamp int
@@ -61,15 +62,15 @@ func (z *ZshHandler) ReadLastHistory(filename string) (cmd *Command, err error) 
 	// ': xxxxxxxxxx:x;cmd\n'
 	var ignore string
 	fmt.Sscanf(ret[0], ": %d:%d;%s\n", &timestamp, &linenum, &ignore)
-	cmd = CreateCommand(ret[0][15:])
+	cmd = model.CreateCommand(ret[0][15:])
 	return
 }
 
-func (b *BashHandler) ReadLastHistory(filename string) (cmd *Command, err error) {
+func (b *BashHandler) ReadLastHistory(filename string) (cmd *model.Command, err error) {
 	var (
 		ret []string
 	)
 	ret, err = tail(filename, 2)
-	cmd = &Command{cmd: ret[0]}
+	cmd = model.CreateCommand(ret[0])
 	return
 }
