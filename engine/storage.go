@@ -4,6 +4,7 @@ import (
 	"bufio"
 	"fmt"
 	"io/ioutil"
+	"log"
 	"os"
 )
 
@@ -17,6 +18,7 @@ type Storager interface {
 	Push(path string, cmd *Command) error
 	Pull() error
 	List() error
+	FetchCommandFromNumber(num int) (cmd *Command)
 	// getter
 	StorageType() string
 }
@@ -80,6 +82,22 @@ func (fs *FileStorager) List() (err error) {
 }
 
 func (fs *FileStorager) Pull() (err error) {
+	return
+}
+
+func (fs *FileStorager) FetchCommandFromNumber(num int) (cmd *Command) {
+	var fi *os.File
+	// TODO
+	fi, _ = os.Open(fs.filepath)
+	scanner := bufio.NewScanner(fi)
+	var idx int = 0
+	for scanner.Scan() {
+		idx++
+		if idx == num {
+			return &Command{cmd: scanner.Text()}
+		}
+	}
+	log.Fatal("Not exist for your specified number=" + string(num))
 	return
 }
 

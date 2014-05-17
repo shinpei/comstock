@@ -7,6 +7,7 @@ import (
 	"github.com/codegangsta/cli"
 	"log"
 	"os"
+	"strconv"
 )
 
 const (
@@ -83,15 +84,32 @@ func initApp() *cli.App {
 			},
 		},
 		{
-			Name:      "run",
-			ShortName: "r",
-			Usage:     "Exec command with #number",
+			Name:      "get",
+			ShortName: "g",
+			Usage:     "Get command by specifiying number",
 			Action: func(c *cli.Context) {
 				if len(c.Args()) == 0 {
 					println("'run' requires #number argument, e.g., 'comstock run 1'")
 					return
 				}
-				println("Hello", c.Args()[0])
+				num, _ := strconv.Atoi(c.Args()[0])
+				cmd := eng.FetchCommandFromNumber(num)
+				println(cmd.cmd)
+			},
+		},
+		{
+			Name:      "run",
+			ShortName: "r",
+			Usage:     "Exec command with #number (experiment)",
+			Action: func(c *cli.Context) {
+				if len(c.Args()) == 0 {
+					println("'run' requires #number argument, e.g., 'comstock run 1'")
+					return
+				}
+				num, _ := strconv.Atoi(c.Args()[0])
+				cmd := eng.FetchCommandFromNumber(num)
+				println(cmd.cmd)
+
 			},
 		},
 		{
@@ -163,4 +181,9 @@ func (e *Engine) Login(username string, password string) string {
 
 func (e *Engine) ShowConfig() {
 	println("Showing config")
+}
+
+func (e *Engine) FetchCommandFromNumber(num int) (cmd *Command) {
+	cmd = e.storager.FetchCommandFromNumber(num)
+	return
 }
