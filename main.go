@@ -6,6 +6,6 @@ import (
 )
 
 func main() {
-	com = comstock.engine.NewComstock()
-	com.Run(os.Args)
+	engine = engine.NewEngine()
+	engine.Run(os.Args)
 }

@@ -3,7 +3,6 @@ package engine
 import (
 	"bufio"
 	"code.google.com/p/gopass"
-
 	"fmt"
 	"github.com/codegangsta/cli"
 	"log"
@@ -16,10 +15,10 @@ const (
 )
 
 var (
-	com *Comstock
+	eng *Engine
 )
 
-type Comstock struct {
+type Engine struct {
 	App      *cli.App
 	storager Storager // storage
 	logined  bool
@@ -27,11 +26,11 @@ type Comstock struct {
 	env      *Env
 }
 
-func (c *Comstock) Logined() bool {
+func (e *Engine) Logined() bool {
 	return c.logined
 }
 
-func NewComstock() *Comstock {
+func NewEngine() *Engine {
 	f := &FileStorager{}
 	f.Open()
 	env := CreateEnv()
@@ -41,7 +40,7 @@ func NewComstock() *Comstock {
 		config = LoadConfig(configPath)
 		fmt.Println("Config loaded")
 	}
-	return &Comstock{
+	return &Engine{
 		App:      initApp(),
 		storager: &FileStorager{},
 		logined:  false,
@@ -65,7 +64,7 @@ func initApp() *cli.App {
 			ShortName: "sv",
 			Usage:     "Save previous command",
 			Action: func(c *cli.Context) {
-				command.Save(com, com.env.HomePath(), com.env.Shell())
+				command.Save(com, eng.env.HomePath(), eng.env.Shell())
 			},
 			BashComplete: func(c *cli.Context) {
 				if len(c.Args()) > 0 {
@@ -80,7 +79,7 @@ func initApp() *cli.App {
 			Usage:       "List stocked command",
 			Action: func(c *cli.Context) {
 
-				com.List()
+				eng.List()
 			},
 		},
 		{
@@ -113,14 +112,14 @@ func initApp() *cli.App {
 			Name:  "login",
 			Usage: "Login to the cloud",
 			Action: func(c *cli.Context) {
-				if !com.Logined() {
+				if !eng.Logined() {
 					scanner := bufio.NewScanner(os.Stdin)
 					fmt.Printf("Your registered email address? : ")
 					scanner.Scan()
 					username := scanner.Text()
 					fmt.Printf("And password? :")
 					password, _ := gopass.GetPass("")
-					com.Login(username, password)
+					eng.Login(username, password)
 				}
 			},
 		},
@@ -128,7 +127,7 @@ func initApp() *cli.App {
 			Name:  "config",
 			Usage: "Get and set comstock options",
 			Action: func(c *cli.Context) {
-				com.ShowConfig()
+				eng.ShowConfig()
 			},
 		},
 	}
@@ -136,12 +135,12 @@ func initApp() *cli.App {
 	return app
 }
 
-func (c *Comstock) Run(args []string) {
-	c.App.Run(args)
-	c.Close()
+func (e *Engine) Run(args []string) {
+	e.App.Run(args)
+	e.Close()
 }
 
-func (c *Comstock) Stock(cmd *Command) {
+func (e *Engine) Stock(cmd *Command) {
 	// save to the local storage
 	c.storager.Push(cmd)
 	/*
@@ -156,27 +155,27 @@ func (c *Comstock) Stock(cmd *Command) {
 }
 
 // Push
-func (c *Comstock) PushToRemote() {
+func (e *Engine) PushToRemote() {
 
 }
 
-func (c *Comstock) PushToLocal(cmd *Command) {
+func (e *Engine) PushToLocal(cmd *Command) {
 
 	c.storager.Push(cmd)
 }
 
-func (c *Comstock) Close() {
+func (e *Engine) Close() {
 	c.storager.Close()
 }
 
-func (c *Comstock) List() {
+func (e *Engine) List() {
 	// c.storager.PullCommands()
 	if err := c.storager.List(); err != nil {
 		log.Fatal(err)
 	}
 }
 
-func (c *Comstock) Login(username string, password string) string {
+func (e *Engine) Login(username string, password string) string {
 	if c.Logined() {
 
 		return "access token"
@@ -186,6 +185,24 @@ func (c *Comstock) Login(username string, password string) string {
 	}
 }
 
-func (c *Comstock) ShowConfig() {
+func (e *Engine) ShowConfig() {
 	println("Showing config")
+}
+
+func (e *Engine) Save(home string, shell string) {
+	var shellHistoryFilename string = home
+	var handler comstock.Shell = nil
+	Save()
+	if strings.Contains(shell, "zsh") {
+		shellHistoryFilename += "/.zsh_history"
+		handler = &ZshHandler{}
+	} else if strings.Contains(shell, "bash") {
+		shellHistoryFilename += "/.bash_history"
+		handler = &BashHandler{}
+	}
+	cmd, err := handler.ReadLastHistory(shellHistoryFilename)
+	if err != nil {
+		log.Fatal(err)
+	}
+	Stock(cmd)
 }
