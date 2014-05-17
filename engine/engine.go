@@ -42,10 +42,19 @@ func NewEngine() *Engine {
 	if IsFileExist(configPath) {
 		config = LoadConfig(configPath)
 	}
+	var s storage.Storager
+	switch config.Local.Type {
+	case "file":
+		s = storage.CreateFileStorager(env.compath)
+	case "mongo":
+		s = storage.CreateMongoStorager()
+	default:
+		s = storage.CreateFileStorager(env.compath)
+	}
 	eng = &Engine{
 		App: initApp(),
 		//		storager: storage.CreateFileStorager(env.compath),
-		storager: storage.CreateMongoStorager(),
+		storager: s,
 		logined:  false,
 		env:      env,
 		config:   config,
