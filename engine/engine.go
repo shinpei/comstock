@@ -1,14 +1,11 @@
 package engine
 
 import (
-	"bufio"
-	"code.google.com/p/gopass"
 	"fmt"
 	"github.com/codegangsta/cli"
 	"github.com/shinpei/comstock/model"
 	"github.com/shinpei/comstock/storage"
 	"log"
-	"os"
 	"strconv"
 )
 
@@ -26,13 +23,26 @@ var (
 type Engine struct {
 	App      *cli.App
 	storager storage.Storager // storage
-	logined  bool
+	isLogin  bool
+	authInfo string
 	config   *Config
 	env      *Env
 }
 
-func (e *Engine) Logined() bool {
-	return e.logined
+func (e *Engine) IsLogin() bool {
+	return e.isLogin
+}
+func (e *Engine) SetLogin() {
+	e.isLogin = true
+}
+func (e *Engine) SetLogout() {
+	e.isLogin = false
+}
+func (e *Engine) AuthInfo() string {
+	return e.authInfo
+}
+func (e *Engine) SetAuthInfo(auth string) {
+	e.authInfo = auth
 }
 
 func NewEngine() *Engine {
@@ -54,11 +64,13 @@ func NewEngine() *Engine {
 	eng = &Engine{
 		App: initApp(),
 		//		storager: storage.CreateFileStorager(env.compath),
+		isLogin:  false,
+		authInfo: "",
 		storager: s,
-		logined:  false,
 		env:      env,
 		config:   config,
 	}
+
 	return eng
 }
 
@@ -140,15 +152,10 @@ func initApp() *cli.App {
 			Name:  "login",
 			Usage: "Login to the cloud",
 			Action: func(c *cli.Context) {
-				if !eng.Logined() {
-					scanner := bufio.NewScanner(os.Stdin)
-					fmt.Printf("Your registered email address? : ")
-					scanner.Scan()
-					username := scanner.Text()
-					fmt.Printf("And password? :")
-					password, _ := gopass.GetPass("")
-					eng.Login(username, password)
+				if eng.IsLogin() {
+					fmt.Printf("Already login")
 				}
+				eng.Login()
 			},
 		},
 		{
@@ -192,16 +199,6 @@ func (e *Engine) List() {
 	// e.storager.PullCommands()
 	if err := e.storager.List(); err != nil {
 		log.Fatal(err)
-	}
-}
-
-func (e *Engine) Login(username string, password string) string {
-	if e.Logined() {
-
-		return "access token"
-	} else {
-		println("We're preparing this func...")
-		return "access success"
 	}
 }
 
