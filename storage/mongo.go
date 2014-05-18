@@ -62,6 +62,28 @@ func (ms *MongoStorager) Close() (err error) {
 }
 
 func (ms *MongoStorager) FetchCommandFromNumber(num int) (cmd *model.Command) {
+	hostname := MongoHost
+	session, err := mgo.DialWithTimeout("mongodb://"+hostname, time.Duration(3)*time.Second)
+	if err != nil {
+		log.Fatal("Couldn't dial to ", hostname, ",", err)
+	}
+	defer session.Close()
+	session.SetMode(mgo.Monotonic, true)
+	c := session.DB(MongoDatabaseName).C(MongoCollectionName)
+
+	iter := c.Find(nil).Limit(100).Iter()
+	var idx = 1
+	var result model.Command
+	for iter.Next(&result) {
+		if idx == num {
+			cmd = model.CreateCommand(result.Cmd)
+			break
+		}
+		idx++
+	}
+	if err = iter.Close(); err != nil {
+		log.Fatal(err)
+	}
 	return
 }
 func (ms *MongoStorager) List() (err error) {

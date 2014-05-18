@@ -13,7 +13,7 @@ import (
 )
 
 const (
-	Version string = "0.0.1"
+	Version string = "0.1.0"
 	AppName string = "comstock"
 )
 
@@ -82,6 +82,15 @@ func initApp() *cli.App {
 				if len(c.Args()) > 0 {
 					return
 				}
+			},
+		},
+		{
+			Name:      "status",
+			ShortName: "st",
+			Usage:     "Show comstock status",
+			Action: func(c *cli.Context) {
+				//TODO
+				log.Fatal("Not yet implemented")
 			},
 		},
 		{
@@ -158,6 +167,7 @@ func (e *Engine) Run(args []string) {
 
 func (e *Engine) Stock(cmd *model.Command) {
 	// save to the local storage
+	// remove whitespaces from cmd
 	e.storager.Push(e.env.compath, cmd)
 	/*
 		{

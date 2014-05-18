@@ -60,7 +60,6 @@ func (c *Config) ShowConfig() {
 	printConfig("remote.uri", c.Remote.URI)
 	printConfig("user.name", c.User.Name)
 	printConfig("user.mail", c.User.Mail)
-
 }
 
 func (c *Config) Path() string {
