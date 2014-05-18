@@ -5,13 +5,15 @@ import (
 	"github.com/codegangsta/cli"
 	"github.com/shinpei/comstock/model"
 	"github.com/shinpei/comstock/storage"
+	"io/ioutil"
 	"log"
 	"strconv"
 )
 
 const (
-	Version string = "0.1.0"
-	AppName string = "comstock"
+	Version  string = "0.1.0"
+	AppName  string = "comstock"
+	AuthFile string = "authinfo"
 )
 
 // this is TODO.
@@ -193,6 +195,15 @@ func (e *Engine) Stock(cmd *model.Command) {
 
 func (e *Engine) Close() {
 	e.storager.Close()
+
+	// write needed info
+	if e.IsLogin() {
+		authFilePath := e.env.compath + "/" + AuthFile
+		authinfo := []byte(e.AuthInfo())
+		ioutil.WriteFile(authFilePath, authinfo, 0644)
+		return
+	}
+
 }
 
 func (e *Engine) List() {

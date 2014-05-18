@@ -34,10 +34,12 @@ func (e *Engine) Login() {
 	authInfo := tryLogin(username, password)
 	if authInfo != "" {
 		// TODO: register?
+		return
 	}
-	// write authinfo
+	// success, write authinfo
 	e.SetLogin()
 	e.SetAuthInfo(authInfo)
+	fmt.Println("Knock knock ... Success!")
 }
 
 func tryLogin(username string, password string) string {
