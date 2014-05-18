@@ -16,7 +16,7 @@ func (e *Engine) Save(home string, shell string) {
 		handler = &BashHandler{}
 	}
 	cmd, err := handler.ReadLastHistory(shellHistoryFilename)
-	cmd.Cmd = strings.TrimSpace(cmd.Cmd, "\t")
+	cmd.Cmd = strings.TrimSpace(cmd.Cmd)
 	if err != nil {
 		log.Fatal(err)
 	}

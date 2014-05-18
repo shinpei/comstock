@@ -2,11 +2,11 @@ package engine
 
 import (
 	"bufio"
-	"fmt"
 	"github.com/shinpei/comstock/model"
 	"io"
 	"log"
 	"os"
+	"regexp"
 )
 
 type Shell interface {
@@ -53,16 +53,29 @@ func tail(filename string, numberLines int) (ret []string, err error) {
 
 func (z *ZshHandler) ReadLastHistory(filename string) (cmd *model.Command, err error) {
 	var (
-		ret       []string
-		timestamp int
-		linenum   int
+		preCmd   string
+		storeCmd string
 	)
-	ret, err = tail(filename, 2)
+
 	//format
 	// ': xxxxxxxxxx:x;cmd\n'
-	var ignore string
-	fmt.Sscanf(ret[0], ": %d:%d;%s\n", &timestamp, &linenum, &ignore)
-	cmd = model.CreateCommand(ret[0][15:])
+	fi, _ := os.Open(filename)
+	scanner := bufio.NewScanner(fi)
+
+	var validLine = regexp.MustCompile("^:")
+	for scanner.Scan() {
+		line := scanner.Text()
+		idx := validLine.FindIndex([]byte(line))
+		if idx != nil {
+			preCmd = storeCmd
+			storeCmd = line
+		} else {
+			storeCmd += line
+		}
+	}
+	//fmt.Sscanf(preCmd, ": %d:%d;%s", &timestamp, &linenum, &ignore)
+	cmd = model.CreateCommand(preCmd[15:])
+	//cmd = model.CreateCommand(ret[0][15:])
 	return
 }
 
