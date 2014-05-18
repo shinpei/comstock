@@ -84,6 +84,6 @@ func (fs *FileStorager) FetchCommandFromNumber(num int) (cmd *model.Command) {
 			return
 		}
 	}
-	log.Fatal("Not exist for your specified number=" + string(num))
+	log.Fatal("Invalid history number:", num)
 	return
 }

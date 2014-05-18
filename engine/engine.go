@@ -126,7 +126,11 @@ func initApp() *cli.App {
 					println("'run' requires #number argument, e.g., 'comstock run 1'")
 					return
 				}
-				num, _ := strconv.Atoi(c.Args()[0])
+				// TODO fix with parseint
+				num, err := strconv.Atoi(c.Args()[0])
+				if err != nil {
+					log.Fatal(err)
+				}
 				cmd := eng.FetchCommandFromNumber(num)
 				println(cmd.Cmd)
 
@@ -206,6 +210,7 @@ func (e *Engine) ShowConfig() {
 }
 
 func (e *Engine) FetchCommandFromNumber(num int) (cmd *model.Command) {
+
 	cmd = e.storager.FetchCommandFromNumber(num)
 	return
 }
