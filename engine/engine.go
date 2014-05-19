@@ -1,12 +1,14 @@
 package engine
 
 import (
+	"bufio"
 	"fmt"
 	"github.com/codegangsta/cli"
 	"github.com/shinpei/comstock/model"
 	"github.com/shinpei/comstock/storage"
 	"io/ioutil"
 	"log"
+	"os"
 	"strconv"
 )
 
@@ -63,11 +65,28 @@ func NewEngine() *Engine {
 	default:
 		s = storage.CreateFileStorager(env.compath)
 	}
+	authFilePath := env.compath + "/" + AuthFile
+	fi, _ := os.Open(authFilePath)
+	scanner := bufio.NewScanner(fi)
+	var lc int = 0
+	var authinfo string = ""
+	for scanner.Scan() {
+		lc++
+		if 1 < lc {
+			// error
+			log.Fatal("Invalid login info")
+		}
+		authinfo = scanner.Text()
+	}
+	var isAlreadyLogin bool = false
+	if authinfo != "" {
+		isAlreadyLogin = true
+	}
+
 	eng = &Engine{
-		App: initApp(),
-		//		storager: storage.CreateFileStorager(env.compath),
-		isLogin:  false,
-		authInfo: "",
+		App:      initApp(),
+		authInfo: authinfo,
+		isLogin:  isAlreadyLogin,
 		storager: s,
 		env:      env,
 		config:   config,
@@ -155,7 +174,8 @@ func initApp() *cli.App {
 			Usage: "Login to the cloud",
 			Action: func(c *cli.Context) {
 				if eng.IsLogin() {
-					fmt.Printf("Already login")
+					fmt.Printf("Already login as %s\n", eng.config.User.Mail)
+					return
 				}
 				eng.Login()
 			},
