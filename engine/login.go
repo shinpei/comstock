@@ -48,7 +48,18 @@ func tryLoginWithMail(mail string, password string) string {
 	}
 	defer resp.Body.Close()
 	//TODO: control over proxy
-	body, err := ioutil.ReadAll(resp.Body)
-	token := string(body) // access token
+	var token string
+	switch resp.StatusCode {
+	case 200:
+		body, _ := ioutil.ReadAll(resp.Body)
+		token = string(body) // access token
+	case 404, 403:
+		token = ""
+	default:
+		log.Fatal("[Login]Invalid response")
+		token = ""
+		break
+	}
 	return token
+
 }
