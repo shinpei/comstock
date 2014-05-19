@@ -17,23 +17,21 @@ const (
 
 func (e *Engine) Login() {
 	// check login
-	var username string
+	var mail string
 	if e.config.User.Mail == "" && e.config.User.Name == "" {
 		scanner := bufio.NewScanner(os.Stdin)
-		fmt.Printf("Your registered email or username? : ")
+		fmt.Printf("Your registered email? : ") // username is not defineable
 		scanner.Scan()
-		username = scanner.Text()
+		mail = scanner.Text()
 	} else {
-		username = e.config.User.Name
-		if username == "" {
-			username = e.config.User.Mail
-		}
+		mail = e.config.User.Mail
 	}
-	fmt.Printf("Password for %s? :", username)
+	fmt.Printf("Password for %s? :", mail)
 	password, _ := gopass.GetPass("")
-	authInfo := tryLogin(username, password)
-	if authInfo != "" {
+	authInfo := tryLoginWithMail(mail, password)
+	if authInfo == "" {
 		// TODO: register?
+		fmt.Println("Login failed")
 		return
 	}
 	// success, write authinfo
@@ -42,9 +40,8 @@ func (e *Engine) Login() {
 	fmt.Println("Knock knock ... Success!")
 }
 
-func tryLogin(username string, password string) string {
-	requestURI := ComstockHost + "/loginAs?username=" + username + "&password=" + password
-	println(requestURI)
+func tryLoginWithMail(mail string, password string) string {
+	requestURI := ComstockHost + "/loginAs?mail=" + mail + "&password=" + password
 	resp, err := http.Get(requestURI)
 	if err != nil {
 		log.Fatal(err)
@@ -52,6 +49,6 @@ func tryLogin(username string, password string) string {
 	defer resp.Body.Close()
 	//TODO: control over proxy
 	body, err := ioutil.ReadAll(resp.Body)
-	println(string(body))
-	return "access success"
+	token := string(body) // access token
+	return token
 }
