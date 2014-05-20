@@ -14,4 +14,11 @@ type Storager interface {
 	StorageType() string
 }
 
-type RemoteStorager interface{}
+type RemoteStorager interface {
+	Open() error
+	Close() error
+	Push(user *model.UserInfo, path string, cmd *model.Command) error
+	List(user *model.UserInfo)
+	FetchCommandFromNumber(user *model.UserInfo, num int) (cmd *model.Command)
+	StorageType() string
+}

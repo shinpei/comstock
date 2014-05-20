@@ -65,20 +65,8 @@ func NewEngine() *Engine {
 	default:
 		s = storage.CreateFileStorager(env.compath)
 	}
-	authFilePath := env.compath + "/" + AuthFile
-	fi, _ := os.Open(authFilePath)
-	scanner := bufio.NewScanner(fi)
-	var lc int = 0
-	var authinfo string = ""
-	for scanner.Scan() {
-		lc++
-		if 1 < lc {
-			// error
-			log.Fatal("Invalid login info")
-		}
-		authinfo = scanner.Text()
-	}
 	var isAlreadyLogin bool = false
+	authinfo := readAuthInfo(eng.env)
 	if authinfo != "" {
 		isAlreadyLogin = true
 	}
@@ -95,6 +83,22 @@ func NewEngine() *Engine {
 	return eng
 }
 
+func readAuthInfo(env *Env) string {
+	authFilePath := env.compath + "/" + AuthFile
+	fi, _ := os.Open(authFilePath)
+	scanner := bufio.NewScanner(fi)
+	var lc int = 0
+	var authinfo string = ""
+	for scanner.Scan() {
+		lc++
+		if 1 < lc {
+			// error
+			log.Fatal("Invalid login info")
+		}
+		authinfo = scanner.Text()
+	}
+	return authinfo
+}
 func initApp() *cli.App {
 	app := cli.NewApp()
 	app.Version = Version
