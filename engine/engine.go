@@ -25,12 +25,14 @@ var (
 )
 
 type Engine struct {
-	App      *cli.App
-	storager storage.Storager // storage
-	isLogin  bool
-	authInfo string
-	config   *Config
-	env      *Env
+	App       *cli.App
+	storager  storage.Storager       // storage
+	rStorager storage.RemoteStorager // rstorage
+	userinfo  *model.UserInfo
+	isLogin   bool
+	authInfo  string
+	config    *Config
+	env       *Env
 }
 
 func (e *Engine) IsLogin() bool {
@@ -50,6 +52,7 @@ func (e *Engine) SetAuthInfo(auth string) {
 }
 
 func NewEngine() *Engine {
+
 	env := CreateEnv()
 	var config *Config
 	configPath := env.compath + "/" + ConfigFileDefault
@@ -57,6 +60,7 @@ func NewEngine() *Engine {
 		config = LoadConfig(configPath)
 	}
 	var s storage.Storager
+	var rs storage.RemoteStorager
 	switch config.Local.Type {
 	case "file":
 		s = storage.CreateFileStorager(env.compath)
@@ -65,19 +69,25 @@ func NewEngine() *Engine {
 	default:
 		s = storage.CreateFileStorager(env.compath)
 	}
+	rs = storage.CreateHerokuStorager()
+
 	var isAlreadyLogin bool = false
-	authinfo := readAuthInfo(eng.env)
+	authinfo := readAuthInfo(env)
+	var userinfo *model.UserInfo
 	if authinfo != "" {
+		userinfo = model.CreateUserinfo(authinfo)
 		isAlreadyLogin = true
 	}
 
 	eng = &Engine{
-		App:      initApp(),
-		authInfo: authinfo,
-		isLogin:  isAlreadyLogin,
-		storager: s,
-		env:      env,
-		config:   config,
+		App:       initApp(),
+		authInfo:  authinfo,
+		isLogin:   isAlreadyLogin,
+		userinfo:  userinfo,
+		storager:  s,
+		rStorager: rs,
+		env:       env,
+		config:    config,
 	}
 
 	return eng
@@ -136,8 +146,11 @@ func initApp() *cli.App {
 			Description: "Show the list of stocked commands",
 			Usage:       "List stocked command",
 			Action: func(c *cli.Context) {
-
-				eng.List()
+				err := eng.RList()
+				if err != nil {
+					log.Fatal("Error has occured")
+				}
+				//eng.List()
 			},
 		},
 		{
@@ -235,6 +248,11 @@ func (e *Engine) List() {
 	if err := e.storager.List(); err != nil {
 		log.Fatal(err)
 	}
+}
+
+func (e *Engine) RList() (err error) {
+	err = e.rStorager.List(e.userinfo)
+	return
 }
 
 func (e *Engine) ShowConfig() {

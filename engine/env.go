@@ -1,8 +1,8 @@
 package engine
 
 import (
-	"bufio"
 	"fmt"
+	"io/ioutil"
 	"os"
 	"os/user"
 	"runtime"
@@ -15,6 +15,10 @@ type Env struct {
 	arch     string
 	shell    string
 }
+
+const (
+	ComVersionFile string = "version"
+)
 
 func CreateEnv() *Env {
 	user, _ := user.Current()
@@ -33,7 +37,16 @@ func CreateEnv() *Env {
 	}
 
 	// TODO: verify comstock version
-
+	versionPath := compath + "/" + ComVersionFile
+	if IsFileExist(versionPath) {
+		createVersionFile(versionPath)
+	} else {
+		version := getVersion(versionPath)
+		// versioncheck
+		if version != Version {
+			// Version mismatch
+		}
+	}
 	return &Env{
 		compath:  compath,
 		homepath: homeDir,
@@ -48,32 +61,12 @@ func (e *Env) ComPath() string {
 }
 
 func CreateComstockPath(path string) (err error) {
-	scanner := bufio.NewScanner(os.Stdin)
-	for {
-		fmt.Printf("Compath doesn't exists, will you create dir? [Y/n]: ")
-		scanner.Scan()
-		answer := scanner.Text()
-		switch answer {
-		case "Y", "y", "":
-			break
-		case "N", "n":
-			//TODO: make local dir as
-
-			return
-		default:
-			println("Please enter y or n")
-			continue
-		}
-		break
-	}
 	err = os.Mkdir(path, 0755)
 	if err != nil {
 		fmt.Printf("Cannot create compath '%s'\n", path)
-		//TODO: setup version file
 	} else {
 		fmt.Printf("Create compath as '%s'\n", path)
 	}
-
 	return
 }
 
@@ -91,4 +84,15 @@ func (e *Env) OS() string {
 
 func (e *Env) Shell() string {
 	return e.shell
+}
+
+func createVersionFile(path string) {
+	versioninfo := []byte(Version)
+	ioutil.WriteFile(path, versioninfo, 0644)
+	println("hi")
+}
+
+func getVersion(path string) string {
+	versioninfo, _ := ioutil.ReadFile(path)
+	return string(versioninfo)
 }
