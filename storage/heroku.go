@@ -5,7 +5,9 @@ import (
 	"fmt"
 	"github.com/shinpei/comstock/model"
 	"io/ioutil"
+	"log"
 	"net/http"
+	"net/url"
 )
 
 const (
@@ -25,15 +27,37 @@ func CreateHerokuStorager() (h *HerokuStorager) {
 }
 
 func (hs *HerokuStorager) Push(user *model.UserInfo, path string, cmd *model.Command) (err error) {
+	command := "/postCommand"
+	vals := url.Values{"cmd": {cmd.Cmd}, "authinfo": {user.AuthInfo()}}.Encode()
+	requestURI := ComstockHost + command + "?" + vals
+	resp, err := http.Get(requestURI)
+	if err != nil {
+		log.Fatal("error")
+	}
+	defer resp.Body.Close()
+	body, _ := ioutil.ReadAll(resp.Body)
+	println(body)
 	return
 }
 
 func (hs *HerokuStorager) List(user *model.UserInfo) (err error) {
-	command := "/list?authinfo=" + user.AuthInfo()
-	requestURI := ComstockHost + command
-	resp, _ := http.Get(requestURI)
+	command := "/list"
+	vals := url.Values{"authinfo": {user.AuthInfo()}}.Encode()
+	requestURI := ComstockHost + command + "?" + vals
+	resp, err := http.Get(requestURI)
+	if err != nil {
+		log.Fatal("Couldn't reach server, ", err)
+	}
 	defer resp.Body.Close()
-	body, _ := ioutil.ReadAll(resp.Body)
+	var body []byte
+	switch resp.StatusCode {
+	case 200:
+		body, _ = ioutil.ReadAll(resp.Body)
+	case 404, 403:
+		fmt.Printf("Failed to fetch.")
+	default:
+		fmt.Printf("Failed to fetch")
+	}
 	var cmds []model.Command
 	err = json.Unmarshal(body, &cmds)
 	var idx int = 0

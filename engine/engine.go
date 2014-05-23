@@ -218,7 +218,8 @@ func (e *Engine) Run(args []string) {
 func (e *Engine) Stock(cmd *model.Command) {
 	// save to the local storage
 	// remove whitespaces from cmd
-	e.storager.Push(e.env.compath, cmd)
+	e.rStorager.Push(e.userinfo, e.env.compath, cmd)
+	//e.storager.Push(e.env.compath, cmd)
 	/*
 		{
 			// push to the internet
@@ -227,7 +228,7 @@ func (e *Engine) Stock(cmd *model.Command) {
 			e.PushToLocal(cmd)
 		}
 	*/
-	fmt.Printf("[%s]Saved command '%s'\n", e.storager.StorageType(), cmd.Cmd)
+	fmt.Printf("[%s]Saved command '%s'\n", e.rStorager.StorageType(), cmd.Cmd)
 }
 
 func (e *Engine) Close() {
