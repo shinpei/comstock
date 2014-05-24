@@ -43,7 +43,7 @@ func (fs *FileStorager) StorageType() string {
 }
 
 // Store the command
-func (fs *FileStorager) Push(path string, cmd *model.Command) (err error) {
+func (fs *FileStorager) Push(user *model.UserInfo, path string, cmd *model.Command) (err error) {
 
 	data, _ := ioutil.ReadFile(fs.filepath)
 	cmdByte := []byte(cmd.Cmd)
@@ -59,7 +59,7 @@ func (fs *FileStorager) Close() (err error) {
 }
 
 // List all commands
-func (fs *FileStorager) List() (err error) {
+func (fs *FileStorager) List(user *model.UserInfo) (err error) {
 	var fi *os.File
 	fi, err = os.Open(fs.filepath)
 	scanner := bufio.NewScanner(fi)
@@ -71,7 +71,7 @@ func (fs *FileStorager) List() (err error) {
 	return
 }
 
-func (fs *FileStorager) FetchCommandFromNumber(num int) (cmd *model.Command) {
+func (fs *FileStorager) FetchCommandFromNumber(user *model.UserInfo, num int) (cmd *model.Command) {
 	var fi *os.File
 	// TODO
 	fi, _ = os.Open(fs.filepath)

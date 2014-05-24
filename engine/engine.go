@@ -25,14 +25,13 @@ var (
 )
 
 type Engine struct {
-	App       *cli.App
-	storager  storage.Storager       // storage
-	rStorager storage.RemoteStorager // rstorage
-	userinfo  *model.UserInfo
-	isLogin   bool
-	authInfo  string
-	config    *Config
-	env       *Env
+	App      *cli.App
+	storager storage.Storager // storage
+	userinfo *model.UserInfo
+	isLogin  bool
+	authInfo string
+	config   *Config
+	env      *Env
 }
 
 func (e *Engine) IsLogin() bool {
@@ -60,7 +59,6 @@ func NewEngine() *Engine {
 		config = LoadConfig(configPath)
 	}
 	var s storage.Storager
-	var rs storage.RemoteStorager
 	switch config.Local.Type {
 	case "file":
 		s = storage.CreateFileStorager(env.compath)
@@ -69,8 +67,7 @@ func NewEngine() *Engine {
 	default:
 		s = storage.CreateFileStorager(env.compath)
 	}
-	rs = storage.CreateHerokuStorager()
-
+	//s = storage.CreateHerokuStorager()
 	var isAlreadyLogin bool = false
 	authinfo := readAuthInfo(env)
 	var userinfo *model.UserInfo
@@ -80,14 +77,13 @@ func NewEngine() *Engine {
 	}
 
 	eng = &Engine{
-		App:       initApp(),
-		authInfo:  authinfo,
-		isLogin:   isAlreadyLogin,
-		userinfo:  userinfo,
-		storager:  s,
-		rStorager: rs,
-		env:       env,
-		config:    config,
+		App:      initApp(),
+		authInfo: authinfo,
+		isLogin:  isAlreadyLogin,
+		userinfo: userinfo,
+		storager: s,
+		env:      env,
+		config:   config,
 	}
 
 	return eng
@@ -146,7 +142,7 @@ func initApp() *cli.App {
 			Description: "Show the list of stocked commands",
 			Usage:       "List stocked command",
 			Action: func(c *cli.Context) {
-				err := eng.RList()
+				err := eng.List()
 				if err != nil {
 					log.Fatal("Error has occured")
 				}
@@ -218,7 +214,7 @@ func (e *Engine) Run(args []string) {
 func (e *Engine) Stock(cmd *model.Command) {
 	// save to the local storage
 	// remove whitespaces from cmd
-	e.rStorager.Push(e.userinfo, e.env.compath, cmd)
+	e.storager.Push(e.userinfo, e.env.compath, cmd)
 	//e.storager.Push(e.env.compath, cmd)
 	/*
 		{
@@ -228,7 +224,7 @@ func (e *Engine) Stock(cmd *model.Command) {
 			e.PushToLocal(cmd)
 		}
 	*/
-	fmt.Printf("[%s]Saved command '%s'\n", e.rStorager.StorageType(), cmd.Cmd)
+	fmt.Printf("[%s]Saved command '%s'\n", e.storager.StorageType(), cmd.Cmd)
 }
 
 func (e *Engine) Close() {
@@ -244,15 +240,11 @@ func (e *Engine) Close() {
 
 }
 
-func (e *Engine) List() {
+func (e *Engine) List() (err error) {
 	// e.storager.PullCommands()
-	if err := e.storager.List(); err != nil {
+	if err = e.storager.List(e.userinfo); err != nil {
 		log.Fatal(err)
 	}
-}
-
-func (e *Engine) RList() (err error) {
-	err = e.rStorager.List(e.userinfo)
 	return
 }
 
@@ -262,6 +254,6 @@ func (e *Engine) ShowConfig() {
 
 func (e *Engine) FetchCommandFromNumber(num int) (cmd *model.Command) {
 
-	cmd = e.storager.FetchCommandFromNumber(num)
+	cmd = e.storager.FetchCommandFromNumber(e.userinfo, num)
 	return
 }

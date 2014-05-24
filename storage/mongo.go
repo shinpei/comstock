@@ -37,7 +37,7 @@ type Person struct {
 }
 
 //store command
-func (ms *MongoStorager) Push(path string, cmd *model.Command) (err error) {
+func (ms *MongoStorager) Push(user *model.UserInfo, path string, cmd *model.Command) (err error) {
 	hostname := MongoHost
 	session, err := mgo.DialWithTimeout("mongodb://"+hostname, time.Duration(3)*time.Second)
 	if err != nil {
@@ -61,7 +61,7 @@ func (ms *MongoStorager) Close() (err error) {
 	return
 }
 
-func (ms *MongoStorager) FetchCommandFromNumber(num int) (cmd *model.Command) {
+func (ms *MongoStorager) FetchCommandFromNumber(user *model.UserInfo, num int) (cmd *model.Command) {
 	hostname := MongoHost
 	session, err := mgo.DialWithTimeout("mongodb://"+hostname, time.Duration(3)*time.Second)
 	if err != nil {
@@ -86,7 +86,7 @@ func (ms *MongoStorager) FetchCommandFromNumber(num int) (cmd *model.Command) {
 	}
 	return
 }
-func (ms *MongoStorager) List() (err error) {
+func (ms *MongoStorager) List(user *model.UserInfo) (err error) {
 	hostname := MongoHost
 	session, err := mgo.DialWithTimeout("mongodb://"+hostname, time.Duration(3)*time.Second)
 	if err != nil {
