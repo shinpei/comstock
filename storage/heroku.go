@@ -54,9 +54,11 @@ func (hs *HerokuStorager) List(user *model.UserInfo) (err error) {
 	case 200:
 		body, _ = ioutil.ReadAll(resp.Body)
 	case 404, 403:
-		fmt.Printf("Failed to fetch.")
+		fmt.Printf("Failed to fetch\n")
+		return
 	default:
-		fmt.Printf("Failed to fetch")
+		fmt.Printf("Failed to fetch\n")
+		return
 	}
 	var cmds []model.Command
 	err = json.Unmarshal(body, &cmds)

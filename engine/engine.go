@@ -2,6 +2,7 @@ package engine
 
 import (
 	"bufio"
+	"errors"
 	"fmt"
 	"github.com/codegangsta/cli"
 	"github.com/shinpei/comstock/model"
@@ -146,9 +147,8 @@ func initApp() *cli.App {
 			Action: func(c *cli.Context) {
 				err := eng.List()
 				if err != nil {
-					log.Fatal("Error has occured")
+					log.Fatal("Command failed: ", err)
 				}
-				//eng.List()
 			},
 		},
 		{
@@ -244,6 +244,10 @@ func (e *Engine) Close() {
 
 func (e *Engine) List() (err error) {
 	// e.storager.PullCommands()
+	if e.isLogin == false {
+		err = errors.New("Login required")
+		return
+	}
 	if err = e.storager.List(e.userinfo); err != nil {
 		log.Fatal(err)
 	}
