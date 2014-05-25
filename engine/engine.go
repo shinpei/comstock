@@ -64,6 +64,8 @@ func NewEngine() *Engine {
 		s = storage.CreateFileStorager(env.compath)
 	case "mongo":
 		s = storage.CreateMongoStorager()
+	case "heroku":
+		s = storage.CreateHerokuStorager()
 	default:
 		s = storage.CreateFileStorager(env.compath)
 	}
