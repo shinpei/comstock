@@ -3,6 +3,7 @@ package engine
 import (
 	"bufio"
 	"code.google.com/p/gopass"
+	"errors"
 	"fmt"
 	"io/ioutil"
 	"log"
@@ -28,10 +29,10 @@ func (e *Engine) Login() {
 	}
 	fmt.Printf("Password for %s? :", mail)
 	password, _ := gopass.GetPass("")
-	authInfo := tryLoginWithMail(mail, password)
-	if authInfo == "" {
+	authInfo, err := tryLoginWithMail(mail, password)
+	if err != nil {
 		// TODO: register?
-		fmt.Println("Login failed")
+		log.Fatal("Login failed:", err)
 		return
 	}
 	// success, write authinfo
@@ -40,26 +41,30 @@ func (e *Engine) Login() {
 	fmt.Println("Knock knock ... Success!")
 }
 
-func tryLoginWithMail(mail string, password string) string {
+func tryLoginWithMail(mail string, password string) (token string, err error) {
 	requestURI := ComstockHost + "/loginAs?mail=" + mail + "&password=" + password
-	resp, err := http.Get(requestURI)
+	var resp *http.Response
+	resp, err = http.Get(requestURI)
 	if err != nil {
 		log.Fatal(err)
 	}
 	defer resp.Body.Close()
 	//TODO: control over proxy
-	var token string
 	switch resp.StatusCode {
 	case 200:
 		body, _ := ioutil.ReadAll(resp.Body)
 		token = string(body) // access token
+	case 409:
+		err = errors.New("Already loggedin")
+		token = ""
 	case 404, 403:
+		err = errors.New("Wrong username or password")
 		token = ""
 	default:
-		log.Fatal("[Login]Invalid response")
+		err = errors.New("[Login]Invalid response")
 		token = ""
 		break
 	}
-	return token
+	return
 
 }
