@@ -35,8 +35,7 @@ func (hs *HerokuStorager) Push(user *model.UserInfo, path string, cmd *model.Com
 		log.Fatal("error")
 	}
 	defer resp.Body.Close()
-	body, _ := ioutil.ReadAll(resp.Body)
-	println(body)
+	//	body, _ := ioutil.ReadAll(resp.Body)
 	return
 }
 
@@ -54,10 +53,10 @@ func (hs *HerokuStorager) List(user *model.UserInfo) (err error) {
 	case 200:
 		body, _ = ioutil.ReadAll(resp.Body)
 	case 404, 403:
-		fmt.Printf("Failed to fetch\n")
+		fmt.Println("Failed to fetch")
 		return
 	default:
-		fmt.Printf("Failed to fetch\n")
+		fmt.Println("Failed to fetch")
 		return
 	}
 	var cmds []model.Command

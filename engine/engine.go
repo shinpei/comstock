@@ -199,7 +199,6 @@ func initApp() *cli.App {
 			Name:  "config",
 			Usage: "Show comstock configuration",
 			Action: func(c *cli.Context) {
-
 				eng.ShowConfig()
 			},
 		},
@@ -217,15 +216,6 @@ func (e *Engine) Stock(cmd *model.Command) {
 	// save to the local storage
 	// remove whitespaces from cmd
 	e.storager.Push(e.userinfo, e.env.compath, cmd)
-	//e.storager.Push(e.env.compath, cmd)
-	/*
-		{
-			// push to the internet
-			e.PushToRemote()
-		} else {
-			e.PushToLocal(cmd)
-		}
-	*/
 	fmt.Printf("[%s]Saved command '%s'\n", e.storager.StorageType(), cmd.Cmd)
 }
 
@@ -243,7 +233,6 @@ func (e *Engine) Close() {
 }
 
 func (e *Engine) List() (err error) {
-	// e.storager.PullCommands()
 	if e.isLogin == false {
 		err = errors.New("Login required")
 		return
