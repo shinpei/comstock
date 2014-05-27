@@ -12,8 +12,8 @@ import (
 )
 
 const (
-	//ComstockHost string = "http://comstock.herokuapp.com"
-	ComstockHost string = "http://localhost:5000"
+	ComstockHost string = "http://comstock.herokuapp.com"
+	//ComstockHost string = "http://localhost:5000"
 )
 
 func (e *Engine) Login() {
@@ -27,7 +27,7 @@ func (e *Engine) Login() {
 	} else {
 		mail = e.config.User.Mail
 	}
-	fmt.Printf("Password for %s? :", mail)
+	fmt.Printf("Password for %s?:", mail)
 	password, _ := gopass.GetPass("")
 	authInfo, err := tryLoginWithMail(mail, password)
 	if err != nil {
@@ -38,7 +38,6 @@ func (e *Engine) Login() {
 	// success, write authinfo
 	e.SetLogin()
 	e.SetAuthInfo(authInfo)
-	fmt.Println("Knock knock ... Success!")
 }
 
 func tryLoginWithMail(mail string, password string) (token string, err error) {
@@ -54,14 +53,16 @@ func tryLoginWithMail(mail string, password string) (token string, err error) {
 	case 200:
 		body, _ := ioutil.ReadAll(resp.Body)
 		token = string(body) // access token
+		println("Authentification success.")
 	case 409:
-		err = errors.New("Already loggedin")
-		token = ""
+		body, _ := ioutil.ReadAll(resp.Body)
+		token = string(body)
+		println("Already logined.")
 	case 404, 403:
-		err = errors.New("Wrong username or password")
+		err = errors.New("Authentification failed.")
 		token = ""
 	default:
-		err = errors.New("[Login]Invalid response")
+		err = errors.New("Invalid response.")
 		token = ""
 		break
 	}

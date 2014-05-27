@@ -23,9 +23,9 @@ brew doctor
 All you need is do 'login' command.
 ```
 $ comstock login
-Your registered email address, or username? : shinpei
-And password? :
-knock knock..., Success!
+Your registered email? : shinpei@mail.com
+Password for shinpei@mail.com?:
+Authentification success.
 $ brew doctor
 $ comstock save
 saved command 'brew doctor'
