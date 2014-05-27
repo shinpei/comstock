@@ -89,7 +89,6 @@ func (e *Env) Shell() string {
 func createVersionFile(path string) {
 	versioninfo := []byte(Version)
 	ioutil.WriteFile(path, versioninfo, 0644)
-	println("hi")
 }
 
 func getVersion(path string) string {
