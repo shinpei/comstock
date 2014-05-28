@@ -19,7 +19,7 @@ const (
 func (e *Engine) Login() {
 	// check login
 	var mail string
-	if e.config.User.Mail == "" && e.config.User.Name == "" {
+	if e.config.User.Mail == "" {
 		scanner := bufio.NewScanner(os.Stdin)
 		fmt.Printf("Your registered email? : ") // username is not defineable
 		scanner.Scan()
