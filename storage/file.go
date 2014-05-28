@@ -71,7 +71,7 @@ func (fs *FileStorager) List(user *model.UserInfo) (err error) {
 	return
 }
 
-func (fs *FileStorager) FetchCommandFromNumber(user *model.UserInfo, num int) (cmd *model.Command) {
+func (fs *FileStorager) FetchCommandFromNumber(user *model.UserInfo, num int) (cmd *model.Command, err error) {
 	var fi *os.File
 	// TODO
 	fi, _ = os.Open(fs.filepath)

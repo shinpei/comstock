@@ -61,9 +61,10 @@ func (ms *MongoStorager) Close() (err error) {
 	return
 }
 
-func (ms *MongoStorager) FetchCommandFromNumber(user *model.UserInfo, num int) (cmd *model.Command) {
+func (ms *MongoStorager) FetchCommandFromNumber(user *model.UserInfo, num int) (cmd *model.Command, err error) {
 	hostname := MongoHost
-	session, err := mgo.DialWithTimeout("mongodb://"+hostname, time.Duration(3)*time.Second)
+	var session *mgo.Session
+	session, err = mgo.DialWithTimeout("mongodb://"+hostname, time.Duration(3)*time.Second)
 	if err != nil {
 		log.Fatal("Couldn't dial to ", hostname, ",", err)
 	}

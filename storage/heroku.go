@@ -85,9 +85,9 @@ func (hs *HerokuStorager) List(user *model.UserInfo) (err error) {
 	return
 }
 
-func (hs *HerokuStorager) FetchCommandFromNumber(user *model.UserInfo, num int) (cmd *model.Command) {
-	command := "/fetchFromNumber"
-	vals := url.Values{"authinfo": {user.AuthInfo()}}.Encode()
+func (hs *HerokuStorager) FetchCommandFromNumber(user *model.UserInfo, num int) (cmd *model.Command, err error) {
+	command := "/fetchCommandFromNumber"
+	vals := url.Values{"authinfo": {user.AuthInfo()}, "number": {string(num)}}.Encode()
 	requestURI := ComstockHost + command + "?" + vals
 	resp, err := http.Get(requestURI)
 	if err != nil {
@@ -95,14 +95,18 @@ func (hs *HerokuStorager) FetchCommandFromNumber(user *model.UserInfo, num int) 
 	}
 	defer resp.Body.Close()
 	var body []byte
+	println(resp.StatusCode)
 	switch resp.StatusCode {
 	case 200:
 		body, _ = ioutil.ReadAll(resp.Body)
 	case 404, 403:
-		fmt.Println("Number not found")
+		err = errors.New("Number not found")
+		return
+	case 500:
+		err = model.ErrSessionExpires
 		return
 	default:
-		fmt.Println("Failed to fetch")
+		err = errors.New("Fetch failed somehow")
 		return
 	}
 	var cmds []model.Command

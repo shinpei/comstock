@@ -88,7 +88,6 @@ func NewEngine() *Engine {
 		env:      env,
 		config:   config,
 	}
-
 	return eng
 }
 
@@ -161,8 +160,12 @@ func initApp() *cli.App {
 					return
 				}
 				num, _ := strconv.Atoi(c.Args()[0])
-				cmd := eng.FetchCommandFromNumber(num)
-				println(cmd.Cmd)
+				cmd, err := eng.FetchCommandFromNumber(num)
+				if err != nil {
+					fmt.Println("Command failed: ", err)
+				} else {
+					println(cmd.Cmd)
+				}
 			},
 		},
 		{
@@ -231,8 +234,11 @@ func (e *Engine) ShowConfig() {
 	e.config.ShowConfig()
 }
 
-func (e *Engine) FetchCommandFromNumber(num int) (cmd *model.Command) {
+func (e *Engine) FetchCommandFromNumber(num int) (cmd *model.Command, err error) {
 
-	cmd = e.storager.FetchCommandFromNumber(e.userinfo, num)
+	cmd, err = e.storager.FetchCommandFromNumber(e.userinfo, num)
+	if err == model.ErrSessionExpires {
+		e.SetLogout()
+	}
 	return
 }
