@@ -11,8 +11,8 @@ import (
 )
 
 const (
-	//ComstockHost = "http://comstock.herokuapp.com"
-	ComstockHost = "http://localhost:5000"
+	ComstockHost = "http://comstock.herokuapp.com"
+	//ComstockHost = "http://localhost:5000"
 )
 
 type HerokuStorager struct {

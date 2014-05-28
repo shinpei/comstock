@@ -12,8 +12,8 @@ import (
 )
 
 const (
-	//ComstockHost string = "http://comstock.herokuapp.com"
-	ComstockHost string = "http://localhost:5000"
+	ComstockHost string = "http://comstock.herokuapp.com"
+	//ComstockHost string = "http://localhost:5000"
 )
 
 func (e *Engine) Login() {
