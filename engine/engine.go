@@ -170,18 +170,7 @@ func initApp() *cli.App {
 			ShortName: "r",
 			Usage:     "Exec command with #number (experiment)",
 			Action: func(c *cli.Context) {
-				if len(c.Args()) == 0 {
-					println("'run' requires #number argument, e.g., 'comstock run 1'")
-					return
-				}
-				// TODO fix with parseint
-				num, err := strconv.Atoi(c.Args()[0])
-				if err != nil {
-					log.Fatal(err)
-				}
-				cmd := eng.FetchCommandFromNumber(num)
-				println(cmd.Cmd)
-
+				log.Fatal("Not yet implemented")
 			},
 		},
 		{
@@ -210,14 +199,6 @@ func initApp() *cli.App {
 func (e *Engine) Run(args []string) {
 	e.App.Run(args)
 	e.Close()
-}
-
-func (e *Engine) Stock(cmd *model.Command) (err error) {
-	// save to the local storage
-	// remove whitespaces from cmd
-	err = e.storager.Push(e.userinfo, e.env.compath, cmd)
-	fmt.Printf("[%s]Saved command '%s'\n", e.storager.StorageType(), cmd.Cmd)
-	return
 }
 
 func (e *Engine) Close() {

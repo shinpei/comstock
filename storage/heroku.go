@@ -2,6 +2,7 @@ package storage
 
 import (
 	"encoding/json"
+	"errors"
 	"fmt"
 	"github.com/shinpei/comstock/model"
 	"io/ioutil"
@@ -11,8 +12,8 @@ import (
 )
 
 const (
-	ComstockHost = "http://comstock.herokuapp.com"
-	//ComstockHost = "http://localhost:5000"
+	//ComstockHost = "http://comstock.herokuapp.com"
+	ComstockHost = "http://localhost:5000"
 )
 
 type HerokuStorager struct {
@@ -40,8 +41,9 @@ func (hs *HerokuStorager) Push(user *model.UserInfo, path string, cmd *model.Com
 	case 500: // session expires
 		err = model.ErrSessionExpires
 		// disable login status
+	case 403:
+		err = errors.New("Hasn't login, please login first")
 	default:
-		log.Fatal("Something went wrong")
 		//	body, _ := ioutil.ReadAll(resp.Body)
 	}
 	return

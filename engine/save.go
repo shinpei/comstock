@@ -1,6 +1,7 @@
 package engine
 
 import (
+	"fmt"
 	"log"
 	"strings"
 )
@@ -16,9 +17,12 @@ func (e *Engine) Save(home string, shell string) {
 		handler = &BashHandler{}
 	}
 	cmd, err := handler.ReadLastHistory(shellHistoryFilename)
-	cmd.Cmd = strings.TrimSpace(cmd.Cmd)
 	if err != nil {
 		log.Fatal(err)
 	}
-	eng.Stock(cmd)
+	cmd.Cmd = strings.TrimSpace(cmd.Cmd)
+	// save to the local storage
+	// remove whitespaces from cmd
+	err = e.storager.Push(e.userinfo, e.env.compath, cmd)
+	fmt.Printf("[%s]Saved command '%s'\n", e.storager.StorageType(), cmd.Cmd)
 }
