@@ -2,7 +2,6 @@ package storage
 
 import (
 	"encoding/json"
-	"errors"
 	"fmt"
 	"github.com/shinpei/comstock/model"
 	"io/ioutil"
@@ -38,11 +37,9 @@ func (hs *HerokuStorager) Push(user *model.UserInfo, path string, cmd *model.Com
 	defer resp.Body.Close()
 	switch resp.StatusCode {
 	case 200:
-
 	case 500: // session expires
-		log.Fatal("Session expires")
+		err = model.ErrSessionExpires
 		// disable login status
-		err = errors.New("Session expires")
 	default:
 		log.Fatal("Something went wrong")
 		//	body, _ := ioutil.ReadAll(resp.Body)
@@ -64,10 +61,13 @@ func (hs *HerokuStorager) List(user *model.UserInfo) (err error) {
 	case 200:
 		body, _ = ioutil.ReadAll(resp.Body)
 	case 404:
-		fmt.Println("Failed to fetch")
+		log.Fatal("Failed to fetch")
 		return
 	case 403:
-		fmt.Println("Login required")
+		log.Fatal("Login required")
+		return
+	case 500:
+		err = model.ErrSessionExpires
 		return
 	default:
 		fmt.Println("Failed to fetch")

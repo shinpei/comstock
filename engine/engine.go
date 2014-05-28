@@ -147,7 +147,7 @@ func initApp() *cli.App {
 			Action: func(c *cli.Context) {
 				err := eng.List()
 				if err != nil {
-					log.Fatal("Command failed: ", err)
+					fmt.Println("Command failed: ", err)
 				}
 			},
 		},
@@ -212,24 +212,25 @@ func (e *Engine) Run(args []string) {
 	e.Close()
 }
 
-func (e *Engine) Stock(cmd *model.Command) {
+func (e *Engine) Stock(cmd *model.Command) (err error) {
 	// save to the local storage
 	// remove whitespaces from cmd
-	e.storager.Push(e.userinfo, e.env.compath, cmd)
+	err = e.storager.Push(e.userinfo, e.env.compath, cmd)
 	fmt.Printf("[%s]Saved command '%s'\n", e.storager.StorageType(), cmd.Cmd)
+	return
 }
 
 func (e *Engine) Close() {
 	e.storager.Close()
 
 	// write needed info
+	authFilePath := e.env.compath + "/" + AuthFile
 	if e.IsLogin() {
-		authFilePath := e.env.compath + "/" + AuthFile
 		authinfo := []byte(e.AuthInfo())
 		ioutil.WriteFile(authFilePath, authinfo, 0644)
-		return
+	} else {
+		os.Remove(authFilePath)
 	}
-
 }
 
 func (e *Engine) List() (err error) {
@@ -238,7 +239,9 @@ func (e *Engine) List() (err error) {
 		return
 	}
 	if err = e.storager.List(e.userinfo); err != nil {
-		log.Fatal(err)
+		if err == model.ErrSessionExpires {
+			e.SetLogout()
+		}
 	}
 	return
 }
