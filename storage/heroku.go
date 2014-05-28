@@ -9,6 +9,7 @@ import (
 	"log"
 	"net/http"
 	"net/url"
+	"strconv"
 )
 
 const (
@@ -87,7 +88,7 @@ func (hs *HerokuStorager) List(user *model.UserInfo) (err error) {
 
 func (hs *HerokuStorager) FetchCommandFromNumber(user *model.UserInfo, num int) (cmd *model.Command, err error) {
 	command := "/fetchCommandFromNumber"
-	vals := url.Values{"authinfo": {user.AuthInfo()}, "number": {string(num)}}.Encode()
+	vals := url.Values{"authinfo": {user.AuthInfo()}, "number": {strconv.Itoa(num)}}.Encode()
 	requestURI := ComstockHost + command + "?" + vals
 	resp, err := http.Get(requestURI)
 	if err != nil {
@@ -95,7 +96,6 @@ func (hs *HerokuStorager) FetchCommandFromNumber(user *model.UserInfo, num int) 
 	}
 	defer resp.Body.Close()
 	var body []byte
-	println(resp.StatusCode)
 	switch resp.StatusCode {
 	case 200:
 		body, _ = ioutil.ReadAll(resp.Body)
@@ -111,11 +111,7 @@ func (hs *HerokuStorager) FetchCommandFromNumber(user *model.UserInfo, num int) 
 	}
 	var cmds []model.Command
 	err = json.Unmarshal(body, &cmds)
-	var idx int = 0
-	for _, cmd := range cmds {
-		idx++
-		fmt.Printf("%d: %s\n", idx, cmd.Cmd)
-	}
+	cmd = &cmds[0]
 	return
 }
 
