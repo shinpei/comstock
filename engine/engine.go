@@ -2,7 +2,6 @@ package engine
 
 import (
 	"bufio"
-	"errors"
 	"fmt"
 	"github.com/codegangsta/cli"
 	"github.com/shinpei/comstock/model"
@@ -209,7 +208,6 @@ func (e *Engine) Run(args []string) {
 
 func (e *Engine) Close() {
 	e.storager.Close()
-
 	// write needed info
 	authFilePath := e.env.compath + "/" + AuthFile
 	if e.IsLogin() {
@@ -221,12 +219,13 @@ func (e *Engine) Close() {
 }
 
 func (e *Engine) List() (err error) {
-	if e.isLogin == false {
-		err = errors.New("Login required")
-		return
+	if e.storager.IsRequireLogin() == true && e.isLogin == false {
+		log.Fatal("You have no valid access token. Please login first.")
 	}
 	if err = e.storager.List(e.userinfo); err != nil {
 		if err == model.ErrSessionExpires {
+			e.SetLogout()
+		} else if err == model.ErrSessionInvalid {
 			e.SetLogout()
 		}
 	}

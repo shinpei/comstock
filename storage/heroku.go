@@ -53,6 +53,7 @@ func (hs *HerokuStorager) Push(user *model.UserInfo, path string, cmd *model.Com
 }
 
 func (hs *HerokuStorager) List(user *model.UserInfo) (err error) {
+
 	command := "/list"
 	// does it have auto
 	vals := url.Values{"authinfo": {user.AuthInfo()}}.Encode()
@@ -72,7 +73,7 @@ func (hs *HerokuStorager) List(user *model.UserInfo) (err error) {
 		err = errors.New("Not found")
 		return
 	case 403:
-		err = errors.New("Login required")
+		err = model.ErrSessionInvalid
 		return
 	case 500:
 		err = model.ErrSessionExpires
@@ -126,4 +127,7 @@ func (hs *HerokuStorager) StorageType() string {
 
 func (hs *HerokuStorager) Close() (err error) {
 	return
+}
+func (hs *HerokuStorager) IsRequireLogin() bool {
+	return true
 }

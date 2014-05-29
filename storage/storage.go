@@ -11,4 +11,5 @@ type Storager interface {
 	List(user *model.UserInfo) error
 	FetchCommandFromNumber(user *model.UserInfo, num int) (cmd *model.Command, err error)
 	StorageType() string
+	IsRequireLogin() bool
 }

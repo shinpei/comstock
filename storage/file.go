@@ -87,3 +87,7 @@ func (fs *FileStorager) FetchCommandFromNumber(user *model.UserInfo, num int) (c
 	log.Fatal("Invalid history number:", num)
 	return
 }
+
+func (fs *FileStorager) IsRequireLogin() bool {
+	return false
+}
