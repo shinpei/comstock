@@ -122,7 +122,7 @@ func (hs *CloudStorager) FetchCommandFromNumber(user *model.UserInfo, num int) (
 }
 
 func (hs *CloudStorager) StorageType() string {
-	return "RemoteStorager"
+	return "CloudStorager"
 }
 
 func (hs *CloudStorager) Close() (err error) {
