@@ -121,7 +121,10 @@ func initApp() *cli.App {
 			ShortName: "sv",
 			Usage:     "Save previous command",
 			Action: func(c *cli.Context) {
-				eng.Save(eng.env.HomePath(), eng.env.Shell())
+				err := eng.Save(eng.env.HomePath(), eng.env.Shell())
+				if err != nil {
+					fmt.Println("Command failed: ", err)
+				}
 			},
 			BashComplete: func(c *cli.Context) {
 				if len(c.Args()) > 0 {

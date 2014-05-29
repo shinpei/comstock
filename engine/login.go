@@ -12,9 +12,8 @@ import (
 )
 
 const (
-	LoginServer string = "http://comstock.herokuapp.com"
-
-//	LoginServer string = "http://localhost:5000"
+	//LoginServer string = "http://comstock.herokuapp.com"
+	LoginServer string = "http://localhost:5000"
 )
 
 func (e *Engine) Login() {
@@ -33,12 +32,12 @@ func (e *Engine) Login() {
 	authInfo, err := tryLoginWithMail(mail, password)
 	if err != nil {
 		// TODO: register?
-		log.Fatal("Login failed:", err)
-		return
+		log.Println("Login failed:", err)
+	} else {
+		// success, write authinfo
+		e.SetLogin()
+		e.SetAuthInfo(authInfo)
 	}
-	// success, write authinfo
-	e.SetLogin()
-	e.SetAuthInfo(authInfo)
 }
 
 func tryLoginWithMail(mail string, password string) (token string, err error) {
@@ -46,7 +45,8 @@ func tryLoginWithMail(mail string, password string) (token string, err error) {
 	var resp *http.Response
 	resp, err = http.Get(requestURI)
 	if err != nil {
-		log.Fatal(err)
+		log.Println(err)
+		return
 	}
 	defer resp.Body.Close()
 	//TODO: control over proxy

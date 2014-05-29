@@ -13,8 +13,8 @@ import (
 )
 
 const (
-	ComstockHost = "http://comstock.herokuapp.com"
-	//ComstockHost = "http://localhost:5000"
+	//ComstockHost = "http://comstock.herokuapp.com"
+	ComstockHost = "http://localhost:5000"
 )
 
 type HerokuStorager struct {
@@ -34,11 +34,13 @@ func (hs *HerokuStorager) Push(user *model.UserInfo, path string, cmd *model.Com
 	requestURI := ComstockHost + command + "?" + vals
 	resp, err := http.Get(requestURI)
 	if err != nil {
-		log.Fatal("error")
+		log.Fatal("Couldn't reach server", err)
+		return
 	}
 	defer resp.Body.Close()
 	switch resp.StatusCode {
 	case 200:
+		// do nothing.
 	case 500: // session expires
 		err = model.ErrSessionExpires
 		// disable login status
@@ -52,22 +54,25 @@ func (hs *HerokuStorager) Push(user *model.UserInfo, path string, cmd *model.Com
 
 func (hs *HerokuStorager) List(user *model.UserInfo) (err error) {
 	command := "/list"
+	// does it have auto
 	vals := url.Values{"authinfo": {user.AuthInfo()}}.Encode()
 	requestURI := ComstockHost + command + "?" + vals
 	resp, err := http.Get(requestURI)
 	if err != nil {
 		log.Fatal("Couldn't reach server, ", err)
+		return
 	}
 	defer resp.Body.Close()
+
 	var body []byte
 	switch resp.StatusCode {
 	case 200:
 		body, _ = ioutil.ReadAll(resp.Body)
 	case 404:
-		log.Fatal("Failed to fetch")
+		err = errors.New("Not found")
 		return
 	case 403:
-		log.Fatal("Login required")
+		err = errors.New("Login required")
 		return
 	case 500:
 		err = model.ErrSessionExpires
@@ -92,7 +97,7 @@ func (hs *HerokuStorager) FetchCommandFromNumber(user *model.UserInfo, num int) 
 	requestURI := ComstockHost + command + "?" + vals
 	resp, err := http.Get(requestURI)
 	if err != nil {
-		log.Fatal("Couldn't reach server, ", err)
+		log.Fatal("Couldn't reach Host: ", err)
 	}
 	defer resp.Body.Close()
 	var body []byte
