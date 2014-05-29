@@ -51,8 +51,7 @@ func (e *Engine) SetAuthInfo(auth string) {
 }
 
 func NewEngine() *Engine {
-
-	env := CreateEnv()
+	env := NewEnv()
 	var config *Config
 	configPath := env.compath + "/" + ConfigFileDefault
 	if IsFileExist(configPath) {
@@ -64,12 +63,9 @@ func NewEngine() *Engine {
 		s = storage.CreateFileStorager(env.compath)
 	case "mongo":
 		s = storage.CreateMongoStorager()
-	case "heroku":
-		s = storage.CreateHerokuStorager()
 	default:
-		s = storage.CreateFileStorager(env.compath)
+		s = storage.CreateCloudStorager()
 	}
-	//s = storage.CreateHerokuStorager()
 	var isAlreadyLogin bool = false
 	authinfo := readAuthInfo(env)
 	var userinfo *model.UserInfo

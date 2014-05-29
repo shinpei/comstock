@@ -20,7 +20,7 @@ const (
 	ComVersionFile string = "version"
 )
 
-func CreateEnv() *Env {
+func NewEnv() *Env {
 	user, _ := user.Current()
 	shell := os.Getenv("SHELL")
 	homeDir := user.HomeDir

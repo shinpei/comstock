@@ -17,18 +17,18 @@ const (
 	ComstockHost = "http://localhost:5000"
 )
 
-type HerokuStorager struct {
+type CloudStorager struct {
 }
 
-func (hs *HerokuStorager) Open() (err error) {
+func (hs *CloudStorager) Open() (err error) {
 	return
 }
 
-func CreateHerokuStorager() (h *HerokuStorager) {
-	return &HerokuStorager{}
+func CreateCloudStorager() (h *CloudStorager) {
+	return &CloudStorager{}
 }
 
-func (hs *HerokuStorager) Push(user *model.UserInfo, path string, cmd *model.Command) (err error) {
+func (hs *CloudStorager) Push(user *model.UserInfo, path string, cmd *model.Command) (err error) {
 	command := "/postCommand"
 	vals := url.Values{"cmd": {cmd.Cmd}, "authinfo": {user.AuthInfo()}}.Encode()
 	requestURI := ComstockHost + command + "?" + vals
@@ -52,7 +52,7 @@ func (hs *HerokuStorager) Push(user *model.UserInfo, path string, cmd *model.Com
 	return
 }
 
-func (hs *HerokuStorager) List(user *model.UserInfo) (err error) {
+func (hs *CloudStorager) List(user *model.UserInfo) (err error) {
 
 	command := "/list"
 	// does it have auto
@@ -92,7 +92,7 @@ func (hs *HerokuStorager) List(user *model.UserInfo) (err error) {
 	return
 }
 
-func (hs *HerokuStorager) FetchCommandFromNumber(user *model.UserInfo, num int) (cmd *model.Command, err error) {
+func (hs *CloudStorager) FetchCommandFromNumber(user *model.UserInfo, num int) (cmd *model.Command, err error) {
 	command := "/fetchCommandFromNumber"
 	vals := url.Values{"authinfo": {user.AuthInfo()}, "number": {strconv.Itoa(num)}}.Encode()
 	requestURI := ComstockHost + command + "?" + vals
@@ -121,13 +121,13 @@ func (hs *HerokuStorager) FetchCommandFromNumber(user *model.UserInfo, num int) 
 	return
 }
 
-func (hs *HerokuStorager) StorageType() string {
-	return "HerokuStorager"
+func (hs *CloudStorager) StorageType() string {
+	return "RemoteStorager"
 }
 
-func (hs *HerokuStorager) Close() (err error) {
+func (hs *CloudStorager) Close() (err error) {
 	return
 }
-func (hs *HerokuStorager) IsRequireLogin() bool {
+func (hs *CloudStorager) IsRequireLogin() bool {
 	return true
 }
