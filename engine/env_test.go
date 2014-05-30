@@ -5,7 +5,7 @@ import (
 )
 
 func TestCreateEnvField(t *testing.T) {
-	env := CreateEnv()
+	env := NewEnv()
 	if env != nil {
 		// pass
 	} else {
