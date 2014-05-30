@@ -1,12 +1,18 @@
 package engine
 
 import (
+	"bufio"
 	"encoding/json"
 	"fmt"
+	"io"
 	"io/ioutil"
+	"log"
 	"os"
+	"os/exec"
 	"os/user"
 	"runtime"
+	"strconv"
+	"strings"
 )
 
 type Env struct {
@@ -23,7 +29,8 @@ const (
 
 func NewEnv() *Env {
 	user, _ := user.Current()
-	shell := os.Getenv("SHELL")
+	//	shell := os.Getenv("SHELL")
+	shell := getShell()
 	homeDir := user.HomeDir
 	compath := ""
 
@@ -94,4 +101,32 @@ func (e *Env) AsMap() map[string]string {
 		"Shell":    e.Shell,
 	}
 	return m
+}
+
+// get executing shell from ppid
+func getShell() string {
+
+	ppid := strconv.Itoa(os.Getppid())
+	cmd := exec.Command("ps", "-p", ppid)
+	pipe, err := cmd.StdoutPipe()
+	defer pipe.Close()
+	err = cmd.Start()
+	if err != nil {
+		log.Fatal(err)
+	}
+	r := bufio.NewReader(pipe)
+	for {
+		linebuf, _, err := r.ReadLine()
+		if err != io.EOF {
+			line := string(linebuf)
+			if idx := strings.Index(line, "/bin"); idx != -1 {
+				return string(line[idx:])
+			}
+		} else {
+			break
+		}
+
+	}
+
+	return "/bin/noshell"
 }
