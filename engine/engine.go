@@ -56,15 +56,12 @@ func NewEngine() *Engine {
 	configPath := env.compath + "/" + ConfigFileDefault
 	var s storage.Storager
 	s = storage.CreateCloudStorager()
-	if IsFileExist(configPath) {
-		config = LoadConfig(configPath)
-		switch config.Local.Type {
-		case "file":
-			s = storage.CreateFileStorager(env.compath)
-		case "mongo":
-			s = storage.CreateMongoStorager()
-		}
-
+	config = LoadConfig(configPath)
+	switch config.Local.Type {
+	case "file":
+		s = storage.CreateFileStorager(env.compath)
+	case "mongo":
+		s = storage.CreateMongoStorager()
 	}
 
 	var isAlreadyLogin bool = false
@@ -205,11 +202,12 @@ func (e *Engine) Run(args []string) {
 
 func (e *Engine) Close() {
 	e.storager.Close()
-	// write needed info
+	// write auth token
 	authFilePath := e.env.compath + "/" + AuthFile
 	if e.IsLogin() {
-		authinfo := []byte(e.AuthInfo())
-		ioutil.WriteFile(authFilePath, authinfo, 0644)
+		token := []byte(e.AuthInfo())
+		//		username := e.config.User.Mail
+		ioutil.WriteFile(authFilePath, token, 0644)
 	} else {
 		os.Remove(authFilePath)
 	}

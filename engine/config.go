@@ -29,12 +29,16 @@ const (
 
 func LoadConfig(path string) *Config {
 	var cfg Config
+
 	if path == "" {
 		path = ConfigFileDefault
 	}
-
+	if IsFileExist(path) == false {
+		return &cfg
+	}
 	err := gcfg.ReadFileInto(&cfg, path)
 	if err != nil {
+		log.Println("Invalid configuration file")
 		log.Fatal(err)
 	}
 
@@ -46,6 +50,10 @@ func LoadConfig(path string) *Config {
 		cfg.Local.Type = "file"
 	}
 	return &cfg
+}
+
+func DumpConfig(path string) (err error) {
+	return
 }
 
 func printConfig(key string, val string) {

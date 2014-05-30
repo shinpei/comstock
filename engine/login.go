@@ -19,24 +19,30 @@ const (
 func (e *Engine) Login() {
 	// check login
 	var mail string
-	if e.config.User.Mail == "" {
+	var registeredNewEmail bool
+	if e.config != nil && e.config.User.Mail != "" {
+		mail = e.config.User.Mail
+	} else {
 		scanner := bufio.NewScanner(os.Stdin)
 		fmt.Printf("Your registered email? : ") // username is not defineable
 		scanner.Scan()
 		mail = scanner.Text()
-	} else {
-		mail = e.config.User.Mail
+		registeredNewEmail = true
 	}
 	fmt.Printf("Password for %s?:", mail)
 	password, _ := gopass.GetPass("")
-	authInfo, err := tryLoginWithMail(mail, password)
+	token, err := tryLoginWithMail(mail, password)
 	if err != nil {
 		// TODO: register?
 		log.Println("Login failed:", err)
 	} else {
-		// success, write authinfo
+		// success, write token
+		if registeredNewEmail == true {
+			e.config.User.Mail = mail
+			println("New email is registered, you can use config for reserving it")
+		}
 		e.SetLogin()
-		e.SetAuthInfo(authInfo)
+		e.SetAuthInfo(token)
 	}
 }
 
@@ -68,5 +74,4 @@ func tryLoginWithMail(mail string, password string) (token string, err error) {
 		break
 	}
 	return
-
 }
