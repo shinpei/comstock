@@ -1,6 +1,7 @@
 package engine
 
 import (
+	"encoding/json"
 	"fmt"
 	"io/ioutil"
 	"os"
@@ -9,11 +10,11 @@ import (
 )
 
 type Env struct {
-	compath  string
-	homepath string
-	os       string
-	arch     string
-	shell    string
+	Compath  string
+	Homepath string
+	OS       string
+	Arch     string
+	Shell    string
 }
 
 const (
@@ -48,16 +49,12 @@ func NewEnv() *Env {
 		}
 	}
 	return &Env{
-		compath:  compath,
-		homepath: homeDir,
-		os:       runtime.GOOS,
-		arch:     runtime.GOARCH,
-		shell:    shell,
+		Compath:  compath,
+		Homepath: homeDir,
+		OS:       runtime.GOOS,
+		Arch:     runtime.GOARCH,
+		Shell:    shell,
 	}
-}
-
-func (e *Env) ComPath() string {
-	return e.compath
 }
 
 func CreateComstockPath(path string) (err error) {
@@ -70,22 +67,6 @@ func CreateComstockPath(path string) (err error) {
 	return
 }
 
-func (e *Env) HomePath() string {
-	return e.homepath
-}
-
-func (e *Env) Arch() string {
-	return e.arch
-}
-
-func (e *Env) OS() string {
-	return e.os
-}
-
-func (e *Env) Shell() string {
-	return e.shell
-}
-
 func createVersionFile(path string) {
 	versioninfo := []byte(Version)
 	ioutil.WriteFile(path, versioninfo, 0644)
@@ -94,4 +75,23 @@ func createVersionFile(path string) {
 func getVersion(path string) string {
 	versioninfo, _ := ioutil.ReadFile(path)
 	return string(versioninfo)
+}
+
+func (e *Env) Dump() string {
+	dumpStr, err := json.Marshal(e)
+	if err != nil {
+		fmt.Println("error:", err)
+	}
+	return string(dumpStr)
+}
+
+func (e *Env) AsMap() map[string]string {
+	m := map[string]string{
+		"Compath":  e.Compath,
+		"Homepath": e.Homepath,
+		"Arch":     e.Arch,
+		"OS":       e.OS,
+		"Shell":    e.Shell,
+	}
+	return m
 }

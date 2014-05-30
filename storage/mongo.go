@@ -128,3 +128,7 @@ func ensureIndex(col *mgo.Collection) {
 func (m *MongoStorager) IsRequireLogin() bool {
 	return false
 }
+
+func (m *MongoStorager) Status() (err error) {
+	return
+}

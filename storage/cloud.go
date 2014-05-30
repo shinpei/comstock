@@ -131,3 +131,13 @@ func (hs *CloudStorager) Close() (err error) {
 func (hs *CloudStorager) IsRequireLogin() bool {
 	return true
 }
+
+func (cs *CloudStorager) Status() (err error) {
+	var m map[string]string = make(map[string]string)
+	m["StoragerType"] = cs.StorageType()
+
+	for k, v := range m {
+		fmt.Println(k, ":", v)
+	}
+	return
+}

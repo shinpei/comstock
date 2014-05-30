@@ -53,13 +53,13 @@ func (e *Engine) SetAuthInfo(auth string) {
 func NewEngine() *Engine {
 	env := NewEnv()
 	var config *Config
-	configPath := env.compath + "/" + ConfigFileDefault
+	configPath := env.Compath + "/" + ConfigFileDefault
 	var s storage.Storager
 	s = storage.CreateCloudStorager()
 	config = LoadConfig(configPath)
 	switch config.Local.Type {
 	case "file":
-		s = storage.CreateFileStorager(env.compath)
+		s = storage.CreateFileStorager(env.Compath)
 	case "mongo":
 		s = storage.CreateMongoStorager()
 	}
@@ -85,7 +85,7 @@ func NewEngine() *Engine {
 }
 
 func readAuthInfo(env *Env) string {
-	authFilePath := env.compath + "/" + AuthFile
+	authFilePath := env.Compath + "/" + AuthFile
 	fi, _ := os.Open(authFilePath)
 	scanner := bufio.NewScanner(fi)
 	var lc int = 0
@@ -114,7 +114,7 @@ func initApp() *cli.App {
 			ShortName: "sv",
 			Usage:     "Save previous command",
 			Action: func(c *cli.Context) {
-				err := eng.Save(eng.env.HomePath(), eng.env.Shell())
+				err := eng.Save(eng.env.Homepath, eng.env.Shell)
 				if err != nil {
 					fmt.Println("Command failed: ", err)
 				}
@@ -131,7 +131,7 @@ func initApp() *cli.App {
 			Usage:     "Show comstock status",
 			Action: func(c *cli.Context) {
 				//TODO
-				log.Fatal("Not yet implemented")
+				eng.Status()
 			},
 		},
 		{
@@ -203,7 +203,7 @@ func (e *Engine) Run(args []string) {
 func (e *Engine) Close() {
 	e.storager.Close()
 	// write auth token
-	authFilePath := e.env.compath + "/" + AuthFile
+	authFilePath := e.env.Compath + "/" + AuthFile
 	if e.IsLogin() {
 		token := []byte(e.AuthInfo())
 		//		username := e.config.User.Mail

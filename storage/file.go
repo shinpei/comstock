@@ -91,3 +91,7 @@ func (fs *FileStorager) FetchCommandFromNumber(user *model.UserInfo, num int) (c
 func (fs *FileStorager) IsRequireLogin() bool {
 	return false
 }
+
+func (fs *FileStorager) Status() (err error) {
+	return
+}
