@@ -54,18 +54,19 @@ func NewEngine() *Engine {
 	env := NewEnv()
 	var config *Config
 	configPath := env.compath + "/" + ConfigFileDefault
+	var s storage.Storager
+	s = storage.CreateCloudStorager()
 	if IsFileExist(configPath) {
 		config = LoadConfig(configPath)
+		switch config.Local.Type {
+		case "file":
+			s = storage.CreateFileStorager(env.compath)
+		case "mongo":
+			s = storage.CreateMongoStorager()
+		}
+
 	}
-	var s storage.Storager
-	switch config.Local.Type {
-	case "file":
-		s = storage.CreateFileStorager(env.compath)
-	case "mongo":
-		s = storage.CreateMongoStorager()
-	default:
-		s = storage.CreateCloudStorager()
-	}
+
 	var isAlreadyLogin bool = false
 	authinfo := readAuthInfo(env)
 	var userinfo *model.UserInfo
