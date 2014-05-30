@@ -160,7 +160,7 @@ func initApp() *cli.App {
 				if err != nil {
 					fmt.Println("Command failed: ", err)
 				} else {
-					println(cmd.Cmd)
+					fmt.Println(cmd.Cmd)
 				}
 			},
 		},
