@@ -115,13 +115,16 @@ func getShell() string {
 		log.Fatal(err)
 	}
 	r := bufio.NewReader(pipe)
+	lc := 0
 	for {
 		linebuf, _, err := r.ReadLine()
 		if err != io.EOF {
-			line := string(linebuf)
-			if idx := strings.Index(line, "/bin"); idx != -1 {
-				return string(line[idx:])
+			lc++
+			if lc == 2 {
+				line := string(linebuf)
+				return strings.Fields(line)[3]
 			}
+
 		} else {
 			break
 		}
