@@ -12,8 +12,9 @@ import (
 )
 
 const (
-	LoginServer string = "http://comstock.herokuapp.com"
-	//LoginServer string = "http://localhost:5000"
+	LoginServer string = "https://comstock.herokuapp.com"
+
+//	LoginServer string = "http://localhost:5000"
 )
 
 func (e *Engine) Login() {

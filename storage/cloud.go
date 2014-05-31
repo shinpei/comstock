@@ -13,7 +13,7 @@ import (
 )
 
 const (
-	ComstockHost = "http://comstock.herokuapp.com"
+	ComstockHost = "https://comstock.herokuapp.com"
 	//ComstockHost = "http://localhost:5000"
 )
 
