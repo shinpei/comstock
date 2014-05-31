@@ -20,6 +20,8 @@ func (e *Engine) Save(home string, shell string) (err error) {
 	} else if strings.Contains(shell, "bash") {
 		shellHistoryFilename += "/.bash_history"
 		handler = &BashHandler{}
+	} else {
+		log.Fatal("Couldn't recognize your shell. Please report your environment through 'comstock sos'")
 	}
 	cmd, err := handler.ReadLastHistory(shellHistoryFilename)
 	if err != nil {

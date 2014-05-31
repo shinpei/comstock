@@ -141,3 +141,7 @@ func (cs *CloudStorager) Status() (err error) {
 	}
 	return
 }
+
+func (cs *CloudStorager) Search() (err error) {
+	return
+}

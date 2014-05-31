@@ -29,7 +29,6 @@ const (
 
 func NewEnv() *Env {
 	user, _ := user.Current()
-	//	shell := os.Getenv("SHELL")
 	shell := getShell()
 	homeDir := user.HomeDir
 	compath := ""

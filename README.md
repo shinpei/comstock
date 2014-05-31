@@ -21,9 +21,8 @@ $ comstock get 1
 brew doctor
 ```
 
-
 ## Sync with Cloud
-All you need is do 'login' command.
+
 ```
 $ comstock login
 Your registered email? : shinpei@mail.com
