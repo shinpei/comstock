@@ -124,11 +124,9 @@ func getShell() string {
 				line := string(linebuf)
 				return strings.Fields(line)[3]
 			}
-
 		} else {
 			break
 		}
-
 	}
 
 	return "/bin/noshell"
