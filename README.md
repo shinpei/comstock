@@ -12,13 +12,13 @@ We have a plenty of convenient command line tools nowadays, such as `git`, `brew
 
 ## Usage
 ```
-$ brew doctor
+$ git diff HEAD^ --name-only
 $ comstock save
-saved command 'brew doctor'
+saved command 'git diff HEAD^ --name-only'
 $ comstock list
-1: brew doctor
+1: git diff HEAD^ --name-only
 $ comstock get 1
-brew doctor
+git diff HEAD^ --name-only
 ```
 
 ## Sync with Cloud
@@ -28,9 +28,9 @@ $ comstock login
 Your registered email? : shinpei@mail.com
 Password for shinpei@mail.com?:
 Authentification success.
-$ brew doctor
+$ git diff HEAD^ --name-only
 $ comstock save
-saved command 'brew doctor'
+saved command 'git diff HEAD^ --name-only'
 ```
 
 ## Install
