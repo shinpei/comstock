@@ -93,5 +93,12 @@ func (fs *FileStorager) IsRequireLogin() bool {
 }
 
 func (fs *FileStorager) Status() (err error) {
+	var m map[string]string = make(map[string]string)
+	m["StoragerType"] = fs.StorageType()
+
+	for k, v := range m {
+		fmt.Println(k, ":", v)
+	}
+	return
 	return
 }

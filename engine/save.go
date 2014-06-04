@@ -30,7 +30,13 @@ func (e *Engine) Save(home string, shell string) (err error) {
 	cmd.Cmd = strings.TrimSpace(cmd.Cmd)
 	// save to the local storage
 	// remove whitespaces from cmd
+
 	err = e.storager.Push(e.userinfo, e.env.Compath, cmd)
-	fmt.Printf("[%s]Saved command '%s'\n", e.storager.StorageType(), cmd.Cmd)
+
+	if e.config.verboseMode {
+		fmt.Printf("[%s]Saved command '%s'\n", e.storager.StorageType(), cmd.Cmd)
+	} else {
+		fmt.Printf("Saved command '%s'\n", cmd.Cmd)
+	}
 	return
 }

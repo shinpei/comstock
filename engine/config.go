@@ -7,7 +7,8 @@ import (
 )
 
 type Config struct {
-	Local struct {
+	verboseMode bool
+	Local       struct {
 		Type string
 		URI  string
 	}
@@ -44,7 +45,7 @@ func LoadConfig(path string) *Config {
 
 	// set other values
 	cfg.path = path
-
+	cfg.verboseMode = false
 	// Set defaults
 	if cfg.Local.Type == "" {
 		cfg.Local.Type = "file"
