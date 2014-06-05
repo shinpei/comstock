@@ -13,9 +13,10 @@ import (
 )
 
 const (
-	Version  string = "0.1.1"
-	AppName  string = "comstock"
-	AuthFile string = "authinfo"
+	Version      string = "0.1.1"
+	AppName      string = "comstock"
+	AuthFile     string = "authinfo"
+	ComstockHost string = "https://comstock.herokuapp.com"
 )
 
 // this is TODO.
@@ -188,6 +189,13 @@ func initApp() *cli.App {
 			Usage: "Show comstock configuration",
 			Action: func(c *cli.Context) {
 				eng.ShowConfig()
+			},
+		},
+		{
+			Name:  "open",
+			Usage: "Open comstock website",
+			Action: func(c *cli.Context) {
+				eng.Open(ComstockHost)
 			},
 		},
 	}

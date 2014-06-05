@@ -100,5 +100,4 @@ func (fs *FileStorager) Status() (err error) {
 		fmt.Println(k, ":", v)
 	}
 	return
-	return
 }
