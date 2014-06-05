@@ -5,11 +5,6 @@
 
 Comstock is a cloud-based command stocking tool. On this repository, we're providing cli application. comstock-cli can be used as normal tool without network connection. It'll sync when it gets internet connection.
 
-<!--
-## Motivation
-We have a plenty of convenient command line tools nowadays, such as `git`, `brew`, `chef`,  Thanks to github, providing commands become a fame for developers, making good tools is now a orner.
--->
-
 ## Usage
 ```
 $ git diff HEAD^ --name-only
@@ -33,6 +28,7 @@ $ comstock save
 saved command 'git diff HEAD^ --name-only'
 ```
 
+### Getting started
 ## Install
 If you have installed Go, type following.
 ```
@@ -42,6 +38,11 @@ Or, you can install comstock from homebrew.
 ```
 $ brew tap shinpei/comstock
 $ brew install comstock
+```
+## Create your account
+Open register website from command.
+```
+$ comstock open
 ```
 
 ## Lisence, contact info, contribute

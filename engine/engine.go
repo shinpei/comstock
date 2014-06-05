@@ -193,7 +193,7 @@ func initApp() *cli.App {
 		},
 		{
 			Name:  "open",
-			Usage: "Open comstock website",
+			Usage: "Open comstock website (for user registration, documents)",
 			Action: func(c *cli.Context) {
 				eng.Open(ComstockHost)
 			},
