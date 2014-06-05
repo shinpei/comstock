@@ -13,7 +13,7 @@ import (
 )
 
 const (
-	Version      string = "0.1.1"
+	Version      string = "0.1.2-devel"
 	AppName      string = "comstock"
 	AuthFile     string = "authinfo"
 	ComstockHost string = "https://comstock.herokuapp.com"
