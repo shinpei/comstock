@@ -13,4 +13,5 @@ type Storager interface {
 	StorageType() string
 	IsRequireLogin() bool
 	Status() error
+	CheckSession(user *model.UserInfo) bool
 }

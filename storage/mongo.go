@@ -132,3 +132,6 @@ func (m *MongoStorager) IsRequireLogin() bool {
 func (m *MongoStorager) Status() (err error) {
 	return
 }
+func (m *MongoStorager) CheckSession(user *model.UserInfo) bool {
+	return true
+}

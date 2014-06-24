@@ -70,7 +70,7 @@ func NewEngine() *Engine {
 	var userinfo *model.UserInfo
 	if authinfo != "" {
 		userinfo = model.CreateUserinfo(authinfo)
-		isAlreadyLogin = true
+		isAlreadyLogin = s.CheckSession(userinfo)
 	}
 
 	eng = &Engine{

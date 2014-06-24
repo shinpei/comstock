@@ -101,3 +101,7 @@ func (fs *FileStorager) Status() (err error) {
 	}
 	return
 }
+
+func (fs *FileStorager) CheckSession(user *model.UserInfo) bool {
+	return true
+}

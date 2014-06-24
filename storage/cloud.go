@@ -145,3 +145,20 @@ func (cs *CloudStorager) Status() (err error) {
 func (cs *CloudStorager) Search() (err error) {
 	return
 }
+
+func (cs *CloudStorager) CheckSession(user *model.UserInfo) bool {
+	command := "/checkSession"
+	vals := url.Values{"authinfo": {user.AuthInfo()}}.Encode()
+	requestURI := ComstockHost + command + "?" + vals
+	resp, err := http.Get(requestURI)
+	if err != nil {
+		log.Fatal("Couldn't reach server")
+	}
+	defer resp.Body.Close()
+	switch resp.StatusCode {
+	case 200:
+		return true
+
+	}
+	return false
+}

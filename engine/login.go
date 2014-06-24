@@ -13,8 +13,7 @@ import (
 
 const (
 	LoginServer string = "https://comstock.herokuapp.com"
-
-//	LoginServer string = "http://localhost:5000"
+	//LoginServer string = "http://localhost:5000"
 )
 
 func (e *Engine) Login() {
@@ -47,6 +46,7 @@ func (e *Engine) Login() {
 	}
 }
 
+// this is version dependent.
 func tryLoginWithMail(mail string, password string) (token string, err error) {
 	requestURI := LoginServer + "/loginAs?mail=" + mail + "&password=" + password
 	var resp *http.Response
