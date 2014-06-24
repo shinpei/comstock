@@ -1,3 +1,10 @@
+2014-06-24  Shinpei Nakata  <shinpei.nakata@gmail.com>
+	* Released v0.1.2(Jun, 24th, '14)
+	* added dist.sh
+	* seperate version.go
+	* added command.go
+	* added session checker
+
 2014-05-30  Shinpei Nakata  <shinpei.nakata@gmail.com>
 
 	* Released v0.1.1 (Mar 30th, '14)
