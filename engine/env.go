@@ -5,7 +5,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
-	"io/ioutil"
 	"log"
 	"os"
 	"os/exec"
@@ -23,10 +22,6 @@ type Env struct {
 	Shell    string
 }
 
-const (
-	ComVersionFile string = "version"
-)
-
 func NewEnv() *Env {
 	user, _ := user.Current()
 	shell := getShell()
@@ -43,17 +38,6 @@ func NewEnv() *Env {
 		CreateComstockPath(compath)
 	}
 
-	// TODO: verify comstock version
-	versionPath := compath + "/" + ComVersionFile
-	if IsFileExist(versionPath) {
-		createVersionFile(versionPath)
-	} else {
-		version := getVersion(versionPath)
-		// versioncheck
-		if version != Version {
-			// Version mismatch
-		}
-	}
 	return &Env{
 		Compath:  compath,
 		Homepath: homeDir,
@@ -71,16 +55,6 @@ func CreateComstockPath(path string) (err error) {
 		fmt.Printf("Create compath as '%s'\n", path)
 	}
 	return
-}
-
-func createVersionFile(path string) {
-	versioninfo := []byte(Version)
-	ioutil.WriteFile(path, versioninfo, 0644)
-}
-
-func getVersion(path string) string {
-	versioninfo, _ := ioutil.ReadFile(path)
-	return string(versioninfo)
 }
 
 func (e *Env) Dump() string {

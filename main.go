@@ -6,6 +6,6 @@ import (
 )
 
 func main() {
-	eng := engine.NewEngine()
+	eng := engine.NewEngine(Version)
 	eng.Run(os.Args)
 }

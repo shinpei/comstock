@@ -13,10 +13,10 @@ import (
 )
 
 const (
-	Version      string = "0.1.2-devel"
-	AppName      string = "comstock"
-	AuthFile     string = "authinfo"
-	ComstockHost string = "https://comstock.herokuapp.com"
+	AppName        string = "comstock"
+	AuthFile       string = "authinfo"
+	ComstockHost   string = "https://comstock.herokuapp.com"
+	ComVersionFile string = "version"
 )
 
 // this is TODO.
@@ -51,7 +51,7 @@ func (e *Engine) SetAuthInfo(auth string) {
 	e.authInfo = auth
 }
 
-func NewEngine() *Engine {
+func NewEngine(version string) *Engine {
 	env := NewEnv()
 	var config *Config
 	configPath := env.Compath + "/" + ConfigFileDefault
@@ -73,8 +73,20 @@ func NewEngine() *Engine {
 		isAlreadyLogin = s.CheckSession(userinfo)
 	}
 
+	// TODO: verify comstock version
+	versionPath := env.Compath + "/" + ComVersionFile
+	if IsFileExist(versionPath) {
+		createVersionFile(versionPath, version)
+	} else {
+		version := getVersion(versionPath)
+		// versioncheck
+		if version != version {
+			// Version mismatch
+		}
+	}
+
 	eng = &Engine{
-		App:      initApp(),
+		App:      initApp(version),
 		authInfo: authinfo,
 		isLogin:  isAlreadyLogin,
 		userinfo: userinfo,
@@ -83,6 +95,15 @@ func NewEngine() *Engine {
 		config:   config,
 	}
 	return eng
+}
+func createVersionFile(path string, version string) {
+	versioninfo := []byte(version)
+	ioutil.WriteFile(path, versioninfo, 0644)
+}
+
+func getVersion(path string) string {
+	versioninfo, _ := ioutil.ReadFile(path)
+	return string(versioninfo)
 }
 
 func readAuthInfo(env *Env) string {
@@ -101,9 +122,9 @@ func readAuthInfo(env *Env) string {
 	}
 	return authinfo
 }
-func initApp() *cli.App {
+func initApp(version string) *cli.App {
 	app := cli.NewApp()
-	app.Version = Version
+	app.Version = version
 	app.Name = AppName
 	app.Usage = "save your command to the cloud"
 	app.Action = func(c *cli.Context) {
