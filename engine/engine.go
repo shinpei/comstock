@@ -75,13 +75,14 @@ func NewEngine(version string) *Engine {
 
 	// TODO: verify comstock version
 	versionPath := env.Compath + "/" + ComVersionFile
-	if IsFileExist(versionPath) {
+	if !IsFileExist(versionPath) {
 		createVersionFile(versionPath, version)
 	} else {
-		version := getVersion(versionPath)
+		versionRead := getVersion(versionPath)
 		// versioncheck
-		if version != version {
+		if versionRead != version {
 			// Version mismatch
+			//			log.Fatal("version mismatch")
 		}
 	}
 
