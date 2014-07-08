@@ -2,6 +2,7 @@ package engine
 
 import (
 	"bufio"
+	"bytes"
 	"fmt"
 	"github.com/codegangsta/cli"
 	"github.com/shinpei/comstock/model"
@@ -10,6 +11,7 @@ import (
 	"log"
 	"os"
 	"strconv"
+	"strings"
 )
 
 const (
@@ -17,6 +19,7 @@ const (
 	AuthFile       string = "authinfo"
 	ComstockHost   string = "https://comstock.herokuapp.com"
 	ComVersionFile string = "version"
+	SPLITTER       string = "#"
 )
 
 // this is TODO.
@@ -66,10 +69,10 @@ func NewEngine(version string) *Engine {
 	}
 
 	var isAlreadyLogin bool = false
-	authinfo := readAuthInfo(env)
+	authinfo, email := readAuthInfo(env)
 	var userinfo *model.UserInfo
 	if authinfo != "" {
-		userinfo = model.CreateUserinfo(authinfo)
+		userinfo = model.CreateUserinfo(authinfo, email)
 		isAlreadyLogin = s.CheckSession(userinfo)
 	}
 
@@ -107,22 +110,40 @@ func getVersion(path string) string {
 	return string(versioninfo)
 }
 
-func readAuthInfo(env *Env) string {
+func readAuthInfo(env *Env) (authinfo string, email string) {
 	authFilePath := env.Compath + "/" + AuthFile
 	fi, _ := os.Open(authFilePath)
 	scanner := bufio.NewScanner(fi)
 	var lc int = 0
-	var authinfo string = ""
 	for scanner.Scan() {
 		lc++
 		if 1 < lc {
 			// error
 			log.Fatal("Invalid login info")
 		}
-		authinfo = scanner.Text()
+		auths := strings.Split(scanner.Text(), SPLITTER)
+		email = auths[0]
+		authinfo = auths[1]
+
 	}
-	return authinfo
+	return
 }
+
+func (e *Engine) flushAuthInfoOrRemove() {
+	// write auth token
+	authFilePath := e.env.Compath + "/" + AuthFile
+	if e.IsLogin() {
+		buffer := bytes.NewBufferString("")
+		buffer.WriteString(e.config.User.Mail)
+		buffer.WriteString(SPLITTER)
+		buffer.WriteString(e.AuthInfo())
+		ioutil.WriteFile(authFilePath, []byte(buffer.String()), 0644)
+	} else {
+		os.Remove(authFilePath)
+	}
+
+}
+
 func initApp(version string) *cli.App {
 	app := cli.NewApp()
 	app.Version = version
@@ -200,7 +221,7 @@ func initApp(version string) *cli.App {
 			Usage: "Login to the cloud",
 			Action: func(c *cli.Context) {
 				if eng.IsLogin() {
-					fmt.Printf("Already login as %s\n", eng.config.User.Mail)
+					fmt.Printf("Already login as %s\n", eng.userinfo.Email())
 					return
 				}
 				eng.Login()
@@ -232,15 +253,7 @@ func (e *Engine) Run(args []string) {
 
 func (e *Engine) Close() {
 	e.storager.Close()
-	// write auth token
-	authFilePath := e.env.Compath + "/" + AuthFile
-	if e.IsLogin() {
-		token := []byte(e.AuthInfo())
-		//		username := e.config.User.Mail
-		ioutil.WriteFile(authFilePath, token, 0644)
-	} else {
-		os.Remove(authFilePath)
-	}
+	e.flushAuthInfoOrRemove()
 }
 
 func (e *Engine) List() (err error) {
