@@ -2,17 +2,17 @@ package model
 
 type UserInfo struct {
 	authinfo string // need
-	email    string
+	mail     string
 }
 
 func CreateUserinfo(ai string, e string) *UserInfo {
-	return &UserInfo{authinfo: ai, email: e}
+	return &UserInfo{authinfo: ai, mail: e}
 }
 
 func (u *UserInfo) AuthInfo() string {
 	return u.authinfo
 }
 
-func (u *UserInfo) Email() string {
-	return u.email
+func (u *UserInfo) Mail() string {
+	return u.mail
 }

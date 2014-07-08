@@ -19,15 +19,15 @@ const (
 func (e *Engine) Login() {
 	// check login
 	var mail string
-	var registeredNewEmail bool
+	var registeredNewMail bool
 	if e.config != nil && e.config.User.Mail != "" {
 		mail = e.config.User.Mail
 	} else {
 		scanner := bufio.NewScanner(os.Stdin)
-		fmt.Printf("Your registered email? : ") // username is not defineable
+		fmt.Printf("Your registered mail? : ") // username is not defineable
 		scanner.Scan()
 		mail = scanner.Text()
-		registeredNewEmail = true
+		registeredNewMail = true
 	}
 	fmt.Printf("Password for %s?:", mail)
 	password, _ := gopass.GetPass("")
@@ -37,7 +37,7 @@ func (e *Engine) Login() {
 		log.Println("Login failed:", err)
 	} else {
 		// success, write token
-		if registeredNewEmail == true {
+		if registeredNewMail == true {
 			e.config.User.Mail = mail
 			println("New email is registered, you can use config for reserving it")
 		}

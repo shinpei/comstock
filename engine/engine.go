@@ -69,10 +69,10 @@ func NewEngine(version string) *Engine {
 	}
 
 	var isAlreadyLogin bool = false
-	authinfo, email := readAuthInfo(env)
+	authinfo, mail := readAuthInfo(env)
 	var userinfo *model.UserInfo
 	if authinfo != "" {
-		userinfo = model.CreateUserinfo(authinfo, email)
+		userinfo = model.CreateUserinfo(authinfo, mail)
 		isAlreadyLogin = s.CheckSession(userinfo)
 	}
 
@@ -110,7 +110,7 @@ func getVersion(path string) string {
 	return string(versioninfo)
 }
 
-func readAuthInfo(env *Env) (authinfo string, email string) {
+func readAuthInfo(env *Env) (authinfo string, mail string) {
 	authFilePath := env.Compath + "/" + AuthFile
 	fi, _ := os.Open(authFilePath)
 	scanner := bufio.NewScanner(fi)
@@ -122,7 +122,7 @@ func readAuthInfo(env *Env) (authinfo string, email string) {
 			log.Fatal("Invalid login info")
 		}
 		auths := strings.Split(scanner.Text(), SPLITTER)
-		email = auths[0]
+		mail = auths[0]
 		authinfo = auths[1]
 
 	}
@@ -221,7 +221,7 @@ func initApp(version string) *cli.App {
 			Usage: "Login to the cloud",
 			Action: func(c *cli.Context) {
 				if eng.IsLogin() {
-					fmt.Printf("Already login as %s\n", eng.userinfo.Email())
+					fmt.Printf("Already login as %s\n", eng.userinfo.Mail())
 					return
 				}
 				eng.Login()

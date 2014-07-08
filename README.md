@@ -20,7 +20,7 @@ git diff HEAD^ --name-only
 
 ```
 $ comstock login
-Your registered email? : shinpei@mail.com
+Your registered mail? : shinpei@mail.com
 Password for shinpei@mail.com?:
 Authentification success.
 $ git diff HEAD^ --name-only
