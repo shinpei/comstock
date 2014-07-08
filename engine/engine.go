@@ -74,6 +74,7 @@ func NewEngine(version string) *Engine {
 	if authinfo != "" {
 		userinfo = model.CreateUserinfo(authinfo, mail)
 		isAlreadyLogin = s.CheckSession(userinfo)
+		config.User.Mail = mail // apply current status
 	}
 
 	// TODO: verify comstock version
