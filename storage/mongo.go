@@ -87,7 +87,7 @@ func (ms *MongoStorager) FetchCommandFromNumber(user *model.UserInfo, num int) (
 	}
 	return
 }
-func (ms *MongoStorager) List(user *model.UserInfo) (err error) {
+func (ms *MongoStorager) List(user *model.UserInfo) (cmds []model.Command, err error) {
 	hostname := MongoHost
 	session, err := mgo.DialWithTimeout("mongodb://"+hostname, time.Duration(3)*time.Second)
 	if err != nil {
@@ -98,6 +98,7 @@ func (ms *MongoStorager) List(user *model.UserInfo) (err error) {
 	c := session.DB(MongoDatabaseName).C(MongoCollectionName)
 	//	ensureIndex(c)
 
+	// TODO: make cmd array
 	var result model.Command
 	iter := c.Find(nil).Limit(100).Iter()
 	var idx = 1

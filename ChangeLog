@@ -1,3 +1,7 @@
+2014-07-08  Shinpei Nakata  <shinpei.nakata@gmail.com>
+
+	* mail display has imp
+
 2014-06-24  Shinpei Nakata  <shinpei.nakata@gmail.com>
 	* Released v0.1.2(Jun, 24th, '14)
 	* added dist.sh
@@ -10,7 +14,7 @@
 	* Released v0.1.1 (Mar 30th, '14)
 	* more stable behavior
 	* 'status' implemented
-	
+
 2014-05-29  Shinpei Nakata  <shinpei.nakata@gmail.com>
 
 	* Released v0.1.0 (Mar 29th, '14)

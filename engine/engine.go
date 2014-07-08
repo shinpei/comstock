@@ -218,21 +218,22 @@ func initApp(version string) *cli.App {
 			},
 		},
 		{
-			Name:  "login",
-			Usage: "Login to the cloud",
+			Name:      "login",
+			ShortName: "in",
+			Usage:     "Login to the cloud",
 			Action: func(c *cli.Context) {
 				if eng.IsLogin() {
 					fmt.Printf("Already login as %s\n", eng.userinfo.Mail())
 					return
 				}
-				eng.Login()
+				eng.Login(ComstockHost)
 			},
 		},
 		{
 			Name:  "config",
 			Usage: "Show comstock configuration",
 			Action: func(c *cli.Context) {
-				eng.ShowConfig()
+				eng.Config()
 			},
 		},
 		{
@@ -240,6 +241,14 @@ func initApp(version string) *cli.App {
 			Usage: "Open comstock website (for user registration, documents)",
 			Action: func(c *cli.Context) {
 				eng.Open(ComstockHost)
+			},
+		},
+		{
+			Name:      "logout",
+			ShortName: "out",
+			Usage:     "Logout from current account",
+			Action: func(c *cli.Context) {
+				eng.Logout(ComstockHost)
 			},
 		},
 	}
@@ -257,21 +266,7 @@ func (e *Engine) Close() {
 	e.flushAuthInfoOrRemove()
 }
 
-func (e *Engine) List() (err error) {
-	if e.storager.IsRequireLogin() == true && e.isLogin == false {
-		log.Fatal("You have no valid access token. Please login first.")
-	}
-	if err = e.storager.List(e.userinfo); err != nil {
-		if err == model.ErrSessionExpires {
-			e.SetLogout()
-		} else if err == model.ErrSessionInvalid {
-			e.SetLogout()
-		}
-	}
-	return
-}
-
-func (e *Engine) ShowConfig() {
+func (e *Engine) Config() {
 	e.config.ShowConfig()
 }
 

@@ -11,12 +11,7 @@ import (
 	"os"
 )
 
-const (
-	LoginServer string = "https://comstock.herokuapp.com"
-	//LoginServer string = "http://localhost:5000"
-)
-
-func (e *Engine) Login() {
+func (e *Engine) Login(loginServer string) {
 	// check login
 	var mail string
 	var registeredNewMail bool
@@ -31,7 +26,7 @@ func (e *Engine) Login() {
 	}
 	fmt.Printf("Password for %s?:", mail)
 	password, _ := gopass.GetPass("")
-	token, err := tryLoginWithMail(mail, password)
+	token, err := tryLoginWithMail(loginServer, mail, password)
 	if err != nil {
 		// TODO: register?
 		log.Println("Login failed:", err)
@@ -47,8 +42,8 @@ func (e *Engine) Login() {
 }
 
 // this is version dependent.
-func tryLoginWithMail(mail string, password string) (token string, err error) {
-	requestURI := LoginServer + "/loginAs?mail=" + mail + "&password=" + password
+func tryLoginWithMail(loginServer string, mail string, password string) (token string, err error) {
+	requestURI := loginServer + "/loginAs?mail=" + mail + "&password=" + password
 	var resp *http.Response
 	resp, err = http.Get(requestURI)
 	if err != nil {

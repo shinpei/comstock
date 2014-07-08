@@ -59,11 +59,12 @@ func (fs *FileStorager) Close() (err error) {
 }
 
 // List all commands
-func (fs *FileStorager) List(user *model.UserInfo) (err error) {
+func (fs *FileStorager) List(user *model.UserInfo) (cmds []model.Command, err error) {
 	var fi *os.File
 	fi, err = os.Open(fs.filepath)
 	scanner := bufio.NewScanner(fi)
 	var idx int = 0
+	// TODO: make command array
 	for scanner.Scan() {
 		idx++
 		fmt.Printf("%d: %s\n", idx, scanner.Text())

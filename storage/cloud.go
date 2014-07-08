@@ -52,7 +52,7 @@ func (hs *CloudStorager) Push(user *model.UserInfo, path string, cmd *model.Comm
 	return
 }
 
-func (hs *CloudStorager) List(user *model.UserInfo) (err error) {
+func (hs *CloudStorager) List(user *model.UserInfo) (cmds []model.Command, err error) {
 
 	command := "/list"
 	// does it have auto
@@ -82,13 +82,7 @@ func (hs *CloudStorager) List(user *model.UserInfo) (err error) {
 		fmt.Println("Failed to fetch")
 		return
 	}
-	var cmds []model.Command
 	err = json.Unmarshal(body, &cmds)
-	var idx int = 0
-	for _, cmd := range cmds {
-		idx++
-		fmt.Printf("%d: %s\n", idx, cmd.Cmd)
-	}
 	return
 }
 
