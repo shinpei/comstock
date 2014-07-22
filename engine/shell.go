@@ -79,6 +79,7 @@ func (z *ZshHandler) ReadLastHistory(filename string) (cmd *model.Command, err e
 	return
 }
 
+// Bash stores it's history in its cache. So we cannot fetch it from history file.
 func (b *BashHandler) ReadLastHistory(filename string) (cmd *model.Command, err error) {
 	var (
 		ret []string

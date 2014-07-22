@@ -3,27 +3,33 @@ package engine
 import (
 	"errors"
 	"fmt"
+	"github.com/shinpei/comstock/model"
 	"log"
 	"strings"
 )
 
-func (e *Engine) Save(home string, shell string) (err error) {
+func (e *Engine) Save(command string) (err error) {
 	if e.isLogin == false {
 		err = errors.New("Login required")
 		return
 	}
-	var shellHistoryFilename string = home
+	var shellHistoryFilename string = e.env.Homepath
 	var handler Shell = nil
-	if strings.Contains(shell, "zsh") {
+	if strings.Contains(e.env.Shell, "zsh") {
 		shellHistoryFilename += "/.zsh_history"
 		handler = &ZshHandler{}
-	} else if strings.Contains(shell, "bash") {
+	} else if strings.Contains(e.env.Shell, "bash") {
 		shellHistoryFilename += "/.bash_history"
 		handler = &BashHandler{}
 	} else {
 		log.Fatal("Couldn't recognize your shell. Please report your environment through 'comstock sos'")
 	}
-	cmd, err := handler.ReadLastHistory(shellHistoryFilename)
+	var cmd *model.Command
+	if command != "" {
+		cmd = model.CreateCommand(command)
+	}
+	fmt.Println(handler)
+	//	cmd, err = handler.ReadLastHistory(shellHistoryFilename)
 	if err != nil {
 		log.Fatal(err)
 	}

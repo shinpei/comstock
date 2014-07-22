@@ -15,9 +15,10 @@ import (
 )
 
 const (
-	AppName        string = "comstock"
-	AuthFile       string = "authinfo"
-	ComstockHost   string = "https://comstock.herokuapp.com"
+	AppName  string = "comstock"
+	AuthFile string = "authinfo"
+	//	ComstockHost   string = "https://comstock.herokuapp.com"
+	ComstockHost   string = "http://localhost:5000"
 	ComVersionFile string = "version"
 	SPLITTER       string = "#"
 )
@@ -159,7 +160,9 @@ func initApp(version string) *cli.App {
 			ShortName: "sv",
 			Usage:     "Save previous command",
 			Action: func(c *cli.Context) {
-				err := eng.Save(eng.env.Homepath, eng.env.Shell)
+				first := c.Args().First()
+				fmt.Println("first: ", first)
+				err := eng.Save(first)
 				if err != nil {
 					fmt.Println("Command failed: ", err)
 				}
