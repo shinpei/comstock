@@ -1,0 +1,9 @@
+#!/bin/bash
+# Comstock - stock your command to the cloud
+# comstock shell scripts
+# shinpei(c)2014
+
+
+. ./save_previous.sh
+
+
