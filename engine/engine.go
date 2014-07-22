@@ -15,10 +15,10 @@ import (
 )
 
 const (
-	AppName  string = "comstock"
-	AuthFile string = "authinfo"
-	//	ComstockHost   string = "https://comstock.herokuapp.com"
-	ComstockHost   string = "http://localhost:5000"
+	AppName      string = "comstock"
+	AuthFile     string = "authinfo"
+	ComstockHost string = "https://comstock.herokuapp.com"
+	//ComstockHost   string = "http://localhost:5000"
 	ComVersionFile string = "version"
 	SPLITTER       string = "#"
 )

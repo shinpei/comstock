@@ -1,10 +1,12 @@
 package engine
 
 import (
+	"bufio"
 	"errors"
 	"fmt"
 	"github.com/shinpei/comstock/model"
 	"log"
+	"os"
 	"strings"
 )
 
@@ -25,10 +27,20 @@ func (e *Engine) Save(command string) (err error) {
 		log.Fatal("Couldn't recognize your shell. Please report your environment through 'comstock sos'")
 	}
 	var cmd *model.Command
-	if command != "" {
-		cmd = model.CreateCommand(command)
+	if command == "" {
+		// try to read inputstream
+		scanner := bufio.NewScanner(os.Stdin)
+		if scanner.Scan() {
+			// TODO: not only read one line
+			command = scanner.Text()
+			fmt.Println("SCANNER=", command)
+		} else {
+			log.Fatal("No command given")
+		}
 	}
+	cmd = model.CreateCommand(command)
 	fmt.Println(handler)
+	fmt.Println(command)
 	//	cmd, err = handler.ReadLastHistory(shellHistoryFilename)
 	if err != nil {
 		log.Fatal(err)
