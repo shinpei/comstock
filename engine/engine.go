@@ -15,10 +15,10 @@ import (
 )
 
 const (
-	AppName      string = "comstock"
-	AuthFile     string = "authinfo"
-	ComstockHost string = "https://comstock.herokuapp.com"
-	//ComstockHost   string = "http://localhost:5000"
+	AppName  string = "comstock"
+	AuthFile string = "authinfo"
+	//ComstockHost string = "https://comstock.herokuapp.com"
+	ComstockHost   string = "http://localhost:5000"
 	ComVersionFile string = "version"
 	SPLITTER       string = "#"
 )
@@ -60,7 +60,7 @@ func NewEngine(version string) *Engine {
 	var config *Config
 	configPath := env.Compath + "/" + ConfigFileDefault
 	var s storage.Storager
-	s = storage.CreateCloudStorager()
+	s = storage.CreateCloudStorager(ComstockHost)
 	config = LoadConfig(configPath)
 	switch config.Local.Type {
 	case "file":

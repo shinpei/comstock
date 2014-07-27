@@ -12,26 +12,28 @@ import (
 	"strconv"
 )
 
-const (
-	ComstockHost = "https://comstock.herokuapp.com"
-	//ComstockHost = "http://localhost:5000"
-)
-
 type CloudStorager struct {
+	storageHost string
 }
 
-func (hs *CloudStorager) Open() (err error) {
+func (cs *CloudStorager) Open() (err error) {
 	return
 }
 
-func CreateCloudStorager() (h *CloudStorager) {
-	return &CloudStorager{}
+func (cs *CloudStorager) StorageHost() string {
+	return cs.storageHost
 }
 
-func (hs *CloudStorager) Push(user *model.UserInfo, path string, cmd *model.Command) (err error) {
+func CreateCloudStorager(host string) (h *CloudStorager) {
+	return &CloudStorager{
+		storageHost: host,
+	}
+}
+
+func (cs *CloudStorager) Push(user *model.UserInfo, path string, cmd *model.Command) (err error) {
 	command := "/postCommand"
 	vals := url.Values{"cmd": {cmd.Cmd}, "authinfo": {user.AuthInfo()}}.Encode()
-	requestURI := ComstockHost + command + "?" + vals
+	requestURI := cs.StorageHost() + command + "?" + vals
 	resp, err := http.Get(requestURI)
 	if err != nil {
 		log.Fatal("Couldn't reach server", err)
@@ -52,12 +54,12 @@ func (hs *CloudStorager) Push(user *model.UserInfo, path string, cmd *model.Comm
 	return
 }
 
-func (hs *CloudStorager) List(user *model.UserInfo) (cmds []model.Command, err error) {
+func (cs *CloudStorager) List(user *model.UserInfo) (cmds []model.Command, err error) {
 
 	command := "/list"
 	// does it have auto
 	vals := url.Values{"authinfo": {user.AuthInfo()}}.Encode()
-	requestURI := ComstockHost + command + "?" + vals
+	requestURI := cs.StorageHost() + command + "?" + vals
 	resp, err := http.Get(requestURI)
 	if err != nil {
 		log.Fatal("Couldn't reach server, ", err)
@@ -86,10 +88,10 @@ func (hs *CloudStorager) List(user *model.UserInfo) (cmds []model.Command, err e
 	return
 }
 
-func (hs *CloudStorager) FetchCommandFromNumber(user *model.UserInfo, num int) (cmd *model.Command, err error) {
+func (cs *CloudStorager) FetchCommandFromNumber(user *model.UserInfo, num int) (cmd *model.Command, err error) {
 	command := "/fetchCommandFromNumber"
 	vals := url.Values{"authinfo": {user.AuthInfo()}, "number": {strconv.Itoa(num)}}.Encode()
-	requestURI := ComstockHost + command + "?" + vals
+	requestURI := cs.StorageHost() + command + "?" + vals
 	resp, err := http.Get(requestURI)
 	if err != nil {
 		log.Fatal("Couldn't reach Host: ", err)
@@ -115,21 +117,21 @@ func (hs *CloudStorager) FetchCommandFromNumber(user *model.UserInfo, num int) (
 	return
 }
 
-func (hs *CloudStorager) StorageType() string {
+func (cs *CloudStorager) StorageType() string {
 	return "CloudStorager"
 }
 
-func (hs *CloudStorager) Close() (err error) {
+func (cs *CloudStorager) Close() (err error) {
 	return
 }
-func (hs *CloudStorager) IsRequireLogin() bool {
+func (cs *CloudStorager) IsRequireLogin() bool {
 	return true
 }
 
 func (cs *CloudStorager) Status() (err error) {
 	var m map[string]string = make(map[string]string)
 	m["StoragerType"] = cs.StorageType()
-	m["StorageURL"] = ComstockHost
+	m["StorageURL"] = cs.StorageHost()
 	for k, v := range m {
 		fmt.Println(k, ":", v)
 	}
@@ -143,7 +145,7 @@ func (cs *CloudStorager) Search() (err error) {
 func (cs *CloudStorager) CheckSession(user *model.UserInfo) bool {
 	command := "/checkSession"
 	vals := url.Values{"authinfo": {user.AuthInfo()}}.Encode()
-	requestURI := ComstockHost + command + "?" + vals
+	requestURI := cs.StorageHost() + command + "?" + vals
 	resp, err := http.Get(requestURI)
 	if err != nil {
 		log.Fatal("Couldn't reach server")
