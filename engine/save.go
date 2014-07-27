@@ -36,7 +36,6 @@ func (e *Engine) Save(command string) (err error) {
 			command, err = handler.ReadLastHistory(shellHistoryFilename)
 		} else {
 			// data arrived in stdin
-			fmt.Println("Reading from stdin")
 			scanner := bufio.NewScanner(os.Stdin)
 			if scanner.Scan() {
 				// TODO: not only read one line
