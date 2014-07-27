@@ -5,7 +5,7 @@
 
 saveBashHistory() {
     fc -ln -2 > hoge
-    cat hoge | comstock save
+    cat hoge | comstock save --shell bash
 }
 
 # entry point
