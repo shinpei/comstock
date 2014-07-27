@@ -4,8 +4,7 @@
 # shinpei(c)2014
 
 saveBashHistory() {
-    fc -ln -2 > hoge
-    cat hoge | comstock save --shell bash
+    fc -l -n 2 | tac |  comstock --shell bash save
 }
 
 # entry point
