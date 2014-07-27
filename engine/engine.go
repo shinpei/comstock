@@ -15,10 +15,10 @@ import (
 )
 
 const (
-	AppName  string = "comstock"
-	AuthFile string = "authinfo"
-	//ComstockHost string = "https://comstock.herokuapp.com"
-	ComstockHost   string = "http://localhost:5000"
+	AppName           string = "comstock"
+	AuthFile          string = "authinfo"
+	ComstockAPIServer string = "https://comstock.herokuapp.com"
+	//ComstockAPIServer string = "http://localhost:5000"
 	ComVersionFile string = "version"
 	SPLITTER       string = "#"
 )
@@ -30,13 +30,14 @@ var (
 )
 
 type Engine struct {
-	App      *cli.App
-	storager storage.Storager // storage
-	userinfo *model.UserInfo
-	isLogin  bool
-	authInfo string
-	config   *Config
-	env      *Env
+	App       *cli.App
+	storager  storage.Storager // storage
+	userinfo  *model.UserInfo
+	isLogin   bool
+	authInfo  string
+	config    *Config
+	env       *Env
+	apiServer string
 }
 
 func (e *Engine) IsLogin() bool {
@@ -60,7 +61,7 @@ func NewEngine(version string) *Engine {
 	var config *Config
 	configPath := env.Compath + "/" + ConfigFileDefault
 	var s storage.Storager
-	s = storage.CreateCloudStorager(ComstockHost)
+	s = storage.CreateCloudStorager(ComstockAPIServer)
 	config = LoadConfig(configPath)
 	switch config.Local.Type {
 	case "file":
@@ -92,13 +93,14 @@ func NewEngine(version string) *Engine {
 	}
 
 	eng = &Engine{
-		App:      initApp(version),
-		authInfo: authinfo,
-		isLogin:  isAlreadyLogin,
-		userinfo: userinfo,
-		storager: s,
-		env:      env,
-		config:   config,
+		App:       initApp(version),
+		authInfo:  authinfo,
+		isLogin:   isAlreadyLogin,
+		userinfo:  userinfo,
+		storager:  s,
+		env:       env,
+		config:    config,
+		apiServer: ComstockAPIServer,
 	}
 	return eng
 }
@@ -229,7 +231,7 @@ func initApp(version string) *cli.App {
 					fmt.Printf("Already login as %s\n", eng.userinfo.Mail())
 					return
 				}
-				eng.Login(ComstockHost)
+				eng.Login(eng.apiServer)
 			},
 		},
 		{
@@ -243,7 +245,7 @@ func initApp(version string) *cli.App {
 			Name:  "open",
 			Usage: "Open comstock website (for user registration, documents)",
 			Action: func(c *cli.Context) {
-				eng.Open(ComstockHost)
+				eng.Open(eng.apiServer)
 			},
 		},
 		{
@@ -251,7 +253,7 @@ func initApp(version string) *cli.App {
 			ShortName: "out",
 			Usage:     "Logout from current account",
 			Action: func(c *cli.Context) {
-				eng.Logout(ComstockHost)
+				eng.Logout(eng.apiServer)
 			},
 		},
 	}
