@@ -4,6 +4,7 @@ import (
 	"bufio"
 	"errors"
 	"fmt"
+	"github.com/mattn/go-isatty"
 	"github.com/shinpei/comstock/model"
 	"log"
 	"os"
@@ -31,13 +32,9 @@ func (e *Engine) Save(command string) (err error) {
 
 	//check weather command has given
 	if command == "" {
-		// try to read inputstream
-		fi, err := os.Stdin.Stat()
-		if err != nil {
-			log.Fatal("stdin broken")
-		}
-		fmt.Println("fi.size=", fi.Size())
-		if fi.Size() > 0 {
+		if isatty.IsTerminal(os.Stdin.Fd()) {
+			command, err = handler.ReadLastHistory(shellHistoryFilename)
+		} else {
 			// data arrived in stdin
 			fmt.Println("Reading from stdin")
 			scanner := bufio.NewScanner(os.Stdin)
@@ -47,8 +44,6 @@ func (e *Engine) Save(command string) (err error) {
 			} else {
 				log.Fatal("No command given")
 			}
-		} else {
-			command, err = handler.ReadLastHistory(shellHistoryFilename)
 		}
 	}
 	cmd = model.CreateCommand(command)
