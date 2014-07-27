@@ -36,6 +36,7 @@ func (e *Engine) Save(command string) (err error) {
 		if err != nil {
 			log.Fatal("stdin broken")
 		}
+		fmt.Println("fi.size=", fi.Size())
 		if fi.Size() > 0 {
 			// data arrived in stdin
 			fmt.Println("Reading from stdin")

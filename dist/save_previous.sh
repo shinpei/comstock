@@ -4,11 +4,13 @@
 # shinpei(c)2014
 
 saveBashHistory() {
-    fc -l -n 2 | tac |  comstock --shell bash save
+    fc -l -n | tail -n 2 | head -n 1 | sed -e 's/^[[:space:]]*//'  | ./comstock --shell bash save
 }
 
 # entry point
 if [ -z "$BASH_VERSION" ] || [ "${BASH##*/}" != "bash" ]; then 
+    echo "not"
+else 
     saveBashHistory
 fi
 
