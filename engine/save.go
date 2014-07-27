@@ -24,7 +24,8 @@ func (e *Engine) Save(command string) (err error) {
 		shellHistoryFilename += "/.bash_history"
 		handler = &BashHandler{}
 	} else {
-		log.Fatal("Couldn't recognize your shell. Please report your environment through 'comstock sos'")
+		//		log.Fatal("Couldn't recognize your shell. Please report your environment through 'comstock sos'")
+		log.Fatal("Couldn't recognize your shell. Your env is ", e.env.Shell)
 	}
 	var cmd *model.Command
 	if command == "" {
