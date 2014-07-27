@@ -129,6 +129,7 @@ func (hs *CloudStorager) IsRequireLogin() bool {
 func (cs *CloudStorager) Status() (err error) {
 	var m map[string]string = make(map[string]string)
 	m["StoragerType"] = cs.StorageType()
+	m["StorageURL"] = ComstockHost
 	for k, v := range m {
 		fmt.Println(k, ":", v)
 	}
