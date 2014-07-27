@@ -15,12 +15,12 @@ import (
 )
 
 const (
-	AppName           string = "comstock"
-	AuthFile          string = "authinfo"
-	ComstockAPIServer string = "https://comstock.herokuapp.com"
-	//ComstockAPIServer string = "http://localhost:5000"
-	ComVersionFile string = "version"
-	SPLITTER       string = "#"
+	AppName  string = "comstock"
+	AuthFile string = "authinfo"
+	//ComstockAPIServer string = "https://comstock.herokuapp.com"
+	ComstockAPIServer string = "http://localhost:5000"
+	ComVersionFile    string = "version"
+	SPLITTER          string = "#"
 )
 
 // this is TODO.
@@ -153,6 +153,9 @@ func initApp(version string) *cli.App {
 	app.Version = version
 	app.Name = AppName
 	app.Usage = "save your command to the cloud"
+	app.Flags = []cli.Flag{
+		cli.StringFlag{Name: "shell, s", Value: "", Usage: "specify flag"},
+	}
 	app.Action = func(c *cli.Context) {
 		println("comstock: error: command is missing. For more details, see 'comstock -h'")
 	}
@@ -163,7 +166,11 @@ func initApp(version string) *cli.App {
 			Usage:     "Save previous command",
 			Action: func(c *cli.Context) {
 				first := c.Args().First()
-				fmt.Println("first: ", first)
+				//fmt.Println("first: ", first)
+				shellstr := c.GlobalString("shell")
+				if shellstr != "" {
+					eng.env.Shell = shellstr
+				}
 				err := eng.Save(first)
 				if err != nil {
 					fmt.Println("Command failed: ", err)

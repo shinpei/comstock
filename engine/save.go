@@ -28,21 +28,28 @@ func (e *Engine) Save(command string) (err error) {
 		log.Fatal("Couldn't recognize your shell. Your env is ", e.env.Shell)
 	}
 	var cmd *model.Command
+
+	//check weather command has given
 	if command == "" {
 		// try to read inputstream
-		scanner := bufio.NewScanner(os.Stdin)
-		if scanner.Scan() {
-			// TODO: not only read one line
-			command = scanner.Text()
-			fmt.Println("SCANNER=", command)
+		fi, err := os.Stdin.Stat()
+		if err != nil {
+			log.Fatal("stdin broken")
+		}
+		if fi.Size() > 0 {
+			// data arrived in stdin
+			scanner := bufio.NewScanner(os.Stdin)
+			if scanner.Scan() {
+				// TODO: not only read one line
+				command = scanner.Text()
+			} else {
+				log.Fatal("No command given")
+			}
 		} else {
-			log.Fatal("No command given")
+			command, err = handler.ReadLastHistory(shellHistoryFilename)
 		}
 	}
 	cmd = model.CreateCommand(command)
-	fmt.Println(handler)
-	fmt.Println(command)
-	//	cmd, err = handler.ReadLastHistory(shellHistoryFilename)
 	if err != nil {
 		log.Fatal(err)
 	}

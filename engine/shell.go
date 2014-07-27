@@ -2,7 +2,6 @@ package engine
 
 import (
 	"bufio"
-	"github.com/shinpei/comstock/model"
 	"io"
 	"log"
 	"os"
@@ -10,7 +9,7 @@ import (
 )
 
 type Shell interface {
-	ReadLastHistory(historyfile string) (*model.Command, error)
+	ReadLastHistory(historyfile string) (string, error)
 }
 
 type ZshHandler struct {
@@ -51,7 +50,7 @@ func tail(filename string, numberLines int) (ret []string, err error) {
 	return
 }
 
-func (z *ZshHandler) ReadLastHistory(filename string) (cmd *model.Command, err error) {
+func (z *ZshHandler) ReadLastHistory(filename string) (command string, err error) {
 	var (
 		preCmd   string
 		storeCmd string
@@ -74,17 +73,17 @@ func (z *ZshHandler) ReadLastHistory(filename string) (cmd *model.Command, err e
 		}
 	}
 	//fmt.Sscanf(preCmd, ": %d:%d;%s", &timestamp, &linenum, &ignore)
-	cmd = model.CreateCommand(preCmd[15:])
-	//cmd = model.CreateCommand(ret[0][15:])
+	command = preCmd[15:]
+
 	return
 }
 
 // Bash stores it's history in its cache. So we cannot fetch it from history file.
-func (b *BashHandler) ReadLastHistory(filename string) (cmd *model.Command, err error) {
+func (b *BashHandler) ReadLastHistory(filename string) (command string, err error) {
 	var (
 		ret []string
 	)
 	ret, err = tail(filename, 2)
-	cmd = model.CreateCommand(ret[0])
+	command = ret[0]
 	return
 }
