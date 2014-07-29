@@ -10,6 +10,9 @@ VERSION=$(grep "const Version " version.go | sed -E 's/.*"(.+)"$/\1/')
 # Compile
 ./build/compile.sh
 
+# Copy dist scripts
+./build/copyshell.sh
+
 # Zip all pacakges
 mkdir -p ./pkg/dist
 
