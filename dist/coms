@@ -3,7 +3,6 @@
 # comstock shell scripts
 # shinpei(c)2014
 
-
-. ./save_previous.sh
+coms_save_previous
 
 
