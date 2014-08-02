@@ -3,7 +3,10 @@
 [![Build Status](https://drone.io/github.com/shinpei/comstock/status.png)](https://drone.io/github.com/shinpei/comstock/latest)
 [![GoDoc](https://godoc.org/github.com/shinpei/comstock?status.png)](https://godoc.org/github.com/shinpei/comstock)
 
-Comstock is a cloud-based command stocking tool. On this repository, we're providing cli application. comstock-cli can be used as normal tool without network connection. It'll sync when it gets internet connection.
+Comstock is a cloud-based command line stocking tool. Copy and pasting your often used command to the text editor, or cloud-based editor like evernote is dull for me. History command also won't allow me to use favorite commands to the new environment. What Comstock provides is storing your commands to the cloud, and easily use them from cli. On this repository, we're providing cli application. comstock-cli can be used as normal tool without cloud syncing too. (You'll need a comstock server though)
+
+## Demo
+(upcoming)
 
 ## Usage
 ```
