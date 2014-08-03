@@ -3,6 +3,20 @@
 # comstock shell scripts
 # shinpei(c)2014
 
-coms_save_previous
+saveBashHistory() {
+    fc -l -n | tail -n 2 | head -n 1 | sed -e 's/^[[:space:]]*//'  | comstock --shell bash save
+}
 
+saveZshHistory() {
+    comstock save
+}
+
+# entry point
+if [ -z "$BASH_VERSION" ] || [ "${BASH##*/}" != "bash" ]; then
+    echo "bash"
+    saveBashHistory
+else
+    echo "zsh"
+    saveZshHistory
+fi
 
