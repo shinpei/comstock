@@ -15,12 +15,12 @@ import (
 )
 
 const (
-	AppName           string = "comstock"
-	AuthFile          string = "authinfo"
-	ComstockAPIServer string = "https://comstock.herokuapp.com"
-	//ComstockAPIServer string = "http://localhost:5000"
-	ComVersionFile string = "version"
-	SPLITTER       string = "#"
+	AppName  string = "comstock"
+	AuthFile string = "authinfo"
+	//ComstockAPIServer string = "https://comstock.herokuapp.com"
+	ComstockAPIServer string = "http://localhost:5000"
+	ComVersionFile    string = "version"
+	SPLITTER          string = "#"
 )
 
 // this is TODO.
@@ -126,8 +126,14 @@ func readAuthInfo(env *Env) (authinfo string, mail string) {
 			log.Fatal("Invalid login info")
 		}
 		auths := strings.Split(scanner.Text(), SPLITTER)
-		mail = auths[0]
-		authinfo = auths[1]
+		// for safety.
+		if 1 < len(auths) {
+			mail = auths[0]
+			authinfo = auths[1]
+		} else {
+			log.Println("comstock version is too old, consider upgrading it.")
+			authinfo = auths[0]
+		}
 
 	}
 	return

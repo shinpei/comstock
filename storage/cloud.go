@@ -158,3 +158,9 @@ func (cs *CloudStorager) CheckSession(user *model.UserInfo) bool {
 	}
 	return false
 }
+
+func (cs *CloudStorager) RemoveOne(user *model.UserInfo, num int) bool {
+	//	command := "/removeOne"
+	//	vals := url.Values{"authinfo": {user.AuthInfo()}}.Encode()
+	return false
+}

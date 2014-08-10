@@ -136,3 +136,7 @@ func (m *MongoStorager) Status() (err error) {
 func (m *MongoStorager) CheckSession(user *model.UserInfo) bool {
 	return true
 }
+
+func (m *MongoStorager) RemoveOne(user *model.UserInfo, num int) bool {
+	return false // not yet implemented
+}

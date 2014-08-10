@@ -10,6 +10,7 @@ type Storager interface {
 	Push(user *model.UserInfo, path string, cmd *model.Command) error
 	List(user *model.UserInfo) (cmds []model.Command, err error)
 	FetchCommandFromNumber(user *model.UserInfo, num int) (cmd *model.Command, err error)
+	RemoveOne(user *model.UserInfo, num int) bool
 	StorageType() string
 	IsRequireLogin() bool
 	Status() error
