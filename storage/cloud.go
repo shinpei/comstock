@@ -154,7 +154,8 @@ func (cs *CloudStorager) CheckSession(user *model.UserInfo) bool {
 	switch resp.StatusCode {
 	case http.StatusOK:
 		return true
-
+	case http.StatusBadRequest:
+		return false
 	}
 	return false
 }
