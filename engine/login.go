@@ -5,6 +5,7 @@ import (
 	"code.google.com/p/gopass"
 	"errors"
 	"fmt"
+	"github.com/shinpei/comstock/model"
 	"io/ioutil"
 	"log"
 	"net/http"
@@ -60,14 +61,14 @@ func tryLoginWithMail(loginServer string, mail string, password string) (token s
 		if token == "" {
 			err = errors.New("Server error: fetched token is empty")
 		} else {
-			fmt.Println("Authentification success.")
+			fmt.Println("Authentication success.")
 		}
 	case http.StatusConflict:
 		body, _ := ioutil.ReadAll(resp.Body)
 		token = string(body)
 		fmt.Println("Already logined.")
 	case http.StatusNotFound, http.StatusForbidden:
-		err = errors.New("Authentification failed.")
+		err = model.ErrAuthenticationFailed
 		token = ""
 	default:
 		err = errors.New("Invalid response.")
