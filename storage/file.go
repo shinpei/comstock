@@ -43,7 +43,7 @@ func (fs *FileStorager) StorageType() string {
 }
 
 // Store the command
-func (fs *FileStorager) Push(user *model.UserInfo, path string, cmd *model.Command) (err error) {
+func (fs *FileStorager) Push(user *model.AuthInfo, path string, cmd *model.Command) (err error) {
 
 	data, _ := ioutil.ReadFile(fs.filepath)
 	cmdByte := []byte(cmd.Cmd)
@@ -59,7 +59,7 @@ func (fs *FileStorager) Close() (err error) {
 }
 
 // List all commands
-func (fs *FileStorager) List(user *model.UserInfo) (cmds []model.Command, err error) {
+func (fs *FileStorager) List(user *model.AuthInfo) (cmds []model.Command, err error) {
 	var fi *os.File
 	fi, err = os.Open(fs.filepath)
 	scanner := bufio.NewScanner(fi)
@@ -72,7 +72,7 @@ func (fs *FileStorager) List(user *model.UserInfo) (cmds []model.Command, err er
 	return
 }
 
-func (fs *FileStorager) FetchCommandFromNumber(user *model.UserInfo, num int) (cmd *model.Command, err error) {
+func (fs *FileStorager) FetchCommandFromNumber(user *model.AuthInfo, num int) (cmd *model.Command, err error) {
 	var fi *os.File
 	// TODO
 	fi, _ = os.Open(fs.filepath)
@@ -103,10 +103,10 @@ func (fs *FileStorager) Status() (err error) {
 	return
 }
 
-func (fs *FileStorager) CheckSession(user *model.UserInfo) bool {
+func (fs *FileStorager) CheckSession(user *model.AuthInfo) bool {
 	return true
 }
 
-func (fs *FileStorager) RemoveOne(user *model.UserInfo, num int) bool {
+func (fs *FileStorager) RemoveOne(user *model.AuthInfo, num int) bool {
 	return false
 }

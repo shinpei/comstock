@@ -37,7 +37,7 @@ type Person struct {
 }
 
 //store command
-func (ms *MongoStorager) Push(user *model.UserInfo, path string, cmd *model.Command) (err error) {
+func (ms *MongoStorager) Push(user *model.AuthInfo, path string, cmd *model.Command) (err error) {
 	hostname := MongoHost
 	session, err := mgo.DialWithTimeout("mongodb://"+hostname, time.Duration(3)*time.Second)
 	if err != nil {
@@ -61,7 +61,7 @@ func (ms *MongoStorager) Close() (err error) {
 	return
 }
 
-func (ms *MongoStorager) FetchCommandFromNumber(user *model.UserInfo, num int) (cmd *model.Command, err error) {
+func (ms *MongoStorager) FetchCommandFromNumber(user *model.AuthInfo, num int) (cmd *model.Command, err error) {
 	hostname := MongoHost
 	var session *mgo.Session
 	session, err = mgo.DialWithTimeout("mongodb://"+hostname, time.Duration(3)*time.Second)
@@ -87,7 +87,7 @@ func (ms *MongoStorager) FetchCommandFromNumber(user *model.UserInfo, num int) (
 	}
 	return
 }
-func (ms *MongoStorager) List(user *model.UserInfo) (cmds []model.Command, err error) {
+func (ms *MongoStorager) List(user *model.AuthInfo) (cmds []model.Command, err error) {
 	hostname := MongoHost
 	session, err := mgo.DialWithTimeout("mongodb://"+hostname, time.Duration(3)*time.Second)
 	if err != nil {
@@ -133,10 +133,10 @@ func (m *MongoStorager) IsRequireLogin() bool {
 func (m *MongoStorager) Status() (err error) {
 	return
 }
-func (m *MongoStorager) CheckSession(user *model.UserInfo) bool {
+func (m *MongoStorager) CheckSession(user *model.AuthInfo) bool {
 	return true
 }
 
-func (m *MongoStorager) RemoveOne(user *model.UserInfo, num int) bool {
+func (m *MongoStorager) RemoveOne(user *model.AuthInfo, num int) bool {
 	return false // not yet implemented
 }

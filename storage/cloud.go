@@ -30,9 +30,9 @@ func CreateCloudStorager(host string) (h *CloudStorager) {
 	}
 }
 
-func (cs *CloudStorager) Push(user *model.UserInfo, path string, cmd *model.Command) (err error) {
+func (cs *CloudStorager) Push(user *model.AuthInfo, path string, cmd *model.Command) (err error) {
 	command := "/postCommand"
-	vals := url.Values{"cmd": {cmd.Cmd}, "authinfo": {user.AuthInfo()}}.Encode()
+	vals := url.Values{"cmd": {cmd.Cmd}, "authinfo": {user.Token()}}.Encode()
 	requestURI := cs.StorageHost() + command + "?" + vals
 	resp, err := http.Get(requestURI)
 	if err != nil {
@@ -54,11 +54,11 @@ func (cs *CloudStorager) Push(user *model.UserInfo, path string, cmd *model.Comm
 	return
 }
 
-func (cs *CloudStorager) List(user *model.UserInfo) (cmds []model.Command, err error) {
+func (cs *CloudStorager) List(user *model.AuthInfo) (cmds []model.Command, err error) {
 
 	command := "/list"
 	// does it have auto
-	vals := url.Values{"authinfo": {user.AuthInfo()}}.Encode()
+	vals := url.Values{"authinfo": {user.Token()}}.Encode()
 	requestURI := cs.StorageHost() + command + "?" + vals
 	resp, err := http.Get(requestURI)
 	if err != nil {
@@ -88,9 +88,9 @@ func (cs *CloudStorager) List(user *model.UserInfo) (cmds []model.Command, err e
 	return
 }
 
-func (cs *CloudStorager) FetchCommandFromNumber(user *model.UserInfo, num int) (cmd *model.Command, err error) {
+func (cs *CloudStorager) FetchCommandFromNumber(user *model.AuthInfo, num int) (cmd *model.Command, err error) {
 	command := "/fetchCommandFromNumber"
-	vals := url.Values{"authinfo": {user.AuthInfo()}, "number": {strconv.Itoa(num)}}.Encode()
+	vals := url.Values{"authinfo": {user.Token()}, "number": {strconv.Itoa(num)}}.Encode()
 	requestURI := cs.StorageHost() + command + "?" + vals
 	resp, err := http.Get(requestURI)
 	if err != nil {
@@ -142,9 +142,9 @@ func (cs *CloudStorager) Search() (err error) {
 	return
 }
 
-func (cs *CloudStorager) CheckSession(user *model.UserInfo) bool {
+func (cs *CloudStorager) CheckSession(user *model.AuthInfo) bool {
 	command := "/checkSession"
-	vals := url.Values{"authinfo": {user.AuthInfo()}}.Encode()
+	vals := url.Values{"authinfo": {user.Token()}}.Encode()
 	requestURI := cs.StorageHost() + command + "?" + vals
 	resp, err := http.Get(requestURI)
 	if err != nil {
@@ -160,8 +160,7 @@ func (cs *CloudStorager) CheckSession(user *model.UserInfo) bool {
 	return false
 }
 
-func (cs *CloudStorager) RemoveOne(user *model.UserInfo, num int) bool {
+func (cs *CloudStorager) RemoveOne(user *model.AuthInfo, num int) bool {
 	//	command := "/removeOne"
-	//	vals := url.Values{"authinfo": {user.AuthInfo()}}.Encode()
 	return false
 }

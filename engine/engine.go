@@ -32,7 +32,7 @@ var (
 type Engine struct {
 	App       *cli.App
 	storager  storage.Storager // storage
-	userinfo  *model.UserInfo
+	userinfo  *model.AuthInfo
 	isLogin   bool
 	authInfo  string
 	config    *Config
@@ -72,7 +72,7 @@ func NewEngine(version string) *Engine {
 
 	var isAlreadyLogin bool = false
 	authinfo, mail := readAuthInfo(env)
-	var userinfo *model.UserInfo
+	var userinfo *model.AuthInfo
 	if authinfo != "" {
 		userinfo = model.CreateUserinfo(authinfo, mail)
 		isAlreadyLogin = s.CheckSession(userinfo)
