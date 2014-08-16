@@ -56,11 +56,16 @@ func tryLoginWithMail(loginServer string, mail string, password string) (token s
 	case 200:
 		body, _ := ioutil.ReadAll(resp.Body)
 		token = string(body) // access token
-		println("Authentification success.")
+		// check token has contents
+		if token == "" {
+			err = errors.New("Server error: fetched token is empty")
+		} else {
+			fmt.Println("Authentification success.")
+		}
 	case 409:
 		body, _ := ioutil.ReadAll(resp.Body)
 		token = string(body)
-		println("Already logined.")
+		fmt.Println("Already logined.")
 	case 404, 403:
 		err = errors.New("Authentification failed.")
 		token = ""

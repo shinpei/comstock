@@ -1,7 +1,8 @@
 package engine
 
 import (
-	"github.com/shinpei/comstock/model"
+	"errors"
+	//	"github.com/shinpei/comstock/model"
 )
 
 func (e *Engine) Remove(index int) (err error) {
