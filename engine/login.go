@@ -53,7 +53,7 @@ func tryLoginWithMail(loginServer string, mail string, password string) (token s
 	defer resp.Body.Close()
 	//TODO: control over proxy
 	switch resp.StatusCode {
-	case 200:
+	case http.StatusOK:
 		body, _ := ioutil.ReadAll(resp.Body)
 		token = string(body) // access token
 		// check token has contents
@@ -62,11 +62,11 @@ func tryLoginWithMail(loginServer string, mail string, password string) (token s
 		} else {
 			fmt.Println("Authentification success.")
 		}
-	case 409:
+	case http.StatusConflict:
 		body, _ := ioutil.ReadAll(resp.Body)
 		token = string(body)
 		fmt.Println("Already logined.")
-	case 404, 403:
+	case http.StatusNotFound, http.StatusForbidden:
 		err = errors.New("Authentification failed.")
 		token = ""
 	default:

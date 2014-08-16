@@ -41,12 +41,12 @@ func (cs *CloudStorager) Push(user *model.UserInfo, path string, cmd *model.Comm
 	}
 	defer resp.Body.Close()
 	switch resp.StatusCode {
-	case 200:
+	case http.StatusOK:
 		// do nothing.
-	case 500: // session expires
+	case http.StatusInternalServerError: // session expires
 		err = model.ErrSessionExpires
 		// disable login status
-	case 403:
+	case http.StatusForbidden:
 		err = errors.New("Hasn't login, please login first")
 	default:
 		//	body, _ := ioutil.ReadAll(resp.Body)
@@ -69,15 +69,15 @@ func (cs *CloudStorager) List(user *model.UserInfo) (cmds []model.Command, err e
 
 	var body []byte
 	switch resp.StatusCode {
-	case 200:
+	case http.StatusOK:
 		body, _ = ioutil.ReadAll(resp.Body)
-	case 404:
+	case http.StatusNotFound:
 		err = errors.New("Not found")
 		return
-	case 403:
+	case http.StatusForbidden:
 		err = model.ErrSessionInvalid
 		return
-	case 500:
+	case http.StatusInternalServerError:
 		err = model.ErrSessionExpires
 		return
 	default:
@@ -99,12 +99,12 @@ func (cs *CloudStorager) FetchCommandFromNumber(user *model.UserInfo, num int) (
 	defer resp.Body.Close()
 	var body []byte
 	switch resp.StatusCode {
-	case 200:
+	case http.StatusOK:
 		body, _ = ioutil.ReadAll(resp.Body)
-	case 404, 403:
+	case http.StatusForbidden, http.StatusNotFound:
 		err = errors.New("Number not found")
 		return
-	case 500:
+	case http.StatusInternalServerError:
 		err = model.ErrSessionExpires
 		return
 	default:
@@ -152,7 +152,7 @@ func (cs *CloudStorager) CheckSession(user *model.UserInfo) bool {
 	}
 	defer resp.Body.Close()
 	switch resp.StatusCode {
-	case 200:
+	case http.StatusOK:
 		return true
 
 	}
