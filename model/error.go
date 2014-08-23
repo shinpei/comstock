@@ -9,6 +9,11 @@ var ErrSessionNotFound = errors.New("Session not found")
 var ErrSessionExpires = errors.New("Session expiress")
 var ErrSessionInvalid = errors.New("The token you're using is invalid")
 
+//register
+var ErrUserAlreadyExist = errors.New("Requested user already exists")
+var ErrTooWeakPassword = errors.New("Requested password is too weak")
+var ErrInvalidMail = errors.New("Requested email address is invalid")
+
 // login
 var ErrUserNotFound = errors.New("User not found")
 var ErrIncorrectPassword = errors.New("Password is incorrect")
