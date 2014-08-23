@@ -75,6 +75,7 @@ func NewEngine(version string) *Engine {
 	var userinfo *model.AuthInfo
 	if authinfo != "" {
 		userinfo = model.CreateUserinfo(authinfo, mail)
+		//TODO: maybe we shouldn't check session every time, e.g., --help given
 		isAlreadyLogin = s.CheckSession(userinfo)
 		config.User.Mail = mail // apply current status
 	}
@@ -275,6 +276,8 @@ func initApp(version string) *cli.App {
 }
 
 func (e *Engine) Run(args []string) {
+	// initiation
+
 	e.App.Run(args)
 	e.Close()
 }
