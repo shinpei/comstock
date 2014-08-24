@@ -1,3 +1,7 @@
+2014-08-24  Shinpei Nakata  <shinpei.nakata@gmail.com>
+	* Refact serverside with Golang
+	* add remove command
+
 2014-07-08  Shinpei Nakata  <shinpei.nakata@gmail.com>
 	* Release v0.1.3 (Jul, 8th, '14)
 	* storage/file.go: summerize commands
