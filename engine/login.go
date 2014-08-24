@@ -14,6 +14,8 @@ import (
 
 func (e *Engine) Login(loginServer string) {
 	// check login
+	// TODO: does storager requires login?
+
 	var mail string
 	var registeredNewMail bool
 	if e.config != nil && e.config.User.Mail != "" {

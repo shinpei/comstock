@@ -164,7 +164,7 @@ func initApp(version string) *cli.App {
 		cli.StringFlag{Name: "shell, s", Value: "", Usage: "specify flag"},
 	}
 	app.Action = func(c *cli.Context) {
-		println("comstock: error: command is missing. For more details, see 'comstock -h'")
+		fmt.Println("comstock: error: command is missing. For more details, see 'comstock -h'.")
 	}
 	app.Commands = []cli.Command{
 		{
@@ -216,7 +216,7 @@ func initApp(version string) *cli.App {
 			Usage:     "Get command by specifiying number",
 			Action: func(c *cli.Context) {
 				if len(c.Args()) == 0 {
-					println("'get' requires #number argument, e.g., 'comstock get 1'")
+					fmt.Println("'get' requires #number argument, e.g., 'comstock get 1'.")
 					return
 				}
 				num, _ := strconv.Atoi(c.Args()[0])
@@ -282,7 +282,12 @@ func initApp(version string) *cli.App {
 			ShortName: "out",
 			Usage:     "Logout from current account",
 			Action: func(c *cli.Context) {
+				if eng.IsLogin() == false {
+					fmt.Println("Already logout.")
+					return
+				}
 				eng.Logout(eng.apiServer)
+				fmt.Println("Logout, done.")
 			},
 		},
 	}
