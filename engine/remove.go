@@ -9,6 +9,9 @@ func (e *Engine) Remove(index int) (err error) {
 	if e.storager.IsRequireLogin() == true && e.isLogin == false {
 		log.Fatal("You have no valid access token. Please login first.")
 	}
+	if index < 1 {
+		log.Fatal("You cannot specify index as index < 1")
+	}
 	if err = e.storager.RemoveOne(e.userinfo, index); err != nil {
 		if err == model.ErrSessionExpires {
 			e.SetLogout()
