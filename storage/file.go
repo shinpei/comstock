@@ -107,6 +107,6 @@ func (fs *FileStorager) CheckSession(user *model.AuthInfo) bool {
 	return true
 }
 
-func (fs *FileStorager) RemoveOne(user *model.AuthInfo, num int) bool {
-	return false
+func (fs *FileStorager) RemoveOne(user *model.AuthInfo, num int) (err error) {
+	return
 }

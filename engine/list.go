@@ -24,6 +24,7 @@ func (e *Engine) List() (err error) {
 	}
 	var idx int = 0
 
+	// Modify printing size due to the terminal width, if it's not enough, '...' will be used
 	// can be concurrently exec
 	sttyCmd := exec.Command("stty", "size")
 	sttyCmd.Stdin = os.Stdin

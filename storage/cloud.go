@@ -101,11 +101,14 @@ func (cs *CloudStorager) FetchCommandFromNumber(user *model.AuthInfo, num int) (
 	switch resp.StatusCode {
 	case http.StatusOK:
 		body, _ = ioutil.ReadAll(resp.Body)
-	case http.StatusForbidden, http.StatusNotFound:
+	case http.StatusForbidden:
+		err = model.ErrSessionInvalid
+		return
+	case http.StatusNotFound:
 		err = errors.New("Number not found")
 		return
 	case http.StatusInternalServerError:
-		err = model.ErrSessionExpires
+		err = model.ErrServerSystem
 		return
 	default:
 		err = errors.New("Fetch failed somehow")
@@ -160,7 +163,23 @@ func (cs *CloudStorager) CheckSession(user *model.AuthInfo) bool {
 	return false
 }
 
-func (cs *CloudStorager) RemoveOne(user *model.AuthInfo, num int) bool {
-	//	command := "/removeOne"
-	return false
+func (cs *CloudStorager) RemoveOne(user *model.AuthInfo, index int) (err error) {
+	command := "/removeOne"
+	vals := url.Values{"token": {user.Token()}, "index": {strconv.Itoa(index)}}.Encode()
+	requestURI := cs.StorageHost() + command + "?" + vals
+	resp, err := http.Get(requestURI)
+	if err != nil {
+		return
+	}
+	defer resp.Body.Close()
+	switch resp.StatusCode {
+	case http.StatusOK:
+		// do nothing
+	case http.StatusForbidden:
+		err = model.ErrSessionExpires
+		return
+	default:
+		log.Fatal("[SERIOUS] Shouldn't be reache here, please report bug")
+	}
+	return
 }

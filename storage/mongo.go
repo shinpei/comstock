@@ -137,6 +137,6 @@ func (m *MongoStorager) CheckSession(user *model.AuthInfo) bool {
 	return true
 }
 
-func (m *MongoStorager) RemoveOne(user *model.AuthInfo, num int) bool {
-	return false // not yet implemented
+func (m *MongoStorager) RemoveOne(user *model.AuthInfo, num int) (err error) {
+	return
 }

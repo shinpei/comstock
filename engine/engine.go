@@ -15,12 +15,12 @@ import (
 )
 
 const (
-	AppName           string = "comstock"
-	AuthFile          string = "authinfo"
-	ComstockAPIServer string = "https://comstock.herokuapp.com"
-	//ComstockAPIServer string = "http://localhost:5000"
-	ComVersionFile string = "version"
-	SPLITTER       string = "#"
+	AppName  string = "comstock"
+	AuthFile string = "authinfo"
+	//ComstockAPIServer string = "https://comstock.herokuapp.com"
+	ComstockAPIServer string = "http://localhost:5000"
+	ComVersionFile    string = "version"
+	SPLITTER          string = "#"
 )
 
 // this is TODO.
@@ -216,7 +216,7 @@ func initApp(version string) *cli.App {
 			Usage:     "Get command by specifiying number",
 			Action: func(c *cli.Context) {
 				if len(c.Args()) == 0 {
-					println("'run' requires #number argument, e.g., 'comstock run 1'")
+					println("'get' requires #number argument, e.g., 'comstock get 1'")
 					return
 				}
 				num, _ := strconv.Atoi(c.Args()[0])
@@ -225,6 +225,21 @@ func initApp(version string) *cli.App {
 					fmt.Println("Command failed: ", err)
 				} else {
 					fmt.Println(cmd.Cmd)
+				}
+			},
+		},
+		{
+			Name:      "remove",
+			ShortName: "rm",
+			Usage:     "",
+			Action: func(c *cli.Context) {
+				if len(c.Args()) == 0 {
+					fmt.Println("'remove' requires #number argument, e.g., 'comstock rm 1'")
+					return
+				}
+				num, _ := strconv.Atoi(c.Args()[0])
+				if err := eng.Remove(num); err != nil {
+					fmt.Println("Command failed: ", err.Error())
 				}
 			},
 		},
@@ -296,7 +311,7 @@ func (e *Engine) FetchCommandFromNumber(num int) (cmd *model.Command, err error)
 		log.Fatal("You have no valid access token. Please login first.")
 	}
 	cmd, err = e.storager.FetchCommandFromNumber(e.userinfo, num)
-	if err == model.ErrSessionExpires {
+	if err == model.ErrSessionExpires || err == model.ErrSessionInvalid {
 		e.SetLogout()
 	}
 	return
