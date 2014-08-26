@@ -10,5 +10,5 @@ case ${1} in
 	coms_save_previous
 	;;
     *)
-	comstock $@
+	comstock-cli $@
 esac
