@@ -5,6 +5,10 @@
 
 set -e
 
-coms_save_previous
-
-
+case ${1} in
+    save)
+	coms_save_previous
+	;;
+    *)
+	comstock $@
+esac

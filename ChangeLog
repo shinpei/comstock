@@ -1,3 +1,7 @@
+2014-08-26  Shinpei Nakata  <shinpei.nakata@gmail.com>
+
+	* main.go: release version 0.1.4
+
 2014-08-24  Shinpei Nakata  <shinpei.nakata@gmail.com>
 	* Refact serverside with Golang
 	* add remove command
