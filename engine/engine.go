@@ -117,7 +117,11 @@ func getVersion(path string) string {
 
 func readAuthInfo(env *Env) (authinfo string, mail string) {
 	authFilePath := env.Compath + "/" + AuthFile
-	fi, _ := os.Open(authFilePath)
+	fi, err := os.Open(authFilePath)
+	if err != nil {
+		log.Fatal(err.Error())
+	}
+
 	scanner := bufio.NewScanner(fi)
 	var lc int = 0
 	for scanner.Scan() {
