@@ -32,10 +32,15 @@ saved command 'git diff HEAD^ --name-only'
 ```
 
 ## Install
-In Linux, MacOSX, we prepare shell for instlaling.
+
+#via `curl`
 
 ```
 curl -L https://github.com/shinpei/comstock/raw/master/dist/install.sh | sudo sh
+```
+#via `wget`
+```
+wget --no-check-certificate https://github.com/shinpei/comstock/raw/master/dist/install.sh -O - | sudo sh
 ```
 
 Or, in MacOSX+homebrew, you can install comstock as below.
