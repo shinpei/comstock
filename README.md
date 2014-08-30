@@ -31,16 +31,22 @@ $ comstock save
 saved command 'git diff HEAD^ --name-only'
 ```
 
-### Getting started
 ## Install
-If you have installed Go, type following.
+In Linux, MacOSX, we prepare shell for instlaling.
+
 ```
-go get github.com/shinpei/comstock
+curl -L https://github.com/shinpei/comstock/raw/master/dist/install.sh | sudo sh
 ```
-Or, you can install comstock from homebrew.
+
+Or, in MacOSX+homebrew, you can install comstock as below.
 ```
 $ brew tap shinpei/comstock
 $ brew install comstock
+```
+
+If you have installed Go, type following.
+```
+go get github.com/shinpei/comstock
 ```
 ## Create your account
 Open register website from command.
