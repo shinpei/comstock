@@ -39,8 +39,9 @@ curl -L https://github.com/shinpei/comstock/raw/master/dist/install.sh | sudo sh
 `
 
 ####via `wget`
-`wget --no-check-certificate https://github.com/shinpei/comstock/raw/master/dist/install.sh -O - | sudo sh
-`
+```
+wget --no-check-certificate https://github.com/shinpei/comstock/raw/master/dist/install.sh -O - | sudo sh
+```
 
 #### via `homebrew`
 ```
