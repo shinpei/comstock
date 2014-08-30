@@ -33,17 +33,17 @@ saved command 'git diff HEAD^ --name-only'
 
 ## Install
 
-###via `curl`
+####via `curl`
 ```
 curl -L https://github.com/shinpei/comstock/raw/master/dist/install.sh | sudo sh
 ```
 
-###via `wget`
+####via `wget`
 ```
 wget --no-check-certificate https://github.com/shinpei/comstock/raw/master/dist/install.sh -O - | sudo sh
 ```
 
-### via `brew`
+#### via `homebrew`
 ```
 $ brew tap shinpei/comstock
 $ brew install comstock
