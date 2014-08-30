@@ -59,8 +59,12 @@ $COMSTOCK_DOWNLOADER $COMSTOCK_URL -o $COMSTOCK_DIR/$COMSTOCK_BINNAME || {
     exit
 }
 
+DESTDIR=/usr/local/bin
 pushd $COMSTOCK_DIR
 unzip $COMSTOCK_DIR/$COMSTOCK_BINNAME
+install -m 755 comstock-cli ${DESTDIR}
+install -m 755 coms_save_previous ${DESTDIR}
+install -m 755 comstock ${DESTDIR}
 popd
 
 echo "comstock installed!"
