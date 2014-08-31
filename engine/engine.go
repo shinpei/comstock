@@ -89,7 +89,8 @@ func NewEngine(version string) *Engine {
 		// versioncheck
 		if versionRead != version {
 			// Version mismatch
-			//			log.Fatal("version mismatch")
+			// TODO: warn for environment, double installed?
+			//log.Printf("version seems changed, please remove")
 		}
 	}
 
@@ -136,7 +137,7 @@ func readAuthInfo(env *Env) (authinfo string, mail string, err error) {
 			mail = auths[0]
 			authinfo = auths[1]
 		} else {
-			log.Println("comstock version is too old, consider upgrading it.")
+			fmt.Println("comstock version is too old, consider upgrading it.")
 			authinfo = auths[0]
 		}
 
@@ -237,6 +238,13 @@ func initApp(version string) *cli.App {
 			},
 		},
 		{
+			Name:  "alias",
+			Usage: "Make alias for specific command, specified as #number",
+			Action: func(c *cli.Context) {
+				log.Fatal("Not yet implemented")
+			},
+		},
+		{
 			Name:      "remove",
 			ShortName: "rm",
 			Usage:     "",
@@ -255,17 +263,15 @@ func initApp(version string) *cli.App {
 			},
 		},
 		{
-			Name:      "run",
-			ShortName: "r",
-			Usage:     "Exec command with #number (experiment)",
+			Name:  "run",
+			Usage: "Exec command with #number",
 			Action: func(c *cli.Context) {
-				log.Fatal("Not yet implemented")
+				log.Fatal("Please execute 'run' from wrapper script")
 			},
 		},
 		{
-			Name:      "login",
-			ShortName: "in",
-			Usage:     "Login to the cloud",
+			Name:  "login",
+			Usage: "Login to the cloud",
 			Action: func(c *cli.Context) {
 				if eng.IsLogin() {
 					fmt.Printf("Already login as %s\n", eng.userinfo.Mail())

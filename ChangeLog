@@ -1,3 +1,7 @@
+2014-09-01  Shinpei Nakata  <shinpei.nakata@gmail.com>
+
+	* implement 'run' command
+
 2014-08-26  Shinpei Nakata  <shinpei.nakata@gmail.com>
 
 	* main.go: release version 0.1.4
