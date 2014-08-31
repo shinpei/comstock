@@ -1,4 +1,6 @@
 2014-09-01  Shinpei Nakata  <shinpei.nakata@gmail.com>
+
+	* version.go: Release version 0.1.5 (Sep 1st, '14)
 	* engine.go : add 'alias' stub
 	* install.sh: Install shell has added
 	* comstock: Implement 'run' command
@@ -6,7 +8,7 @@
 
 2014-08-26  Shinpei Nakata  <shinpei.nakata@gmail.com>
 
-	* main.go: release version 0.1.4 (Jul 26th, '14)
+	* main.go: release version 0.1.4 (Aug 26th, '14)
 	 - add wrapper shell
 	 - bug fix for 'save' command
 	 - errors are updated (due to the server-side impl change)
