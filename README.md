@@ -6,7 +6,7 @@
 Comstock is a cloud-based command line stocking tool. Copy and pasting your often used command to the text editor, or cloud-based editor like evernote is dull for me. History command also won't allow me to use favorite commands to the new environment. What Comstock provides is storing your commands to the cloud, and easily use them from cli. On this repository, we're providing cli application. comstock-cli can be used as normal tool without cloud syncing too. (You'll need a comstock server though)
 
 ## Demo
-![](https://github.com/shinpei/comstock/comstock-demo.gif)
+![](https://github.com/shinpei/comstock/blob/master/comstock-demo.gif)
 
 ## Usage
 ```
