@@ -71,7 +71,7 @@ func NewEngine(version string) *Engine {
 	}
 
 	var isAlreadyLogin bool = false
-	authinfo, mail := readAuthInfo(env)
+	authinfo, mail, _ := readAuthInfo(env)
 	var userinfo *model.AuthInfo
 	if authinfo != "" {
 		userinfo = model.CreateUserinfo(authinfo, mail)
@@ -115,11 +115,11 @@ func getVersion(path string) string {
 	return string(versioninfo)
 }
 
-func readAuthInfo(env *Env) (authinfo string, mail string) {
+func readAuthInfo(env *Env) (authinfo string, mail string, err error) {
 	authFilePath := env.Compath + "/" + AuthFile
 	fi, err := os.Open(authFilePath)
 	if err != nil {
-		log.Fatal(err.Error())
+		return
 	}
 
 	scanner := bufio.NewScanner(fi)
