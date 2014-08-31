@@ -4,11 +4,20 @@
 # shinpei(c)2014
 
 set -e
+coms_run() {
+    cmd=`comstock-cli get ${1}`
+    echo "Executing, '${cmd}'"
+    ${cmd}
+}
 
 case ${1} in
     save)
 	coms_save_previous
 	;;
+    run)
+	coms_run ${2}
+	;;
     *)
 	comstock-cli $@
 esac
+

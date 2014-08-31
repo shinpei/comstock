@@ -223,10 +223,14 @@ func initApp(version string) *cli.App {
 					fmt.Println("'get' requires #number argument, e.g., 'comstock get 1'.")
 					return
 				}
-				num, _ := strconv.Atoi(c.Args()[0])
+				num, err := strconv.Atoi(c.Args()[0])
+				if err != nil {
+					fmt.Println("Invalid argument was given, please retry")
+					return
+				}
 				cmd, err := eng.FetchCommandFromNumber(num)
 				if err != nil {
-					fmt.Println("Command failed: ", err)
+					fmt.Println("Command failed: ", err.Error())
 				} else {
 					fmt.Println(cmd.Cmd)
 				}
