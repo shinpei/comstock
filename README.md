@@ -8,29 +8,6 @@ Comstock is a cloud-based command line stocking tool. Copy and pasting your ofte
 ## Demo
 ![](https://github.com/shinpei/comstock/blob/master/comstock-demo.gif)
 
-## Usage
-```
-$ git diff HEAD^ --name-only
-$ comstock save
-saved command 'git diff HEAD^ --name-only'
-$ comstock list
-1: git diff HEAD^ --name-only
-$ comstock get 1
-git diff HEAD^ --name-only
-```
-
-## Sync with Cloud
-
-```
-$ comstock login
-Your registered mail? : shinpei@mail.com
-Password for shinpei@mail.com?:
-Authentification success.
-$ git diff HEAD^ --name-only
-$ comstock save
-saved command 'git diff HEAD^ --name-only'
-```
-
 ## Install
 
 ####via `curl`
