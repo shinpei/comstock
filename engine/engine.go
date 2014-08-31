@@ -214,25 +214,9 @@ func initApp(version string) *cli.App {
 			},
 		},
 		{
-			Name:  "get",
-			Usage: "Get command by specifiying number",
-			Action: func(c *cli.Context) {
-				if len(c.Args()) == 0 {
-					fmt.Println("'get' requires #number argument, e.g., 'comstock get 1'.")
-					return
-				}
-				num, err := strconv.Atoi(c.Args()[0])
-				if err != nil {
-					fmt.Println("Invalid argument was given, please retry")
-					return
-				}
-				cmd, err := eng.FetchCommandFromNumber(num)
-				if err != nil {
-					fmt.Println("Command failed: ", err.Error())
-				} else {
-					fmt.Println(cmd.Cmd)
-				}
-			},
+			Name:   "get",
+			Usage:  "Get command by specifiying number",
+			Action: eng.FetchAction,
 		},
 		{
 			Name:  "alias",
