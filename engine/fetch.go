@@ -18,7 +18,7 @@ func (e *Engine) FetchAction(c *cli.Context) {
 		fmt.Println("Invalid argument was given, please retry")
 		return
 	}
-	cmd, err := e.fetchCommandFromNumber(num)
+	cmd, err := e.FetchCommandFromNumber(num)
 	if err != nil {
 		fmt.Println("Command failed: ", err.Error())
 	} else {
@@ -27,7 +27,7 @@ func (e *Engine) FetchAction(c *cli.Context) {
 
 }
 
-func (e *Engine) fetchCommandFromNumber(num int) (cmd *model.Command, err error) {
+func (e *Engine) FetchCommandFromNumber(num int) (cmd *model.Command, err error) {
 	if e.storager.IsRequireLogin() == true && e.isLogin == false {
 		log.Fatal("You have no valid access token. Please login first.")
 	}
