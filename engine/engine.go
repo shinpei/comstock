@@ -15,10 +15,8 @@ import (
 )
 
 const (
-	AppName           string = "comstock"
-	AuthFile          string = "authinfo"
-	ComstockAPIServer string = "https://comstock.herokuapp.com"
-	//ComstockAPIServer string = "http://localhost:5000"
+	AppName        string = "comstock"
+	AuthFile       string = "authinfo"
 	ComVersionFile string = "version"
 	SPLITTER       string = "#"
 )
@@ -56,12 +54,12 @@ func (e *Engine) SetAuthInfo(auth string) {
 	e.authInfo = auth
 }
 
-func NewEngine(version string) *Engine {
+func NewEngine(version string, apiServer string) *Engine {
 	env := NewEnv()
 	var config *Config
 	configPath := env.Compath + "/" + ConfigFileDefault
 	var s storage.Storager
-	s = storage.CreateCloudStorager(ComstockAPIServer)
+	s = storage.CreateCloudStorager(apiServer)
 	config = LoadConfig(configPath)
 	switch config.Local.Type {
 	case "file":
@@ -102,7 +100,7 @@ func NewEngine(version string) *Engine {
 		storager:  s,
 		env:       env,
 		config:    config,
-		apiServer: ComstockAPIServer,
+		apiServer: apiServer,
 	}
 	return eng
 }
@@ -216,9 +214,8 @@ func initApp(version string) *cli.App {
 			},
 		},
 		{
-			Name:      "get",
-			ShortName: "g",
-			Usage:     "Get command by specifiying number",
+			Name:  "get",
+			Usage: "Get command by specifiying number",
 			Action: func(c *cli.Context) {
 				if len(c.Args()) == 0 {
 					fmt.Println("'get' requires #number argument, e.g., 'comstock get 1'.")
