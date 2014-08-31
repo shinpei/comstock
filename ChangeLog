@@ -1,14 +1,23 @@
 2014-09-01  Shinpei Nakata  <shinpei.nakata@gmail.com>
-
-	* implement 'run' command
+	* engine.go : add 'alias' stub
+	* install.sh: Install shell has added
+	* comstock: Implement 'run' command
+	* added demo gif to readme
 
 2014-08-26  Shinpei Nakata  <shinpei.nakata@gmail.com>
 
-	* main.go: release version 0.1.4
+	* main.go: release version 0.1.4 (Jul 26th, '14)
+	 - add wrapper shell
+	 - bug fix for 'save' command
+	 - errors are updated (due to the server-side impl change)
+	 - refactor for more readability
+	 - added bench tests
+	 - update 'get' command
+	 - accepting pipe input, added '--shell' flag
 
 2014-08-24  Shinpei Nakata  <shinpei.nakata@gmail.com>
 	* Refact serverside with Golang
-	* add remove command
+	* add 'remove' command
 
 2014-07-08  Shinpei Nakata  <shinpei.nakata@gmail.com>
 	* Release v0.1.3 (Jul, 8th, '14)
