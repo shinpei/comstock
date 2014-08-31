@@ -7,5 +7,6 @@ import (
 
 func main() {
 	eng := engine.NewEngine(Version)
-	eng.Run(os.Args)
+	_ = eng.Run(os.Args)
+
 }

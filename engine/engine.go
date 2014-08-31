@@ -245,7 +245,10 @@ func initApp(version string) *cli.App {
 					fmt.Println("'remove' requires #number argument, e.g., 'comstock rm 1'")
 					return
 				}
-				num, _ := strconv.Atoi(c.Args()[0])
+				num, err := strconv.Atoi(c.Args()[0])
+				if err != nil {
+					fmt.Println("Invalid argument was given, please retry")
+				}
 				if err := eng.Remove(num); err != nil {
 					fmt.Println("Command failed: ", err.Error())
 				}
@@ -303,11 +306,12 @@ func initApp(version string) *cli.App {
 	return app
 }
 
-func (e *Engine) Run(args []string) {
+func (e *Engine) Run(args []string) error {
 	// initiation
 
-	e.App.Run(args)
+	err := e.App.Run(args)
 	e.Close()
+	return err
 }
 
 func (e *Engine) Close() {
