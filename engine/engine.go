@@ -223,13 +223,16 @@ func initApp(version string) *cli.App {
 					fmt.Println("'remove' requires #number argument, e.g., 'comstock rm 1'")
 					return
 				}
-				num, err := strconv.Atoi(c.Args()[0])
+				index, err := strconv.Atoi(c.Args()[0])
 				if err != nil {
 					fmt.Println("Invalid argument was given, please retry")
+					return
 				}
-				if err := eng.Remove(num); err != nil {
+				if err := eng.Remove(index); err != nil {
 					fmt.Println("Command failed: ", err.Error())
+					return
 				}
+				fmt.Println("Successfully remove command #", index)
 			},
 		},
 		{

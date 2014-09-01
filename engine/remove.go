@@ -18,9 +18,7 @@ func (e *Engine) Remove(index int) (err error) {
 		} else if err == model.ErrSessionInvalid {
 			e.SetLogout()
 		}
-		log.Println("Couldn't delete: ", err.Error())
 		return
 	}
-	log.Println("Successfully remove command #", index)
 	return
 }
