@@ -1,7 +1,7 @@
 set -e
 
 COMSTOCK_GITHUB_RELEASE_URL=https://github.com/shinpei/comstock/releases/download
-COMSTOCK_VERSION=0.1.5
+COMSTOCK_VERSION=0.1.6
 COMSTOCK_ARCH=amd64
 
 if [ `uname` = "Darwin" ]; then

@@ -1,5 +1,7 @@
 2014-09-01  Shinpei Nakata  <shinpei.nakata@gmail.com>
 
+	* main.go: Release version 0.1.6
+	 - fix #14,#15
 	* version.go: Release version 0.1.5 (Sep 1st, '14)
 	* engine.go : add 'alias' stub
 	* install.sh: Install shell has added
