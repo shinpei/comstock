@@ -8,7 +8,7 @@ import (
 	"strconv"
 )
 
-func (e *Engine) FetchAction(c *cli.Context) {
+func FetchAction(c *cli.Context) {
 	if len(c.Args()) == 0 {
 		fmt.Println("'get' requires #number argument, e.g., 'comstock get 1'.")
 		return
@@ -18,13 +18,12 @@ func (e *Engine) FetchAction(c *cli.Context) {
 		fmt.Println("Invalid argument was given, please retry")
 		return
 	}
-	cmd, err := e.FetchCommandFromNumber(num)
+	cmd, err := eng.FetchCommandFromNumber(num)
 	if err != nil {
 		fmt.Println("Command failed: ", err.Error())
 	} else {
 		fmt.Println(cmd.Cmd)
 	}
-
 }
 
 func (e *Engine) FetchCommandFromNumber(num int) (cmd *model.Command, err error) {

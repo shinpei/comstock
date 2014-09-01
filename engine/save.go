@@ -4,12 +4,26 @@ import (
 	"bufio"
 	"errors"
 	"fmt"
+	"github.com/codegangsta/cli"
 	"github.com/mattn/go-isatty"
 	"github.com/shinpei/comstock/model"
 	"log"
 	"os"
 	"strings"
 )
+
+func SaveAction(c *cli.Context) {
+	first := c.Args().First()
+	//fmt.Println("first: ", first)
+	shellstr := c.GlobalString("shell")
+	if shellstr != "" {
+		eng.env.Shell = shellstr
+	}
+	err := eng.Save(first)
+	if err != nil {
+		fmt.Println("Command failed: ", err)
+	}
+}
 
 func (e *Engine) Save(command string) (err error) {
 	if e.isLogin == false {

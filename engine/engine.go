@@ -174,18 +174,7 @@ func initApp(version string) *cli.App {
 			Name:      "save",
 			ShortName: "sv",
 			Usage:     "Save previous command",
-			Action: func(c *cli.Context) {
-				first := c.Args().First()
-				//fmt.Println("first: ", first)
-				shellstr := c.GlobalString("shell")
-				if shellstr != "" {
-					eng.env.Shell = shellstr
-				}
-				err := eng.Save(first)
-				if err != nil {
-					fmt.Println("Command failed: ", err)
-				}
-			},
+			Action:    SaveAction,
 			BashComplete: func(c *cli.Context) {
 				if len(c.Args()) > 0 {
 					return
@@ -216,7 +205,7 @@ func initApp(version string) *cli.App {
 		{
 			Name:   "get",
 			Usage:  "Get command by specifiying number",
-			Action: eng.FetchAction,
+			Action: FetchAction,
 		},
 		{
 			Name:  "alias",
@@ -228,7 +217,7 @@ func initApp(version string) *cli.App {
 		{
 			Name:      "remove",
 			ShortName: "rm",
-			Usage:     "",
+			Usage:     "Delete stocked command by specifiying #number",
 			Action: func(c *cli.Context) {
 				if len(c.Args()) == 0 {
 					fmt.Println("'remove' requires #number argument, e.g., 'comstock rm 1'")
