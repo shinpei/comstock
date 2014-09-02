@@ -5,12 +5,22 @@ import (
 	"code.google.com/p/gopass"
 	"errors"
 	"fmt"
+	"github.com/codegangsta/cli"
 	"github.com/shinpei/comstock/model"
 	"io/ioutil"
 	"log"
 	"net/http"
 	"os"
 )
+
+func LoginAction(c *cli.Context) {
+	if eng.IsLogin() {
+		fmt.Printf("Already login as %s\n", eng.userinfo.Mail())
+		return
+	}
+	eng.Login(eng.apiServer)
+
+}
 
 func (e *Engine) Login(loginServer string) {
 	// check login

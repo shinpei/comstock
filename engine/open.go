@@ -1,9 +1,14 @@
 package engine
 
 import (
+	"github.com/codegangsta/cli"
 	"os/exec"
 	"strings"
 )
+
+func OpenAction(c *cli.Context) {
+	eng.Open(eng.apiServer)
+}
 
 // codes from link below
 // http://stackoverflow.com/a/14053693/3070610

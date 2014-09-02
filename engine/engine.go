@@ -10,7 +10,6 @@ import (
 	"io/ioutil"
 	"log"
 	"os"
-	"strconv"
 	"strings"
 )
 
@@ -166,20 +165,12 @@ func initApp(version string) *cli.App {
 	app.Flags = []cli.Flag{
 		cli.StringFlag{Name: "shell, s", Value: "", Usage: "specify flag"},
 	}
-	app.Action = func(c *cli.Context) {
-		fmt.Println("comstock: error: command is missing. For more details, see 'comstock -h'.")
-	}
 	app.Commands = []cli.Command{
 		{
 			Name:      "save",
 			ShortName: "sv",
 			Usage:     "Save previous command",
 			Action:    SaveAction,
-			BashComplete: func(c *cli.Context) {
-				if len(c.Args()) > 0 {
-					return
-				}
-			},
 		},
 		{
 			Name:      "status",
@@ -195,12 +186,7 @@ func initApp(version string) *cli.App {
 			ShortName:   "ls",
 			Description: "Show the list of stocked commands",
 			Usage:       "List stocked command",
-			Action: func(c *cli.Context) {
-				err := eng.List()
-				if err != nil {
-					fmt.Println("Command failed: ", err)
-				}
-			},
+			Action:      ListAction,
 		},
 		{
 			Name:   "get",
@@ -218,22 +204,7 @@ func initApp(version string) *cli.App {
 			Name:      "remove",
 			ShortName: "rm",
 			Usage:     "Delete stocked command by specifiying #number",
-			Action: func(c *cli.Context) {
-				if len(c.Args()) == 0 {
-					fmt.Println("'remove' requires #number argument, e.g., 'comstock rm 1'")
-					return
-				}
-				index, err := strconv.Atoi(c.Args()[0])
-				if err != nil {
-					fmt.Println("Invalid argument was given, please retry")
-					return
-				}
-				if err := eng.Remove(index); err != nil {
-					fmt.Println("Command failed: ", err.Error())
-					return
-				}
-				fmt.Println("Successfully remove command #", index)
-			},
+			Action:    RemoveAction,
 		},
 		{
 			Name:  "run",
@@ -243,15 +214,9 @@ func initApp(version string) *cli.App {
 			},
 		},
 		{
-			Name:  "login",
-			Usage: "Login to the cloud",
-			Action: func(c *cli.Context) {
-				if eng.IsLogin() {
-					fmt.Printf("Already login as %s\n", eng.userinfo.Mail())
-					return
-				}
-				eng.Login(eng.apiServer)
-			},
+			Name:   "login",
+			Usage:  "Login to the cloud",
+			Action: LoginAction,
 		},
 		{
 			Name:  "config",
@@ -261,24 +226,14 @@ func initApp(version string) *cli.App {
 			},
 		},
 		{
-			Name:  "open",
-			Usage: "Open comstock website (for user registration, documents)",
-			Action: func(c *cli.Context) {
-				eng.Open(eng.apiServer)
-			},
+			Name:   "open",
+			Usage:  "Open comstock website (for user registration, documents)",
+			Action: OpenAction,
 		},
 		{
-			Name:      "logout",
-			ShortName: "out",
-			Usage:     "Logout from current account",
-			Action: func(c *cli.Context) {
-				if eng.IsLogin() == false {
-					fmt.Println("Already logout.")
-					return
-				}
-				eng.Logout(eng.apiServer)
-				fmt.Println("Logout, done.")
-			},
+			Name:   "logout",
+			Usage:  "Logout from current account",
+			Action: LogoutAction,
 		},
 	}
 

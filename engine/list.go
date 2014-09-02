@@ -2,6 +2,7 @@ package engine
 
 import (
 	"fmt"
+	"github.com/codegangsta/cli"
 	"github.com/shinpei/comstock/model"
 	"log"
 	"os"
@@ -9,6 +10,13 @@ import (
 	"strconv"
 	"strings"
 )
+
+func ListAction(c *cli.Context) {
+	err := eng.List()
+	if err != nil {
+		fmt.Println("Command failed: ", err)
+	}
+}
 
 func (e *Engine) List() (err error) {
 	if e.storager.IsRequireLogin() == true && e.isLogin == false {
