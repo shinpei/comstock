@@ -31,7 +31,10 @@ func (e *Engine) FetchCommandFromNumber(num int) (cmd *model.Command, err error)
 		log.Fatal("You have no valid access token. Please login first.")
 	}
 	cmd, err = e.storager.FetchCommandFromNumber(e.userinfo, num)
-	if err == model.ErrSessionExpires || err == model.ErrSessionInvalid {
+	if _, ok := err.(*model.SessionExpiresError); ok {
+		e.SetLogout()
+	}
+	if _, ok := err.(*model.SessionInvalidError); ok {
 		e.SetLogout()
 	}
 	return

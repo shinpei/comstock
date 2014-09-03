@@ -4,6 +4,30 @@ import (
 	"errors"
 )
 
+type SessionNotFoundError struct {
+	msg string
+}
+
+func (e *SessionNotFoundError) Error() string {
+	return e.msg
+}
+
+type SessionExpiresError struct {
+	msg string
+}
+
+func (e *SessionExpiresError) Error() string {
+	return e.msg
+}
+
+type SessionInvalidError struct {
+	msg string
+}
+
+func (e *SessionInvalidError) Error() string {
+	return e.msg
+}
+
 // session
 var ErrSessionNotFound = errors.New("Session not found")
 var ErrSessionExpires = errors.New("Session expiress")
