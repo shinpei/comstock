@@ -44,7 +44,7 @@ func (cs *CloudStorager) Push(user *model.AuthInfo, path string, cmd *model.Comm
 	case http.StatusOK:
 		// do nothing.
 	case http.StatusInternalServerError: // session expires
-		err = model.ErrSessionExpires
+		err = &model.SessionExpiresError{} //model.ErrSessionExpires
 		// disable login status
 	case http.StatusForbidden:
 		err = errors.New("Hasn't login, please login first")
@@ -75,10 +75,10 @@ func (cs *CloudStorager) List(user *model.AuthInfo) (cmds []model.Command, err e
 		err = errors.New("Not found")
 		return
 	case http.StatusForbidden:
-		err = model.ErrSessionInvalid
+		err = &model.SessionInvalidError{} //ErrSessionInvalid
 		return
 	case http.StatusInternalServerError:
-		err = model.ErrSessionExpires
+		err = &model.SessionInvalidError{} //ErrSessionExpires
 		return
 	default:
 		fmt.Println("Failed to fetch")
@@ -102,13 +102,13 @@ func (cs *CloudStorager) FetchCommandFromNumber(user *model.AuthInfo, num int) (
 	case http.StatusOK:
 		body, _ = ioutil.ReadAll(resp.Body)
 	case http.StatusForbidden:
-		err = model.ErrSessionInvalid
+		err = &model.SessionInvalidError{} //ErrSessionInvalid
 		return
 	case http.StatusNotFound:
 		err = errors.New("Number not found")
 		return
 	case http.StatusInternalServerError:
-		err = model.ErrServerSystem
+		err = &model.ServerSystemError{} //ErrServerSystem
 		return
 	default:
 		err = errors.New("Fetch failed somehow")

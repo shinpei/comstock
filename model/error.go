@@ -4,6 +4,7 @@ import (
 	"errors"
 )
 
+// session
 type SessionNotFoundError struct {
 	msg string
 }
@@ -28,7 +29,6 @@ func (e *SessionInvalidError) Error() string {
 	return e.msg
 }
 
-// session
 var ErrSessionNotFound = errors.New("Session not found")
 var ErrSessionExpires = errors.New("Session expiress")
 var ErrSessionInvalid = errors.New("The token you're using is invalid")
@@ -101,7 +101,23 @@ func (e *AlreadyLoginError) Error() string {
 }
 
 // fetch
+type CommandNotFoundError struct {
+	msg string
+}
+
+func (e *CommandNotFoundError) Error() string {
+	return e.msg
+}
+
 var ErrCommandNotFound = errors.New("Requested Command not found")
 
 // other error
+type ServerSystemError struct {
+	msg string
+}
+
+func (e *ServerSystemError) Error() string {
+	return e.msg
+}
+
 var ErrServerSystem = errors.New("Comstock server has internal error")
