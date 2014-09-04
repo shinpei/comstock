@@ -24,9 +24,9 @@ func (e *Engine) List() (err error) {
 	}
 	var cmds []model.Command
 	if cmds, err = e.storager.List(e.userinfo); err != nil {
-		if err == model.ErrSessionExpires {
+		if _, ok := err.(*model.SessionExpiresError); ok {
 			e.SetLogout()
-		} else if err == model.ErrSessionInvalid {
+		} else if _, ok := err.(*model.SessionInvalidError); ok {
 			e.SetLogout()
 		}
 	}

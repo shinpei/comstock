@@ -1,9 +1,5 @@
 package model
 
-import (
-	"errors"
-)
-
 // session
 type SessionNotFoundError struct {
 	msg string
@@ -28,10 +24,6 @@ type SessionInvalidError struct {
 func (e *SessionInvalidError) Error() string {
 	return e.msg
 }
-
-var ErrSessionNotFound = errors.New("Session not found")
-var ErrSessionExpires = errors.New("Session expiress")
-var ErrSessionInvalid = errors.New("The token you're using is invalid")
 
 //register
 type UserAlreadyExistError struct {
@@ -58,15 +50,7 @@ func (e *InvalidMailError) Error() string {
 	return e.msg
 }
 
-var ErrUserAlreadyExist = errors.New("Requested user already exists")
-var ErrTooWeakPassword = errors.New("Requested password is too weak")
-var ErrInvalidMail = errors.New("Requested email address is invalid")
-
 // login
-var ErrUserNotFound = errors.New("User not found")
-var ErrIncorrectPassword = errors.New("Password is incorrect")
-var ErrAuthenticationFailed = errors.New("Authentication failed")
-var ErrAlreadyLogin = errors.New("User already logged in")
 
 type UserNotFoundError struct {
 	msg string
@@ -109,8 +93,6 @@ func (e *CommandNotFoundError) Error() string {
 	return e.msg
 }
 
-var ErrCommandNotFound = errors.New("Requested Command not found")
-
 // other error
 type ServerSystemError struct {
 	msg string
@@ -119,5 +101,3 @@ type ServerSystemError struct {
 func (e *ServerSystemError) Error() string {
 	return e.msg
 }
-
-var ErrServerSystem = errors.New("Comstock server has internal error")

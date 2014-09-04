@@ -33,9 +33,9 @@ func (e *Engine) Remove(index int) (err error) {
 		log.Fatal("You cannot specify index as index < 1")
 	}
 	if err = e.storager.RemoveOne(e.userinfo, index); err != nil {
-		if err == model.ErrSessionExpires {
+		if _, ok := err.(*model.SessionExpiresError); ok {
 			e.SetLogout()
-		} else if err == model.ErrSessionInvalid {
+		} else if _, ok := err.(*model.SessionInvalidError); ok {
 			e.SetLogout()
 		}
 		return
