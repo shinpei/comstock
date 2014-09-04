@@ -176,13 +176,13 @@ func (cs *CloudStorager) RemoveOne(user *model.AuthInfo, index int) (err error) 
 	case http.StatusOK:
 		// do nothing
 	case http.StatusForbidden:
-		err = model.ErrSessionExpires
+		err = &model.SessionExpiresError{} //ErrSessionExpires
 	case http.StatusUnauthorized:
-		err = model.ErrSessionNotFound
+		err = &model.SessionNotFoundError{} //ErrSessionNotFound
 	case http.StatusNotFound:
-		err = model.ErrCommandNotFound
+		err = &model.CommandNotFoundError{} //ErrCommandNotFound
 	case http.StatusInternalServerError:
-		err = model.ErrServerSystem
+		err = &model.ServerSystemError{} //ErrServerSystem
 	default:
 		log.Fatal("[SERIOUS] Shouldn't be reache here, please report bug")
 	}

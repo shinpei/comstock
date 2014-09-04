@@ -80,7 +80,7 @@ func tryLoginWithMail(loginServer string, mail string, password string) (token s
 		token = string(body)
 		fmt.Println("Already logined.")
 	case http.StatusNotFound, http.StatusForbidden:
-		err = model.ErrAuthenticationFailed
+		err = &model.AuthenticationFailedError{} //ErrAuthenticationFailed
 		token = ""
 	default:
 		err = errors.New("Invalid response.")
