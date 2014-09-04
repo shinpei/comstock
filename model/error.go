@@ -60,11 +60,11 @@ func (e *UserNotFoundError) Error() string {
 	return e.msg
 }
 
-type IncorrectPassword struct {
+type IncorrectPasswordError struct {
 	msg string
 }
 
-func (e *IncorrectPassword) Error() string {
+func (e *IncorrectPasswordError) Error() string {
 	return e.msg
 }
 
