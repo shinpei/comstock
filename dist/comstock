@@ -6,7 +6,6 @@
 set -e
 coms_run() {
     cmd=`comstock-cli get ${1}`
-    echo "Executing, '${cmd}'"
     ${cmd}
 }
 
