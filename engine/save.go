@@ -63,22 +63,22 @@ func (e *Engine) Save(command string) (err error) {
 	// split with parser
 	commands, _ := parser.Parse(command)
 	for _, cmdStr := range commands {
-		println(cmdStr)
-	}
-	cmd = model.CreateCommand(command)
-	if err != nil {
-		log.Fatal(err)
-	}
-	cmd.Cmd = strings.TrimSpace(cmd.Cmd)
-	// save to the local storage
-	// remove whitespaces from cmd
+		cmd = model.CreateCommand(cmdStr)
+		if err != nil {
+			log.Fatal(err)
+		}
+		cmd.Cmd = strings.TrimSpace(cmd.Cmd)
+		// save to the local storage
+		// remove whitespaces from cmd
 
-	err = e.storager.Push(e.userinfo, e.env.Compath, cmd)
+		err = e.storager.Push(e.userinfo, e.env.Compath, cmd)
 
-	if e.config.verboseMode {
-		fmt.Printf("[%s]Saved command '%s'\n", e.storager.StorageType(), cmd.Cmd)
-	} else {
-		fmt.Printf("Saved command '%s'\n", cmd.Cmd)
+		if e.config.verboseMode {
+			fmt.Printf("[%s]Saved command '%s'\n", e.storager.StorageType(), cmd.Cmd)
+		} else {
+			fmt.Printf("Saved command '%s'\n", cmd.Cmd)
+		}
+
 	}
 	return
 }
