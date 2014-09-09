@@ -7,6 +7,7 @@ import (
 	"github.com/codegangsta/cli"
 	"github.com/mattn/go-isatty"
 	"github.com/shinpei/comstock/model"
+	"github.com/shinpei/comstock/parser"
 	"log"
 	"os"
 	"strings"
@@ -58,6 +59,11 @@ func (e *Engine) Save(command string) (err error) {
 				log.Fatal("No command given")
 			}
 		}
+	}
+	// split with parser
+	commands, _ := parser.Parse(command)
+	for _, cmdStr := range commands {
+		println(cmdStr)
 	}
 	cmd = model.CreateCommand(command)
 	if err != nil {
