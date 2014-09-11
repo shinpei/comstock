@@ -13,5 +13,4 @@ const (
 func main() {
 	eng := engine.NewEngine(Version, ComstockAPIServer)
 	_ = eng.Run(os.Args)
-
 }
