@@ -16,5 +16,6 @@ func TestNotEqualString(t *testing.T) {
 
 func TestEqualInt(t *testing.T) {
 	AssertEqual(t, 12345, 12345)
+	//AssertEqual(t, 12345, 12.34)
 	AssertNotEqual(t, 12345, 56789)
 }

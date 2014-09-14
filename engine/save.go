@@ -14,8 +14,8 @@ import (
 )
 
 func SaveAction(c *cli.Context) {
+
 	first := c.Args().First()
-	//fmt.Println("first: ", first)
 	shellstr := c.GlobalString("shell")
 	if shellstr != "" {
 		eng.env.Shell = shellstr
@@ -27,6 +27,7 @@ func SaveAction(c *cli.Context) {
 }
 
 func (e *Engine) Save(command string) (err error) {
+
 	if e.isLogin == false {
 		err = errors.New("Login required")
 		return
@@ -40,7 +41,7 @@ func (e *Engine) Save(command string) (err error) {
 		shellHistoryFilename += "/.bash_history"
 		handler = &BashHandler{}
 	} else {
-		//		log.Fatal("Couldn't recognize your shell. Please report your environment through 'comstock sos'")
+
 		log.Fatal("Couldn't recognize your shell. Your env is ", e.env.Shell)
 	}
 	var cmd *model.Command

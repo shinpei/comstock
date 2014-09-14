@@ -16,7 +16,6 @@ func LogoutAction(c *cli.Context) {
 }
 
 func (e *Engine) Logout(loginServer string) {
-	// TODO:
 	eng.SetLogout()
 	return
 }

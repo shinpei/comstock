@@ -18,6 +18,8 @@ func assertEqual(t *testing.T, expected interface{}, value interface{}) bool {
 		if e != v {
 			return false
 		}
+	} else if _, ok := expected.(float64); ok {
+
 	}
 	return true
 
@@ -32,7 +34,9 @@ func AssertEqual(t *testing.T, expected interface{}, value interface{}) bool {
 	return true
 }
 
+// Maybe not needed...
 func AssertNotEqual(t *testing.T, expectedNot interface{}, value interface{}) bool {
+
 	if ok := assertEqual(t, expectedNot, value); ok {
 		t.Error("Unexpectedly the given value is matched with expectedNot value")
 		return false
