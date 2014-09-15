@@ -8,6 +8,12 @@ import (
 	"strconv"
 )
 
+var FetchCommand cli.Command = cli.Command{
+	Name:   "get",
+	Usage:  "Get command by specifiying number",
+	Action: FetchAction,
+}
+
 func FetchAction(c *cli.Context) {
 	if len(c.Args()) == 0 {
 		fmt.Println("'get' requires #number argument, e.g., 'comstock get 1'.")

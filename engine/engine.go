@@ -169,11 +169,7 @@ func initApp(version string) *cli.App {
 		ActionCommand,
 		StatusCommand,
 		ListCommand,
-		{
-			Name:   "get",
-			Usage:  "Get command by specifiying number",
-			Action: FetchAction,
-		},
+		FetchCommand,
 		{
 			Name:  "alias",
 			Usage: "Make alias for specific command, specified as #number",
@@ -191,11 +187,7 @@ func initApp(version string) *cli.App {
 		},
 		LoginCommand,
 		ConfigCommand,
-		{
-			Name:   "open",
-			Usage:  "Open comstock website (for user registration, documents)",
-			Action: OpenAction,
-		},
+		OpenCommand,
 		LogoutCommand,
 		ImportCommand,
 	}

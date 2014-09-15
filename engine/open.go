@@ -7,6 +7,12 @@ import (
 	"strings"
 )
 
+var OpenCommand cli.Command = cli.Command{
+	Name:   "open",
+	Usage:  "Open comstock website (for user registration, documents)",
+	Action: OpenAction,
+}
+
 func OpenAction(c *cli.Context) {
 	err := eng.Open(eng.apiServer)
 	if err != nil {
