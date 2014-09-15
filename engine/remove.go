@@ -8,6 +8,13 @@ import (
 	"strconv"
 )
 
+var RemoveCommand cli.Command = cli.Command{
+	Name:      "remove",
+	ShortName: "rm",
+	Usage:     "Delete stocked command by specifiying #number",
+	Action:    RemoveAction,
+}
+
 func RemoveAction(c *cli.Context) {
 	if len(c.Args()) == 0 {
 		fmt.Println("'remove' requires #number argument, e.g., 'comstock rm 1'")

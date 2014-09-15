@@ -2,7 +2,18 @@ package engine
 
 import (
 	"fmt"
+	"github.com/codegangsta/cli"
 )
+
+var StatusCommand cli.Command = cli.Command{
+	Name:      "status",
+	ShortName: "st",
+	Usage:     "Show comstock status",
+	Action: func(c *cli.Context) {
+		//TODO
+		eng.Status()
+	},
+}
 
 func (e *Engine) Status() {
 	fmt.Println("[Comstock envieonment]")

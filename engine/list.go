@@ -12,6 +12,14 @@ import (
 	"strings"
 )
 
+var ListCommand cli.Command = cli.Command{
+	Name:        "list",
+	ShortName:   "ls",
+	Description: "Show the list of stocked commands",
+	Usage:       "List stocked command",
+	Action:      ListAction,
+}
+
 func ListAction(c *cli.Context) {
 	err := eng.List()
 	if err != nil {

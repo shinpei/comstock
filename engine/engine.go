@@ -166,28 +166,9 @@ func initApp(version string) *cli.App {
 		cli.StringFlag{Name: "shell, s", Value: "", Usage: "specify flag"},
 	}
 	app.Commands = []cli.Command{
-		{
-			Name:      "save",
-			ShortName: "sv",
-			Usage:     "Save previous command",
-			Action:    SaveAction,
-		},
-		{
-			Name:      "status",
-			ShortName: "st",
-			Usage:     "Show comstock status",
-			Action: func(c *cli.Context) {
-				//TODO
-				eng.Status()
-			},
-		},
-		{
-			Name:        "list",
-			ShortName:   "ls",
-			Description: "Show the list of stocked commands",
-			Usage:       "List stocked command",
-			Action:      ListAction,
-		},
+		ActionCommand,
+		StatusCommand,
+		ListCommand,
 		{
 			Name:   "get",
 			Usage:  "Get command by specifiying number",
@@ -200,12 +181,7 @@ func initApp(version string) *cli.App {
 				log.Fatal("Not yet implemented")
 			},
 		},
-		{
-			Name:      "remove",
-			ShortName: "rm",
-			Usage:     "Delete stocked command by specifiying #number",
-			Action:    RemoveAction,
-		},
+		RemoveCommand,
 		{
 			Name:  "run",
 			Usage: "Exec command with #number",
@@ -213,33 +189,15 @@ func initApp(version string) *cli.App {
 				log.Fatal("Please execute 'run' from wrapper script")
 			},
 		},
-		{
-			Name:   "login",
-			Usage:  "Login to the cloud",
-			Action: LoginAction,
-		},
-		{
-			Name:  "config",
-			Usage: "Show comstock configuration",
-			Action: func(c *cli.Context) {
-				eng.Config()
-			},
-		},
+		LoginCommand,
+		ConfigCommand,
 		{
 			Name:   "open",
 			Usage:  "Open comstock website (for user registration, documents)",
 			Action: OpenAction,
 		},
-		{
-			Name:   "logout",
-			Usage:  "Logout from current account",
-			Action: LogoutAction,
-		},
-		{
-			Name:   "import",
-			Usage:  "Import from zshell files",
-			Action: ImportAction,
-		},
+		LogoutCommand,
+		ImportCommand,
 	}
 
 	return app

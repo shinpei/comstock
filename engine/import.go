@@ -7,6 +7,12 @@ import (
 	"log"
 )
 
+var ImportCommand cli.Command = cli.Command{
+	Name:   "import",
+	Usage:  "Import from zshell files",
+	Action: ImportAction,
+}
+
 func ImportAction(c *cli.Context) {
 
 	err := eng.Import()

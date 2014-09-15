@@ -3,8 +3,17 @@ package engine
 import (
 	"code.google.com/p/gcfg"
 	"fmt"
+	"github.com/codegangsta/cli"
 	"log"
 )
+
+var ConfigCommand cli.Command = cli.Command{
+	Name:  "config",
+	Usage: "Show comstock configuration",
+	Action: func(c *cli.Context) {
+		eng.Config()
+	},
+}
 
 type Config struct {
 	verboseMode bool

@@ -13,6 +13,13 @@ import (
 	"strings"
 )
 
+var ActionCommand cli.Command = cli.Command{
+	Name:      "save",
+	ShortName: "sv",
+	Usage:     "Save previous command",
+	Action:    SaveAction,
+}
+
 func SaveAction(c *cli.Context) {
 
 	first := c.Args().First()

@@ -5,6 +5,12 @@ import (
 	"github.com/codegangsta/cli"
 )
 
+var LogoutCommand cli.Command = cli.Command{
+	Name:   "logout",
+	Usage:  "Logout from current account",
+	Action: LogoutAction,
+}
+
 func LogoutAction(c *cli.Context) {
 	if eng.IsLogin() == false {
 		fmt.Println("Already logout.")

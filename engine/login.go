@@ -13,6 +13,12 @@ import (
 	"os"
 )
 
+var LoginCommand cli.Command = cli.Command{
+	Name:   "login",
+	Usage:  "Login to the cloud",
+	Action: LoginAction,
+}
+
 func LoginAction(c *cli.Context) {
 	if eng.IsLogin() {
 		fmt.Printf("Already login as %s\n", eng.userinfo.Mail())
