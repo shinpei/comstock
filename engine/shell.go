@@ -6,10 +6,26 @@ import (
 	"log"
 	"os"
 	"regexp"
+	"strings"
 )
 
-type Shell interface {
+type ShellHandler interface {
 	ReadLastHistory(historyfile string) (string, error)
+	ReadEveryHistory(historyfile string) (string, error)
+}
+
+func FetchShellHandler(e *Engine) (handler ShellHandler) {
+	var shellHistoryFilename string
+	if strings.Contains(e.env.Shell, "zsh") {
+		shellHistoryFilename += "/.zsh_history"
+		handler = &ZshHandler{}
+	} else if strings.Contains(e.env.Shell, "bash") {
+		shellHistoryFilename += "/.bash_history"
+		handler = &BashHandler{}
+	} else {
+		log.Fatal("Couldn't recognize your shell. Your env is ", e.env.Shell)
+	}
+	return
 }
 
 type ZshHandler struct {
@@ -85,5 +101,12 @@ func (b *BashHandler) ReadLastHistory(filename string) (command string, err erro
 	)
 	ret, err = tail(filename, 2)
 	command = ret[0]
+	return
+}
+
+func (z *ZshHandler) ReadEveryHistory(filename string) (cmd string, err error) {
+	return
+}
+func (b *BashHandler) ReadEveryHistory(filename string) (cmd string, err error) {
 	return
 }

@@ -32,18 +32,8 @@ func (e *Engine) Save(command string) (err error) {
 		err = errors.New("Login required")
 		return
 	}
-	var shellHistoryFilename string = e.env.Homepath
-	var handler Shell = nil
-	if strings.Contains(e.env.Shell, "zsh") {
-		shellHistoryFilename += "/.zsh_history"
-		handler = &ZshHandler{}
-	} else if strings.Contains(e.env.Shell, "bash") {
-		shellHistoryFilename += "/.bash_history"
-		handler = &BashHandler{}
-	} else {
-
-		log.Fatal("Couldn't recognize your shell. Your env is ", e.env.Shell)
-	}
+	shellHistoryFilename := e.env.Homepath
+	handler := FetchShellHandler(e)
 	var cmd *model.Command
 
 	//check weather command has given
@@ -79,7 +69,6 @@ func (e *Engine) Save(command string) (err error) {
 		} else {
 			fmt.Printf("Saved command '%s'\n", cmd.Cmd)
 		}
-
 	}
 	return
 }
