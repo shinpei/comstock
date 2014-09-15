@@ -62,9 +62,7 @@ func (e *Engine) Save(command string) (err error) {
 	commands, _ := parser.Parse(command)
 	for _, cmdStr := range commands {
 		cmd = model.CreateCommand(cmdStr)
-		if err != nil {
-			log.Fatal(err)
-		}
+
 		cmd.Cmd = strings.TrimSpace(cmd.Cmd)
 		// save to the local storage
 		// remove whitespaces from cmd

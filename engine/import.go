@@ -4,7 +4,6 @@ import (
 	"errors"
 	"fmt"
 	"github.com/codegangsta/cli"
-	"log"
 )
 
 var ImportCommand cli.Command = cli.Command{
@@ -31,9 +30,6 @@ func (e *Engine) Import() (err error) {
 	histFile := e.env.Homepath
 	handler := FetchShellHandler(e)
 	_, err = handler.ReadEveryHistory(histFile)
-	if err != nil {
-		log.Fatal("Command failed: " + err.Error())
-	}
 
 	return
 }
