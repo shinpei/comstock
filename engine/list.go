@@ -1,6 +1,7 @@
 package engine
 
 import (
+	"errors"
 	"fmt"
 	"github.com/codegangsta/cli"
 	"github.com/shinpei/comstock/model"
@@ -14,13 +15,14 @@ import (
 func ListAction(c *cli.Context) {
 	err := eng.List()
 	if err != nil {
-		fmt.Println("Command failed: ", err)
+		fmt.Println("Command failed: ", err.Error())
 	}
 }
 
 func (e *Engine) List() (err error) {
 	if e.storager.IsRequireLogin() == true && e.isLogin == false {
-		log.Fatal("You have no valid access token. Please login first.")
+		err = errors.New("Login required")
+		return
 	}
 	var cmds []model.Command
 	if cmds, err = e.storager.List(e.userinfo); err != nil {

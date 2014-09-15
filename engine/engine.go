@@ -235,6 +235,11 @@ func initApp(version string) *cli.App {
 			Usage:  "Logout from current account",
 			Action: LogoutAction,
 		},
+		{
+			Name:   "import",
+			Usage:  "Import from zshell files",
+			Action: ImportAction,
+		},
 	}
 
 	return app

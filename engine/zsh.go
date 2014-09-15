@@ -9,7 +9,7 @@ import (
 type ZshHandler struct {
 }
 
-func (z *ZshHandler) ReadLastHistory(filename string) (command string, err error) {
+func (z *ZshHandler) ReadLastHistory(filename string) (cmd string, err error) {
 	var (
 		preCmd   string
 		storeCmd string
@@ -17,9 +17,10 @@ func (z *ZshHandler) ReadLastHistory(filename string) (command string, err error
 
 	//format
 	// ': xxxxxxxxxx:x;cmd\n'
-	fi, _ := os.Open(filename)
+	fi, err := os.Open(filename)
 	scanner := bufio.NewScanner(fi)
 
+	//TODO: fix below algo
 	var validLine = regexp.MustCompile("^:")
 	for scanner.Scan() {
 		line := scanner.Text()
@@ -32,12 +33,21 @@ func (z *ZshHandler) ReadLastHistory(filename string) (command string, err error
 		}
 	}
 	//fmt.Sscanf(preCmd, ": %d:%d;%s", &timestamp, &linenum, &ignore)
-	command = preCmd[15:]
+	cmd = preCmd[15:]
 
 	return
 }
 
 func (z *ZshHandler) ReadEveryHistory(filename string) (cmd string, err error) {
+	fi, err := os.Open(filename)
+	scanner := bufio.NewScanner(fi)
+	var storeCmd string
 
+	//	var validLine = regexp.MustCompile("^:")
+	for scanner.Scan() {
+		line := scanner.Text()
+		storeCmd = line
+	}
+	cmd = storeCmd
 	return
 }
