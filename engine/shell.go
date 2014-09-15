@@ -5,7 +5,6 @@ import (
 	"io"
 	"log"
 	"os"
-	"regexp"
 	"strings"
 )
 
@@ -26,12 +25,6 @@ func FetchShellHandler(e *Engine) (handler ShellHandler) {
 		log.Fatal("Couldn't recognize your shell. Your env is ", e.env.Shell)
 	}
 	return
-}
-
-type ZshHandler struct {
-}
-
-type BashHandler struct {
 }
 
 func tail(filename string, numberLines int) (ret []string, err error) {
@@ -63,50 +56,5 @@ func tail(filename string, numberLines int) (ret []string, err error) {
 	if err == io.EOF {
 		err = nil
 	}
-	return
-}
-
-func (z *ZshHandler) ReadLastHistory(filename string) (command string, err error) {
-	var (
-		preCmd   string
-		storeCmd string
-	)
-
-	//format
-	// ': xxxxxxxxxx:x;cmd\n'
-	fi, _ := os.Open(filename)
-	scanner := bufio.NewScanner(fi)
-
-	var validLine = regexp.MustCompile("^:")
-	for scanner.Scan() {
-		line := scanner.Text()
-		idx := validLine.FindIndex([]byte(line))
-		if idx != nil {
-			preCmd = storeCmd
-			storeCmd = line
-		} else {
-			storeCmd += line
-		}
-	}
-	//fmt.Sscanf(preCmd, ": %d:%d;%s", &timestamp, &linenum, &ignore)
-	command = preCmd[15:]
-
-	return
-}
-
-// Bash stores it's history in its cache. So we cannot fetch it from history file.
-func (b *BashHandler) ReadLastHistory(filename string) (command string, err error) {
-	var (
-		ret []string
-	)
-	ret, err = tail(filename, 2)
-	command = ret[0]
-	return
-}
-
-func (z *ZshHandler) ReadEveryHistory(filename string) (cmd string, err error) {
-	return
-}
-func (b *BashHandler) ReadEveryHistory(filename string) (cmd string, err error) {
 	return
 }
