@@ -46,8 +46,9 @@ func (z *ZshHandler) ReadEveryHistory(filename string) (cmd string, err error) {
 	//	var validLine = regexp.MustCompile("^:")
 	for scanner.Scan() {
 		line := scanner.Text()
-		storeCmd = line
+		storeCmd = line[15:]
 	}
+
 	cmd = storeCmd
 	return
 }
