@@ -13,13 +13,13 @@ type ShellHandler interface {
 	ReadEveryHistory(historyfile string) (string, error)
 }
 
-func FetchShellHandler(e *Engine) (handler ShellHandler) {
-	var shellHistoryFilename string
+func FetchShellHandler(e *Engine, histDir string) (handler ShellHandler, histFile string) {
+
 	if strings.Contains(e.env.Shell, "zsh") {
-		shellHistoryFilename += "/.zsh_history"
+		histFile = histDir + "/.zsh_history"
 		handler = &ZshHandler{}
 	} else if strings.Contains(e.env.Shell, "bash") {
-		shellHistoryFilename += "/.bash_history"
+		histFile = histDir + "/.bash_history"
 		handler = &BashHandler{}
 	} else {
 		log.Fatal("Couldn't recognize your shell. Your env is ", e.env.Shell)

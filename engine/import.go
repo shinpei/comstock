@@ -28,7 +28,7 @@ func (e *Engine) Import() (err error) {
 	}
 
 	histFile := e.env.Homepath
-	handler := FetchShellHandler(e)
+	handler, histFile := FetchShellHandler(e, histFile)
 	_, err = handler.ReadEveryHistory(histFile)
 
 	return

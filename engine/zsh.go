@@ -17,6 +17,7 @@ func (z *ZshHandler) ReadLastHistory(filename string) (cmd string, err error) {
 
 	//format
 	// ': xxxxxxxxxx:x;cmd\n'
+	println(filename)
 	fi, err := os.Open(filename)
 	scanner := bufio.NewScanner(fi)
 
@@ -39,14 +40,21 @@ func (z *ZshHandler) ReadLastHistory(filename string) (cmd string, err error) {
 }
 
 func (z *ZshHandler) ReadEveryHistory(filename string) (cmd string, err error) {
+	println(filename)
 	fi, err := os.Open(filename)
 	scanner := bufio.NewScanner(fi)
 	var storeCmd string
-
-	//	var validLine = regexp.MustCompile("^:")
+	println("reading")
+	var validLine = regexp.MustCompile("^:")
 	for scanner.Scan() {
 		line := scanner.Text()
-		storeCmd = line[15:]
+		idx := validLine.FindIndex([]byte(line))
+		if idx != nil {
+			storeCmd = line[15:]
+			println(storeCmd)
+		} else {
+			storeCmd += line
+		}
 	}
 
 	cmd = storeCmd

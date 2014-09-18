@@ -40,7 +40,7 @@ func (e *Engine) Save(command string) (err error) {
 		return
 	}
 	shellHistoryFilename := e.env.Homepath
-	handler := FetchShellHandler(e)
+	handler, shellHistoryFilename := FetchShellHandler(e, shellHistoryFilename)
 	var cmd *model.Command
 
 	//check weather command has given
