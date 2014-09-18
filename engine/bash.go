@@ -14,5 +14,6 @@ func (b *BashHandler) ReadLastHistory(filename string) (command string, err erro
 }
 
 func (b *BashHandler) ReadEveryHistory(filename string) (cmd string, err error) {
+
 	return
 }

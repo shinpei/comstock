@@ -3,7 +3,7 @@ package engine
 import (
 	"bufio"
 	"os"
-	"regexp"
+	"strings"
 )
 
 type ZshHandler struct {
@@ -22,11 +22,9 @@ func (z *ZshHandler) ReadLastHistory(filename string) (cmd string, err error) {
 	scanner := bufio.NewScanner(fi)
 
 	//TODO: fix below algo
-	var validLine = regexp.MustCompile("^:")
 	for scanner.Scan() {
 		line := scanner.Text()
-		idx := validLine.FindIndex([]byte(line))
-		if idx != nil {
+		if strings.HasPrefix(line, ":") {
 			preCmd = storeCmd
 			storeCmd = line
 		} else {
@@ -35,7 +33,6 @@ func (z *ZshHandler) ReadLastHistory(filename string) (cmd string, err error) {
 	}
 	//fmt.Sscanf(preCmd, ": %d:%d;%s", &timestamp, &linenum, &ignore)
 	cmd = preCmd[15:]
-
 	return
 }
 
@@ -45,11 +42,9 @@ func (z *ZshHandler) ReadEveryHistory(filename string) (cmd string, err error) {
 	scanner := bufio.NewScanner(fi)
 	var storeCmd string
 	println("reading")
-	var validLine = regexp.MustCompile("^:")
 	for scanner.Scan() {
 		line := scanner.Text()
-		idx := validLine.FindIndex([]byte(line))
-		if idx != nil {
+		if strings.HasPrefix(line, ":") {
 			storeCmd = line[15:]
 			println(storeCmd)
 		} else {
