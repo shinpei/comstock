@@ -13,7 +13,7 @@ func (b *BashHandler) ReadLastHistory(filename string) (command string, err erro
 	return
 }
 
-func (b *BashHandler) ReadEveryHistory(filename string) (cmd string, err error) {
+func (b *BashHandler) ReadEveryHistory(filename string) (cmd []string, err error) {
 
 	return
 }

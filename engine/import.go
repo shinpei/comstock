@@ -29,7 +29,13 @@ func (e *Engine) Import() (err error) {
 
 	histFile := e.env.Homepath
 	handler, histFile := FetchShellHandler(e, histFile)
-	_, err = handler.ReadEveryHistory(histFile)
-
+	cmds, err := handler.ReadEveryHistory(histFile)
+	for idx, cmd := range cmds {
+		eng.Save(cmd)
+		if idx > 2 {
+			break
+		}
+		println(idx, cmd)
+	}
 	return
 }

@@ -10,7 +10,7 @@ import (
 
 type ShellHandler interface {
 	ReadLastHistory(historyfile string) (string, error)
-	ReadEveryHistory(historyfile string) (string, error)
+	ReadEveryHistory(historyfile string) ([]string, error)
 }
 
 func FetchShellHandler(e *Engine, histDir string) (handler ShellHandler, histFile string) {
