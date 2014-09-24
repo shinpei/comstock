@@ -44,7 +44,7 @@ func (cs *CloudStorager) Push(user *model.AuthInfo, path string, cmd *model.Comm
 	case http.StatusOK:
 		// do nothing.
 	case http.StatusInternalServerError: // session expires
-		err = &model.SessionExpiresError{} //model.ErrSessionExpires
+		err = &model.ServerSystemError{} //model.ErrSessionExpires
 		// disable login status
 	case http.StatusForbidden:
 		err = errors.New("Hasn't login, please login first")
