@@ -180,7 +180,8 @@ func (cs *CloudStorager) RemoveOne(user *model.AuthInfo, index int) (err error) 
 	case http.StatusUnauthorized:
 		err = &model.SessionNotFoundError{} //ErrSessionNotFound
 	case http.StatusNotFound:
-		err = &model.CommandNotFoundError{} //ErrCommandNotFound
+
+		err = (&model.CommandNotFoundError{}).SetError("No command for idx=" + strconv.Itoa(index))
 	case http.StatusInternalServerError:
 		err = &model.ServerSystemError{} //ErrServerSystem
 	default:

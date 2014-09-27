@@ -11,7 +11,7 @@ import (
 var RemoveCommand cli.Command = cli.Command{
 	Name:      "remove",
 	ShortName: "rm",
-	Usage:     "Delete stocked command by specifiying #number",
+	Usage:     "Delete stocked command by specifiying command number, e.g. 'comstock rm 16'",
 	Action:    RemoveAction,
 }
 
@@ -26,7 +26,7 @@ func RemoveAction(c *cli.Context) {
 		return
 	}
 	if err := eng.Remove(index); err != nil {
-		fmt.Println("Command failed: ", err.Error())
+		fmt.Println("Command failed:", err.Error())
 		return
 	}
 	fmt.Println("Successfully remove command #", index)

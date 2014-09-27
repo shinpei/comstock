@@ -92,6 +92,10 @@ type CommandNotFoundError struct {
 func (e *CommandNotFoundError) Error() string {
 	return e.msg
 }
+func (e *CommandNotFoundError) SetError(msg string) *CommandNotFoundError {
+	e.msg = msg
+	return e
+}
 
 // other error
 type ServerSystemError struct {
