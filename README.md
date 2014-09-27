@@ -12,7 +12,7 @@ Comstock is a cloud-based command stocking tool. Copy and pasting your often use
 
 ####via `curl`
 `
-curl -L https://github.com/shinpei/comstock/raw/master/dist/install.sh | sudo sh
+curl -L https://github.com/shinpei/comstock/raw/master/dist/install.sh | sudo env HOME=$HOME sh
 `
 
 ####via `wget`
