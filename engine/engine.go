@@ -191,8 +191,8 @@ func initApp(version string) *cli.App {
 		ConfigCommand,
 		OpenCommand,
 		LogoutCommand,
-		ImportCommand,
-		RawCommand,
+		//		ImportCommand,
+		//		RawCommand,
 	}
 
 	return app
