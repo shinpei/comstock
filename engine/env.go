@@ -23,7 +23,11 @@ type Env struct {
 }
 
 func NewEnv() *Env {
-	user, _ := user.Current()
+	user, err := user.Current()
+	if err != nil {
+		log.Fatal("Couldn't get current user: ", err.Error())
+
+	}
 	shell := getShell()
 	homeDir := user.HomeDir
 	compath := ""
