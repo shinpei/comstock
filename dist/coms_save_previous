@@ -14,8 +14,8 @@ saveZshHistory() {
 
 # entry point
 if [ -z "$BASH_VERSION" ] || [ "${BASH##*/}" != "bash" ]; then
-    saveBashHistory
-else
     saveZshHistory
+else
+    saveBashHistory
 fi
 
