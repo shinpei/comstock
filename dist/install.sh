@@ -17,7 +17,7 @@ COMSTOCK_BINNAME=comstock_${COMSTOCK_VERSION}_${COMSTOCK_OS}_${COMSTOCK_ARCH}.zi
 
 
 if [ ! -n "$COMSTOCK_DIR" ]; then
-    COMSTOCK_DIR=~/.comstock/download
+    COMSTOCK_DIR=~/comstock
 fi
 
 if [ -d "$COMSTOCK_DIR" ]; then
@@ -60,6 +60,7 @@ $COMSTOCK_DOWNLOADER $COMSTOCK_URL -o $COMSTOCK_DIR/$COMSTOCK_BINNAME || {
 }
 
 DESTDIR=/usr/local/bin
+
 pushd $COMSTOCK_DIR
 unzip $COMSTOCK_DIR/$COMSTOCK_BINNAME
 install -m 755 comstock-cli ${DESTDIR}
@@ -67,4 +68,7 @@ install -m 755 coms_save_previous ${DESTDIR}
 install -m 755 comstock ${DESTDIR}
 popd
 
+###
+rm -rf $COMSTOCK_DIR
+###
 echo "comstock installed!"
