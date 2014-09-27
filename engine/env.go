@@ -24,13 +24,15 @@ type Env struct {
 
 func NewEnv() *Env {
 	user, err := user.Current()
+	var homeDir string
 	if err != nil {
-		log.Fatal("Couldn't get current user: ", err.Error())
-
+		// should warn?
+		homeDir = os.Getenv("HOME")
+	} else {
+		homeDir = user.HomeDir
 	}
-	shell := getShell()
-	homeDir := user.HomeDir
 	compath := ""
+	shell := getShell()
 
 	if compath = os.Getenv("COMSTOCK_PATH"); compath == "" {
 		// if it's empty, load default path, ~/.comstock
