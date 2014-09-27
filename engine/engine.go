@@ -156,7 +156,6 @@ func (e *Engine) flushAuthInfoOrRemove() {
 	}
 
 }
-
 func initApp(version string) *cli.App {
 	app := cli.NewApp()
 	app.Version = version
@@ -164,6 +163,9 @@ func initApp(version string) *cli.App {
 	app.Usage = "save your command to the cloud"
 	app.Flags = []cli.Flag{
 		cli.StringFlag{Name: "shell, s", Value: "", Usage: "specify flag"},
+	}
+	app.CommandNotFound = func(c *cli.Context, command string) {
+		fmt.Printf("Command '%v' is unknown.\nRun 'comstock --help' to get help.\n", command)
 	}
 	app.Commands = []cli.Command{
 		ActionCommand,
