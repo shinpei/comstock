@@ -9,12 +9,22 @@ func (e *SessionNotFoundError) Error() string {
 	return e.msg
 }
 
+func (e *SessionNotFoundError) SetError(msg string) *SessionNotFoundError {
+	e.msg = msg
+	return e
+}
+
 type SessionExpiresError struct {
 	msg string
 }
 
 func (e *SessionExpiresError) Error() string {
 	return e.msg
+}
+
+func (e *SessionExpiresError) SetError(msg string) *SessionExpiresError {
+	e.msg = msg
+	return e
 }
 
 type SessionInvalidError struct {

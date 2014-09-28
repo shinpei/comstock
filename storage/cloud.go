@@ -75,10 +75,10 @@ func (cs *CloudStorager) List(user *model.AuthInfo) (cmds []model.Command, err e
 		err = errors.New("Not found")
 		return
 	case http.StatusForbidden:
-		err = &model.SessionInvalidError{} //ErrSessionInvalid
+		err = &model.SessionInvalidError{}
 		return
 	case http.StatusInternalServerError:
-		err = &model.SessionInvalidError{} //ErrSessionExpires
+		err = &model.SessionExpiresError{}
 		return
 	default:
 		fmt.Println("Failed to fetch")
@@ -176,12 +176,11 @@ func (cs *CloudStorager) RemoveOne(user *model.AuthInfo, index int) (err error) 
 	case http.StatusOK:
 		// do nothing
 	case http.StatusForbidden:
-		err = &model.SessionExpiresError{} //ErrSessionExpires
+		err = (&model.SessionExpiresError{}).SetError("Session expired, please login again")
 	case http.StatusUnauthorized:
-		err = &model.SessionNotFoundError{} //ErrSessionNotFound
+		err = (&model.SessionNotFoundError{}).SetError("Session not found") //ErrSessionNotFound
 	case http.StatusNotFound:
-
-		err = (&model.CommandNotFoundError{}).SetError("No command for idx=" + strconv.Itoa(index))
+		err = (&model.CommandNotFoundError{}).SetError("No command found for idx=" + strconv.Itoa(index))
 	case http.StatusInternalServerError:
 		err = &model.ServerSystemError{} //ErrServerSystem
 	default:
