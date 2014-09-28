@@ -3,6 +3,7 @@
 ####
 
 all:
+	python model/error-gen.py
 	go build
 
 clean:
