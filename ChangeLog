@@ -1,3 +1,12 @@
+2014-09-28  Shinpei Nakata  <shinpei.nakata@gmail.com>
+
+	* README.md: Release version 0.1.7
+	   - several bug fixes
+	* wrapper scripts are updated
+	* error messages are improved
+	* dash install support (for Ubuntu)
+	* multiple commands are saved as separated commands (parser.go)
+
 2014-09-01  Shinpei Nakata  <shinpei.nakata@gmail.com>
 
 	* main.go: Release version 0.1.6
