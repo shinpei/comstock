@@ -88,9 +88,9 @@ func (cs *CloudStorager) List(user *model.AuthInfo) (cmds []model.Command, err e
 	return
 }
 
-func (cs *CloudStorager) FetchCommandFromNumber(user *model.AuthInfo, num int) (cmd *model.Command, err error) {
+func (cs *CloudStorager) FetchCommandFromNumber(user *model.AuthInfo, index int) (cmd *model.Command, err error) {
 	command := "/fetchCommandFromNumber"
-	vals := url.Values{"authinfo": {user.Token()}, "number": {strconv.Itoa(num)}}.Encode()
+	vals := url.Values{"authinfo": {user.Token()}, "number": {strconv.Itoa(index)}}.Encode()
 	requestURI := cs.StorageHost() + command + "?" + vals
 	resp, err := http.Get(requestURI)
 	if err != nil {
@@ -105,7 +105,7 @@ func (cs *CloudStorager) FetchCommandFromNumber(user *model.AuthInfo, num int) (
 		err = &model.SessionInvalidError{} //ErrSessionInvalid
 		return
 	case http.StatusNotFound:
-		err = errors.New("Number not found")
+		err = (&model.CommandNotFoundError{}).SetError("No command found for idx=" + strconv.Itoa(index))
 		return
 	case http.StatusInternalServerError:
 		err = &model.ServerSystemError{} //ErrServerSystem
