@@ -54,6 +54,7 @@ func (e *Engine) SetAuthInfo(auth string) {
 }
 
 func NewEngine(version string, apiServer string) *Engine {
+
 	env := NewEnv()
 	var config *Config
 	configPath := env.Compath + "/" + ConfigFileDefault

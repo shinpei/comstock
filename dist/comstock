@@ -16,6 +16,17 @@ case ${1} in
     run)
 	coms_run ${2}
 	;;
+    status)
+	ps -p $$
+	if [ -z "$BASH_VERSION" ];then
+	    echo $BASH_VERSION
+	    COMSTOCK_SHELL="zsh" comstock-cli status
+	else
+	    echo $BASH_VERSION
+	    # bash or bash compatible (dash?)
+	    COMSTOCK_SHELL="bash" comstock-cli status
+	fi
+	;;
     *)
 	comstock-cli $@
 esac

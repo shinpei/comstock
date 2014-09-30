@@ -3,9 +3,10 @@ package engine
 import (
 	"bufio"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"io"
-	"log"
+
 	"os"
 	"os/exec"
 	"os/user"
@@ -82,31 +83,44 @@ func (e *Env) AsMap() map[string]string {
 	return m
 }
 
-// get executing shell from ppid
-func getShell() string {
-
-	ppid := strconv.Itoa(os.Getppid())
-	cmd := exec.Command("ps", "-p", ppid)
+func getProcessName(pid int) (procName string, err error) {
+	cmd := exec.Command("ps", "-p", strconv.Itoa(pid))
 	pipe, err := cmd.StdoutPipe()
 	defer pipe.Close()
 	err = cmd.Start()
 	if err != nil {
-		log.Fatal(err)
+		panic(err)
 	}
 	r := bufio.NewReader(pipe)
-	lc := 0
 	for {
 		linebuf, _, err := r.ReadLine()
 		if err != io.EOF {
-			lc++
-			if lc == 2 {
-				line := string(linebuf)
-				return strings.Fields(line)[3]
-			}
+			line := string(linebuf)
+			procName = strings.Fields(line)[3]
 		} else {
 			break
 		}
 	}
+	if procName == "" {
+		err = errors.New("Command Not fonud for pid=" + strconv.Itoa(pid))
+	}
+	return
+}
 
-	return "/bin/noshell"
+// get executing shell from ppid
+func getShell() (shell string) {
+
+	shell = os.Getenv("COMSTOCK_SHELL")
+	fmt.Println("env='", shell, "'")
+	if shell != "" {
+		return
+	}
+	shell = "unknown"
+	//cmd := exec.Command("ps", "xao", "pid,ppid", ppid)
+	ppid := (os.Getppid())
+	shell, err := getProcessName(ppid)
+	if err != nil {
+		panic(err)
+	}
+	return
 }
