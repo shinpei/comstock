@@ -83,7 +83,7 @@ func (e *Env) AsMap() map[string]string {
 	return m
 }
 
-func getProcessName(pid int) (procName string, err error) {
+func getShellProcessName(pid int) (procName string, err error) {
 	cmd := exec.Command("ps", "-p", strconv.Itoa(pid))
 	pipe, err := cmd.StdoutPipe()
 	defer pipe.Close()
@@ -96,7 +96,12 @@ func getProcessName(pid int) (procName string, err error) {
 		linebuf, _, err := r.ReadLine()
 		if err != io.EOF {
 			line := string(linebuf)
-			procName = strings.Fields(line)[3]
+			fields := strings.Fields(line)
+			if 4 < len(fields) {
+				procName = fields[4]
+			} else {
+				procName = fields[3]
+			}
 		} else {
 			break
 		}
@@ -107,18 +112,51 @@ func getProcessName(pid int) (procName string, err error) {
 	return
 }
 
+func getPPID(pid int) (ppid int, err error) {
+	cmd := exec.Command("ps", "xao", "pid,ppid", strconv.Itoa(pid))
+	pipe, err := cmd.StdoutPipe()
+	defer pipe.Close()
+	err = cmd.Start()
+	if err != nil {
+		panic(err)
+	}
+	r := bufio.NewReader(pipe)
+	for {
+		linebuf, _, err := r.ReadLine()
+
+		if err != io.EOF {
+			line := string(linebuf)
+			ppid, err = strconv.Atoi(strings.Fields(line)[1])
+		} else {
+			break
+		}
+	}
+	if ppid == 0 {
+		err = errors.New("Command Not fonud for pid=" + strconv.Itoa(pid))
+	}
+	return
+}
+
 // get executing shell from ppid
 func getShell() (shell string) {
 
-	shell = os.Getenv("COMSTOCK_SHELL")
-	fmt.Println("env='", shell, "'")
-	if shell != "" {
-		return
-	}
-	shell = "unknown"
+	//	shell = os.Getenv("COMSTOCK_SHELL")
+	//	fmt.Println("env='", shell, "'")
+	//	if shell != "" {
+	//		return
+	//	}
 	//cmd := exec.Command("ps", "xao", "pid,ppid", ppid)
+	shell = "unknown"
 	ppid := (os.Getppid())
-	shell, err := getProcessName(ppid)
+	shell, err := getShellProcessName(ppid)
+	if strings.HasSuffix(shell, "comstock") {
+		// this case, it's wrapper
+		ppid, err = getPPID(ppid)
+		if err != nil {
+			panic(err)
+		}
+		shell, err = getShellProcessName(ppid)
+	}
 	if err != nil {
 		panic(err)
 	}
