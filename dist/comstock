@@ -13,10 +13,8 @@ CURRENT_SHELL=`ps -p $PPID | grep -v PID | awk '{print $4}'`
 case ${1} in
     save)
         if [ `echo $CURRENT_SHELL | grep "zsh"` ] ;then
-	    echo "zsh"
 	    comstock-cli $@
 	else
-	    echo "bash"
 	    coms_save_previous
 	fi
 	;;
