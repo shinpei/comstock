@@ -1,19 +1,25 @@
-#!/bin/sh
 # Comstock - stock your command to the cloud
 # comstock shell scripts
 # shinpei(c)2014
-
 set -e
-# saveBashHistory() {
-#     fc -l -n | tail -n 2 | head -n 1 | sed -e 's/^[[:space:]]*//'  | comstock-cli --shell bash save
-# }
 
 coms_run() {
     cmd=`comstock-cli get ${1}`
     ${cmd}
 }
 
+CURRENT_SHELL=`ps -p $PPID | grep -v PID | awk '{print $4}'`
+
 case ${1} in
+    save)
+        if [ `echo $CURRENT_SHELL | grep "zsh"` ] ;then
+	    echo "zsh"
+	    comstock-cli $@
+	else
+	    echo "bash"
+	    coms_save_previous
+	fi
+	;;
     run)
 	coms_run ${2}
 	;;
