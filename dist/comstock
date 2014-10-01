@@ -4,15 +4,16 @@
 # shinpei(c)2014
 
 set -e
+# saveBashHistory() {
+#     fc -l -n | tail -n 2 | head -n 1 | sed -e 's/^[[:space:]]*//'  | comstock-cli --shell bash save
+# }
+
 coms_run() {
     cmd=`comstock-cli get ${1}`
     ${cmd}
 }
 
 case ${1} in
-    save)
-	coms_save_previous
-	;;
     run)
 	coms_run ${2}
 	;;

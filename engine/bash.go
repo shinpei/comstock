@@ -8,7 +8,7 @@ func (b *BashHandler) ReadLastHistory(filename string) (command string, err erro
 	var (
 		ret []string
 	)
-	ret, err = tail(filename, 2)
+	ret, err = tail(filename, 1)
 	command = ret[0]
 	return
 }

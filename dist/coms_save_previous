@@ -4,18 +4,7 @@
 # shinpei(c)2014
 
 set -e 
-saveBashHistory() {
-    fc -l -n | tail -n 2 | head -n 1 | sed -e 's/^[[:space:]]*//'  | comstock-cli --shell bash save
-}
 
-saveZshHistory() {
-    comstock-cli --shell zsh  save
-}
 
 # entry point
-if [ -z "$BASH_VERSION" ] || [ "${BASH##*/}" != "sh" ]; then
-    saveZshHistory
-else
-    saveBashHistory
-fi
 
