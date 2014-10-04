@@ -1,6 +1,7 @@
 2014-10-02  Shinpei Nakata  <shinpei.nakata@gmail.com>
 
 	* dist/comstock fix problem for choosing shell wrapper. shebang was a problem.
+	* Released version 0.1.8
 
 2014-09-28  Shinpei Nakata  <shinpei.nakata@gmail.com>
 
