@@ -173,13 +173,13 @@ func initApp(version string) *cli.App {
 		StatusCommand,
 		ListCommand,
 		FetchCommand,
-		{
-			Name:  "alias",
-			Usage: "Make alias for specific command, specified as #number",
-			Action: func(c *cli.Context) {
-				log.Fatal("Not yet implemented")
-			},
-		},
+		// {
+		// 	Name:  "alias",
+		// 	Usage: "Make alias for specific command, specified as #number",
+		// 	Action: func(c *cli.Context) {
+		// 		log.Fatal("Not yet implemented")
+		// 	},
+		// },
 		RemoveCommand,
 		{
 			Name:  "run",
