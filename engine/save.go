@@ -47,6 +47,9 @@ func (e *Engine) Save(command string) (err error) {
 	if command == "" {
 		if isatty.IsTerminal(os.Stdin.Fd()) {
 			command, err = handler.ReadLastHistory(shellHistoryFilename)
+			if err != nil {
+				return
+			}
 		} else {
 			// data arrived in stdin
 			scanner := bufio.NewScanner(os.Stdin)

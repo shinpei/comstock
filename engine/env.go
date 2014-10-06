@@ -150,7 +150,6 @@ func getShell() (shell string) {
 	if err != nil {
 		return
 	}
-
 	if strings.HasSuffix(shell, "comstock") {
 		// this case, it's wrapper
 		ppid, err = getPPID(ppid)
@@ -158,7 +157,15 @@ func getShell() (shell string) {
 			panic(err)
 		}
 		shell, err = getShellProcessName(ppid)
+	} else if strings.HasSuffix(shell, "sh") && !strings.HasSuffix(shell, "bash") {
+		// this case, it's wrapper
+		ppid, err = getPPID(ppid)
+		if err != nil {
+			panic(err)
+		}
+		shell, err = getShellProcessName(ppid)
 	}
+
 	if err != nil {
 		panic(err)
 	}

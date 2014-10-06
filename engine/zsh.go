@@ -18,6 +18,10 @@ func (z *ZshHandler) ReadLastHistory(filename string) (cmd string, err error) {
 	//format
 	// ': xxxxxxxxxx:x;cmd\n'
 	fi, err := os.Open(filename)
+	if err != nil {
+		return
+	}
+
 	scanner := bufio.NewScanner(fi)
 
 	//TODO: fix below algo
@@ -30,7 +34,6 @@ func (z *ZshHandler) ReadLastHistory(filename string) (cmd string, err error) {
 			storeCmd += line
 		}
 	}
-	//fmt.Sscanf(preCmd, ": %d:%d;%s", &timestamp, &linenum, &ignore)
 	cmd = preCmd[15:]
 	return
 }
