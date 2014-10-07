@@ -5,10 +5,7 @@ import (
 	"os"
 )
 
-const (
-	ComstockAPIServer string = "https://comstock.herokuapp.com"
-	//ComstockAPIServer string = "http://localhost:5000"
-)
+//ComstockAPIServer string = "http://localhost:5000"
 
 func main() {
 	eng := engine.NewEngine(Version, ComstockAPIServer)
