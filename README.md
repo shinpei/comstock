@@ -26,10 +26,6 @@ $ brew tap shinpei/comstock
 $ brew install comstock
 ```
 
-If you have installed Go, type following.
-```
-go get github.com/shinpei/comstock
-```
 ## Create your account
 Open register website from command.
 ```
@@ -53,9 +49,9 @@ Remove your commands
 $ comstock rm 3
 ```
 
-## Configure comstock
-You can configure comstock behavior from config file. The configs are stored inside `$COMSTOCK_HOME`, 
 
+//## Configure comstock
+//You can configure comstock behavior from config file. The configs are stored inside `$COMSTOCK_HOME`, 
 
 
 ## Lisence, contact info, contribute
