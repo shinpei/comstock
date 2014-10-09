@@ -14,8 +14,12 @@ import (
 )
 
 var LoginCommand cli.Command = cli.Command{
-	Name:   "login",
-	Usage:  "Login to the cloud",
+	Name:  "login",
+	Usage: "Login to the cloud",
+	Flags: []cli.Flag{
+		cli.StringFlag{Name: "username, l", Usage: "username (email address)"},
+		cli.StringFlag{Name: "password, p", Usage: "password"},
+	},
 	Action: LoginAction,
 }
 
@@ -24,17 +28,21 @@ func LoginAction(c *cli.Context) {
 		fmt.Printf("Already login as %s\n", eng.userinfo.Mail())
 		return
 	}
-	eng.Login(eng.apiServer)
+	username := c.String("username")
+	password := c.String("password")
+	eng.Login(eng.apiServer, username, password)
 
 }
 
-func (e *Engine) Login(loginServer string) {
+func (e *Engine) Login(loginServer string, u string, p string) {
 	// check login
 	// TODO: does storager requires login?
 
 	var mail string
 	var registeredNewMail bool
-	if e.config != nil && e.config.User.Mail != "" {
+	if u != "" {
+		mail = u
+	} else if e.config != nil && e.config.User.Mail != "" {
 		mail = e.config.User.Mail
 	} else {
 		scanner := bufio.NewScanner(os.Stdin)
@@ -43,8 +51,13 @@ func (e *Engine) Login(loginServer string) {
 		mail = scanner.Text()
 		registeredNewMail = true
 	}
-	fmt.Printf("Password for %s?:", mail)
-	password, _ := gopass.GetPass("")
+	var password string
+	if p != "" {
+		password = p
+	} else {
+		fmt.Printf("Password for %s?:", mail)
+		password, _ = gopass.GetPass("")
+	}
 	token, err := tryLoginWithMail(loginServer, mail, password)
 	if err != nil {
 		// TODO: register?

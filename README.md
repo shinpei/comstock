@@ -1,7 +1,7 @@
 ## Comstock: store your favorite command
 
 [![Build Status](https://drone.io/github.com/shinpei/comstock/status.png)](https://drone.io/github.com/shinpei/comstock/latest)
-[![GoDoc](https://godoc.org/github.com/shinpei/comstock?status.png)](https://godoc.org/github.com/shinpei/comstock)
+[![GoDoc](http://godoc.org/github.com/shinpei/comstock?status.png)](https://godoc.org/github.com/shinpei/comstock)
 
 Comstock is a cloud-based command stocking tool. Copy and pasting your often used command to the text editor, or cloud-based editor like evernote was a dull for me. History command also won't allow me to use favorite commands in the new environment. What Comstock provides is storing your commands to the cloud, and easily use them from anywhere. 
 
