@@ -19,6 +19,10 @@ case ${1} in
 	fi
 	;;
     run)
+	if [ -z ${2} ] ;then
+	    echo "'run' requires #number argument, e.g., 'comstock run 1'"
+	    exit -1;
+	fi
 	coms_run ${2}
 	;;
     *)
