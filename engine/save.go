@@ -17,13 +17,16 @@ var ActionCommand cli.Command = cli.Command{
 	Name:      "save",
 	ShortName: "sv",
 	Usage:     "Save previous command",
-	Action:    SaveAction,
+	Flags: []cli.Flag{
+		cli.StringFlag{Name: "shell, s", Value: "", Usage: "Forcly change the shell handler. for example, bash compatible shell can use 'bash'"},
+	},
+	Action: SaveAction,
 }
 
 func SaveAction(c *cli.Context) {
 
 	first := c.Args().First()
-	shellstr := c.GlobalString("shell")
+	shellstr := c.String("shell")
 	if shellstr != "" {
 		eng.env.Shell = shellstr
 	}
