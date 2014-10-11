@@ -1,3 +1,4 @@
+// Main logics of comstock (TODO: this will be renamed)
 package engine
 
 import (

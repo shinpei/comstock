@@ -1,3 +1,4 @@
+// Check environment for Comstock
 package engine
 
 import (
@@ -148,6 +149,7 @@ func getShell() (shell string) {
 	ppid := (os.Getppid())
 	shell, err := getShellProcessName(ppid)
 	if err != nil {
+		// Couldn't get parent shell
 		return
 	}
 	if strings.HasSuffix(shell, "comstock") {
