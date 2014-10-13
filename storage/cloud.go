@@ -31,9 +31,38 @@ func CreateCloudStorager(host string) (h *CloudStorager) {
 	}
 }
 
+func (cs *CloudStorager) Push2(user *model.AuthInfo, path string, cmd *model.Command) (err error) {
+
+	command := "/postCommands"
+	objStr, _ := json.Marshal(cmd)
+	println(string(objStr))
+	vals := url.Values{"cmd": {string(objStr)} /*cmd.Cmd*/, "authinfo": {user.Token()}}.Encode()
+	requestURI := cs.StorageHost() + command + "?" + vals
+	resp, err := http.Get(requestURI)
+	if err != nil {
+		log.Fatal("Couldn't reach server", err)
+		return
+	}
+	defer resp.Body.Close()
+	switch resp.StatusCode {
+	case http.StatusOK:
+		// do nothing
+	case http.StatusInternalServerError:
+		err = &model.ServerSystemError{}
+		//disable login
+	default:
+		fmt.Println("Failed to fetch")
+		return
+	}
+	return
+}
+
 func (cs *CloudStorager) Push(user *model.AuthInfo, path string, cmd *model.Command) (err error) {
+
 	command := "/postCommand"
-	vals := url.Values{"cmd": {cmd.Cmd}, "authinfo": {user.Token()}}.Encode()
+	objStr, _ := json.Marshal(cmd)
+	//	fmt.Println("Object:", string(objStr))
+	vals := url.Values{"cmd": {string(objStr)}, "authinfo": {user.Token()}}.Encode()
 	requestURI := cs.StorageHost() + command + "?" + vals
 	resp, err := http.Get(requestURI)
 	if err != nil {
@@ -90,6 +119,7 @@ func (cs *CloudStorager) List(user *model.AuthInfo) (cmds []model.Command, err e
 }
 
 func (cs *CloudStorager) FetchCommandFromNumber(user *model.AuthInfo, index int) (cmd *model.Command, err error) {
+
 	command := "/fetchCommandFromNumber"
 	vals := url.Values{"authinfo": {user.Token()}, "number": {strconv.Itoa(index)}}.Encode()
 	requestURI := cs.StorageHost() + command + "?" + vals

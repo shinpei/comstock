@@ -132,6 +132,19 @@ func (e *CommandNotFoundError) SetError(msg string) *CommandNotFoundError {
 	return e
 }
 
+type AlreadyLoginError struct {
+	msg string
+}
+
+func (e *AlreadyLoginError) Error() string {
+	return e.msg
+}
+
+func (e *AlreadyLoginError) SetError(msg string) *AlreadyLoginError {
+	e.msg = msg
+	return e
+}
+
 type ServerSystemError struct {
 	msg string
 }

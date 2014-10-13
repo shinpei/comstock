@@ -64,17 +64,16 @@ func (e *Engine) Save(command string) (err error) {
 			}
 		}
 	}
+
 	// split with parser
 	commands, _ := parser.Parse(command)
 	for _, cmdStr := range commands {
 		cmd = model.CreateCommand(cmdStr)
-
 		cmd.Cmd = strings.TrimSpace(cmd.Cmd)
 		// save to the local storage
 		// remove whitespaces from cmd
 
 		err = e.storager.Push(e.userinfo, e.env.Compath, cmd)
-
 		if e.config.verboseMode {
 			fmt.Printf("[%s]Saved command '%s'\n", e.storager.StorageType(), cmd.Cmd)
 		} else {

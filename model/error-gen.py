@@ -13,6 +13,7 @@ definedErrors = [
 'IncorrectPasswordError',
 'AuthenticationFailedError',
 'CommandNotFoundError',
+'AlreadyLoginError',
 'ServerSystemError'
 ]
 
