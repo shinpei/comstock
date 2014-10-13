@@ -7,13 +7,19 @@ import (
 )
 
 var ImportCommand cli.Command = cli.Command{
-	Name:   "import",
-	Usage:  "Import from zshell files",
+	Name:  "import",
+	Usage: "Import from zshell files",
+	Flags: []cli.Flag{
+		cli.StringFlag{Name: "shell, s", Value: "", Usage: "Forcly change the shell handler. for example, bash compatible shell can use 'bash'"},
+	},
 	Action: ImportAction,
 }
 
 func ImportAction(c *cli.Context) {
-
+	shellstr := c.String("shell")
+	if shellstr != "" {
+		eng.env.Shell = shellstr
+	}
 	err := eng.Import()
 	if err != nil {
 		fmt.Println("Command fialed: " + err.Error())
