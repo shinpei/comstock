@@ -31,12 +31,13 @@ func CreateCloudStorager(host string) (h *CloudStorager) {
 	}
 }
 
+/*
 func (cs *CloudStorager) Push2(user *model.AuthInfo, path string, cmd *model.Command) (err error) {
 
 	command := "/postCommands"
 	objStr, _ := json.Marshal(cmd)
 	println(string(objStr))
-	vals := url.Values{"cmd": {string(objStr)} /*cmd.Cmd*/, "authinfo": {user.Token()}}.Encode()
+	vals := url.Values{"cmd": {string(objStr)},"authinfo": {user.Token()}}.Encode()
 	requestURI := cs.StorageHost() + command + "?" + vals
 	resp, err := http.Get(requestURI)
 	if err != nil {
@@ -56,12 +57,12 @@ func (cs *CloudStorager) Push2(user *model.AuthInfo, path string, cmd *model.Com
 	}
 	return
 }
-
+*/
 func (cs *CloudStorager) Push(user *model.AuthInfo, path string, cmd *model.Command) (err error) {
 
 	command := "/postCommand"
 	objStr, _ := json.Marshal(cmd)
-	//	fmt.Println("Object:", string(objStr))
+
 	vals := url.Values{"cmd": {string(objStr)}, "authinfo": {user.Token()}}.Encode()
 	requestURI := cs.StorageHost() + command + "?" + vals
 	resp, err := http.Get(requestURI)
