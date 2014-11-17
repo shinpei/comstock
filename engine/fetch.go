@@ -24,19 +24,19 @@ func FetchAction(c *cli.Context) {
 		fmt.Println("Invalid argument was given, please retry")
 		return
 	}
-	cmd, err := eng.FetchCommandFromNumber(num)
+	nh, err := eng.FetchCommandFromNumber(num)
 	if err != nil {
 		fmt.Println("Command failed: ", err.Error())
 	} else {
-		fmt.Println(cmd.Cmd)
+		fmt.Println(nh.Cmds[0])
 	}
 }
 
-func (e *Engine) FetchCommandFromNumber(num int) (cmd *model.Command, err error) {
+func (e *Engine) FetchCommandFromNumber(num int) (nh *model.NaiveHistory, err error) {
 	if e.storager.IsRequireLogin() == true && e.isLogin == false {
 		log.Fatal("You have no valid access token. Please login first.")
 	}
-	cmd, err = e.storager.FetchCommandFromNumber(e.userinfo, num)
+	nh, err = e.storager.FetchFromNumber(e.userinfo, num)
 	if _, ok := err.(*model.SessionExpiresError); ok {
 		e.SetLogout()
 	}

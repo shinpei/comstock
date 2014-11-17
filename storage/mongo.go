@@ -37,7 +37,7 @@ type Person struct {
 }
 
 //store command
-func (ms *MongoStorager) Push(user *model.AuthInfo, path string, cmd *model.Command) (err error) {
+func (ms *MongoStorager) Push(user *model.AuthInfo, path string, hist *model.NaiveHistory) (err error) {
 	hostname := MongoHost
 	session, err := mgo.DialWithTimeout("mongodb://"+hostname, time.Duration(3)*time.Second)
 	if err != nil {
@@ -46,7 +46,7 @@ func (ms *MongoStorager) Push(user *model.AuthInfo, path string, cmd *model.Comm
 	defer session.Close()
 	session.SetMode(mgo.Monotonic, true)
 	c := session.DB(MongoDatabaseName).C(MongoCollectionName)
-	err = c.Insert(cmd)
+	err = c.Insert(hist)
 	if err != nil {
 		log.Fatal("Couldn't insert")
 	}
@@ -61,7 +61,7 @@ func (ms *MongoStorager) Close() (err error) {
 	return
 }
 
-func (ms *MongoStorager) FetchCommandFromNumber(user *model.AuthInfo, num int) (cmd *model.Command, err error) {
+func (ms *MongoStorager) FetchFromNumber(user *model.AuthInfo, num int) (hist *model.NaiveHistory, err error) {
 	hostname := MongoHost
 	var session *mgo.Session
 	session, err = mgo.DialWithTimeout("mongodb://"+hostname, time.Duration(3)*time.Second)
@@ -77,7 +77,7 @@ func (ms *MongoStorager) FetchCommandFromNumber(user *model.AuthInfo, num int) (
 	var result model.Command
 	for iter.Next(&result) {
 		if idx == num {
-			cmd = model.CreateCommand(result.Cmd)
+			hist = model.CreateNaiveHistory([]string{result.Cmd}, "")
 			break
 		}
 		idx++

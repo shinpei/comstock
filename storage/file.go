@@ -43,10 +43,10 @@ func (fs *FileStorager) StorageType() string {
 }
 
 // Store the command
-func (fs *FileStorager) Push(user *model.AuthInfo, path string, cmd *model.Command) (err error) {
+func (fs *FileStorager) Push(user *model.AuthInfo, path string, hist *model.NaiveHistory) (err error) {
 
 	data, _ := ioutil.ReadFile(fs.filepath)
-	cmdByte := []byte(cmd.Cmd)
+	cmdByte := []byte(hist.Cmds[0])
 	cmdByte = append(cmdByte, string("\n")...)
 	data = append(data, cmdByte...)
 	err = ioutil.WriteFile(fs.filepath, data, 0644)
@@ -72,7 +72,7 @@ func (fs *FileStorager) List(user *model.AuthInfo) (cmds []model.Command, err er
 	return
 }
 
-func (fs *FileStorager) FetchCommandFromNumber(user *model.AuthInfo, num int) (cmd *model.Command, err error) {
+func (fs *FileStorager) FetchFromNumber(user *model.AuthInfo, num int) (hist *model.NaiveHistory, err error) {
 	var fi *os.File
 	// TODO
 	fi, _ = os.Open(fs.filepath)
@@ -81,7 +81,7 @@ func (fs *FileStorager) FetchCommandFromNumber(user *model.AuthInfo, num int) (c
 	for scanner.Scan() {
 		idx++
 		if idx == num {
-			cmd = model.CreateCommand(scanner.Text())
+			hist = model.CreateNaiveHistory([]string{scanner.Text()}, "")
 			return
 		}
 	}
