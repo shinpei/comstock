@@ -32,8 +32,8 @@ func (e *Engine) List() (err error) {
 		err = errors.New("Login required")
 		return
 	}
-	var cmds []model.Command
-	if cmds, err = e.storager.List(e.userinfo); err != nil {
+	var hists []model.NaiveHistory
+	if hists, err = e.storager.List(e.userinfo); err != nil {
 		if _, ok := err.(*model.SessionExpiresError); ok {
 			e.SetLogout()
 		} else if _, ok := err.(*model.SessionInvalidError); ok {
@@ -54,12 +54,13 @@ func (e *Engine) List() (err error) {
 	ttyWidthStr := strings.Replace(strings.Split(string(out), " ")[1], "\n", "", 1)
 	ttyWidth, _ := strconv.Atoi(ttyWidthStr)
 
-	for _, cmd := range cmds {
+	for _, hist := range hists {
 		idx++
-		if ttyWidth < len(cmd.Cmd) {
-			fmt.Printf("%d: %s...\n", idx, cmd.Cmd[:ttyWidth-15])
+		cmd := hist.Command()
+		if ttyWidth < len(cmd) {
+			fmt.Printf("%d: %s...\n", idx, cmd[:ttyWidth-15])
 		} else {
-			fmt.Printf("%d: %s\n", idx, cmd.Cmd)
+			fmt.Printf("%d: %s\n", idx, cmd)
 		}
 	}
 	return

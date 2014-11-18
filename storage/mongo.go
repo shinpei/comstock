@@ -2,7 +2,7 @@ package storage
 
 import (
 	"fmt"
-	"github.com/shinpei/comstock/model"
+	cmodel "github.com/shinpei/comstock/model"
 	"labix.org/v2/mgo"
 	"log"
 	"time"
@@ -37,7 +37,7 @@ type Person struct {
 }
 
 //store command
-func (ms *MongoStorager) Push(user *model.AuthInfo, path string, hist *model.NaiveHistory) (err error) {
+func (ms *MongoStorager) Push(user *cmodel.AuthInfo, path string, hist *cmodel.NaiveHistory) (err error) {
 	hostname := MongoHost
 	session, err := mgo.DialWithTimeout("mongodb://"+hostname, time.Duration(3)*time.Second)
 	if err != nil {
@@ -61,7 +61,7 @@ func (ms *MongoStorager) Close() (err error) {
 	return
 }
 
-func (ms *MongoStorager) FetchFromNumber(user *model.AuthInfo, num int) (hist *model.NaiveHistory, err error) {
+func (ms *MongoStorager) FetchFromNumber(user *cmodel.AuthInfo, num int) (hist *cmodel.NaiveHistory, err error) {
 	hostname := MongoHost
 	var session *mgo.Session
 	session, err = mgo.DialWithTimeout("mongodb://"+hostname, time.Duration(3)*time.Second)
@@ -74,10 +74,10 @@ func (ms *MongoStorager) FetchFromNumber(user *model.AuthInfo, num int) (hist *m
 
 	iter := c.Find(nil).Limit(100).Iter()
 	var idx = 1
-	var result model.Command
+	var result cmodel.Command
 	for iter.Next(&result) {
 		if idx == num {
-			hist = model.CreateNaiveHistory([]string{result.Cmd}, "")
+			hist = cmodel.CreateNaiveHistory([]string{result.Cmd}, "")
 			break
 		}
 		idx++
@@ -87,7 +87,7 @@ func (ms *MongoStorager) FetchFromNumber(user *model.AuthInfo, num int) (hist *m
 	}
 	return
 }
-func (ms *MongoStorager) List(user *model.AuthInfo) (cmds []model.Command, err error) {
+func (ms *MongoStorager) List(user *cmodel.AuthInfo) (cmds []cmodel.NaiveHistory, err error) {
 	hostname := MongoHost
 	session, err := mgo.DialWithTimeout("mongodb://"+hostname, time.Duration(3)*time.Second)
 	if err != nil {
@@ -99,7 +99,7 @@ func (ms *MongoStorager) List(user *model.AuthInfo) (cmds []model.Command, err e
 	//	ensureIndex(c)
 
 	// TODO: make cmd array
-	var result model.Command
+	var result cmodel.Command
 	iter := c.Find(nil).Limit(100).Iter()
 	var idx = 1
 	for iter.Next(&result) {
@@ -133,10 +133,10 @@ func (m *MongoStorager) IsRequireLogin() bool {
 func (m *MongoStorager) Status() (err error) {
 	return
 }
-func (m *MongoStorager) CheckSession(user *model.AuthInfo) bool {
+func (m *MongoStorager) CheckSession(user *cmodel.AuthInfo) bool {
 	return true
 }
 
-func (m *MongoStorager) RemoveOne(user *model.AuthInfo, num int) (err error) {
+func (m *MongoStorager) RemoveOne(user *cmodel.AuthInfo, num int) (err error) {
 	return
 }

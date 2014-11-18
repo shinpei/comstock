@@ -9,7 +9,7 @@ type Storager interface {
 	Close() error
 	Push(user *model.AuthInfo, path string, hist *model.NaiveHistory) error
 	//Push2(user *model.AuthInfo, path string, cmds []model.Command) error
-	List(user *model.AuthInfo) (cmds []model.Command, err error)
+	List(user *model.AuthInfo) (cmds []model.NaiveHistory, err error)
 	FetchFromNumber(user *model.AuthInfo, num int) (hist *model.NaiveHistory, err error)
 	RemoveOne(user *model.AuthInfo, num int) error
 	StorageType() string

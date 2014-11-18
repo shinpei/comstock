@@ -5,7 +5,6 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	//	"github.com/shinpei/comstock-www/model"
 	cmodel "github.com/shinpei/comstock/model"
 	"io/ioutil"
 	"log"
@@ -59,11 +58,11 @@ func (cs *CloudStorager) Push(user *cmodel.AuthInfo, path string, ns *cmodel.Nai
 	return
 }
 
-func (cs *CloudStorager) List(user *cmodel.AuthInfo) (cmds []cmodel.Command, err error) {
+func (cs *CloudStorager) List(user *cmodel.AuthInfo) (hists []cmodel.NaiveHistory, err error) {
 
 	command := "/list"
 	// does it have auto
-	vals := url.Values{"authinfo": {user.Token()}}.Encode()
+	vals := url.Values{"token": {user.Token()}}.Encode()
 	requestURI := cs.StorageHost() + command + "?" + vals
 	resp, err := http.Get(requestURI)
 	if err != nil {
@@ -89,7 +88,7 @@ func (cs *CloudStorager) List(user *cmodel.AuthInfo) (cmds []cmodel.Command, err
 		fmt.Println("Failed to fetch")
 		return
 	}
-	err = json.Unmarshal(body, &cmds)
+	err = json.Unmarshal(body, &hists)
 	return
 }
 

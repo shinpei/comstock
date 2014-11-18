@@ -3,7 +3,7 @@ package storage
 import (
 	"bufio"
 	"fmt"
-	"github.com/shinpei/comstock/model"
+	cmodel "github.com/shinpei/comstock/model"
 	"io/ioutil"
 	"log"
 	"os"
@@ -43,7 +43,7 @@ func (fs *FileStorager) StorageType() string {
 }
 
 // Store the command
-func (fs *FileStorager) Push(user *model.AuthInfo, path string, hist *model.NaiveHistory) (err error) {
+func (fs *FileStorager) Push(user *cmodel.AuthInfo, path string, hist *cmodel.NaiveHistory) (err error) {
 
 	data, _ := ioutil.ReadFile(fs.filepath)
 	cmdByte := []byte(hist.Cmds[0])
@@ -59,7 +59,7 @@ func (fs *FileStorager) Close() (err error) {
 }
 
 // List all commands
-func (fs *FileStorager) List(user *model.AuthInfo) (cmds []model.Command, err error) {
+func (fs *FileStorager) List(user *cmodel.AuthInfo) (cmds []cmodel.NaiveHistory, err error) {
 	var fi *os.File
 	fi, err = os.Open(fs.filepath)
 	scanner := bufio.NewScanner(fi)
@@ -72,7 +72,7 @@ func (fs *FileStorager) List(user *model.AuthInfo) (cmds []model.Command, err er
 	return
 }
 
-func (fs *FileStorager) FetchFromNumber(user *model.AuthInfo, num int) (hist *model.NaiveHistory, err error) {
+func (fs *FileStorager) FetchFromNumber(user *cmodel.AuthInfo, num int) (hist *cmodel.NaiveHistory, err error) {
 	var fi *os.File
 	// TODO
 	fi, _ = os.Open(fs.filepath)
@@ -81,7 +81,7 @@ func (fs *FileStorager) FetchFromNumber(user *model.AuthInfo, num int) (hist *mo
 	for scanner.Scan() {
 		idx++
 		if idx == num {
-			hist = model.CreateNaiveHistory([]string{scanner.Text()}, "")
+			hist = cmodel.CreateNaiveHistory([]string{scanner.Text()}, "")
 			return
 		}
 	}
@@ -103,10 +103,10 @@ func (fs *FileStorager) Status() (err error) {
 	return
 }
 
-func (fs *FileStorager) CheckSession(user *model.AuthInfo) bool {
+func (fs *FileStorager) CheckSession(user *cmodel.AuthInfo) bool {
 	return true
 }
 
-func (fs *FileStorager) RemoveOne(user *model.AuthInfo, num int) (err error) {
+func (fs *FileStorager) RemoveOne(user *cmodel.AuthInfo, num int) (err error) {
 	return
 }
