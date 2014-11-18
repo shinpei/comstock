@@ -153,7 +153,7 @@ func (cs *CloudStorager) Search() (err error) {
 
 func (cs *CloudStorager) CheckSession(user *cmodel.AuthInfo) bool {
 	command := "/checkSession"
-	vals := url.Values{"authinfo": {user.Token()}}.Encode()
+	vals := url.Values{"token": {user.Token()}}.Encode()
 	requestURI := cs.StorageHost() + command + "?" + vals
 	resp, err := http.Get(requestURI)
 	if err != nil {
