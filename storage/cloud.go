@@ -95,7 +95,7 @@ func (cs *CloudStorager) List(user *cmodel.AuthInfo) (hists []cmodel.NaiveHistor
 func (cs *CloudStorager) FetchFromNumber(user *cmodel.AuthInfo, index int) (nh *cmodel.NaiveHistory, err error) {
 
 	command := "/fetchCommandFromNumber"
-	vals := url.Values{"authinfo": {user.Token()}, "number": {strconv.Itoa(index)}}.Encode()
+	vals := url.Values{"token": {user.Token()}, "number": {strconv.Itoa(index)}}.Encode()
 	requestURI := cs.StorageHost() + command + "?" + vals
 	resp, err := http.Get(requestURI)
 	if err != nil {
@@ -115,13 +115,14 @@ func (cs *CloudStorager) FetchFromNumber(user *cmodel.AuthInfo, index int) (nh *
 	case http.StatusInternalServerError:
 		err = &cmodel.ServerSystemError{} //ErrServerSystem
 		return
+	case http.StatusBadRequest:
+		err = (&cmodel.IllegalArgumentError{}).SetError("Invalid argument are given, idx=" + strconv.Itoa(index))
+		return
 	default:
 		err = errors.New("Fetch failed somehow")
 		return
 	}
-	var nhs []cmodel.NaiveHistory
-	err = json.Unmarshal(body, &nhs)
-	nh = &nhs[0]
+	err = json.Unmarshal(body, &nh)
 	return
 }
 
