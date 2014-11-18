@@ -14,8 +14,22 @@ type NaiveHistory struct {
 func CreateNaiveHistory(cmds []string, desc string) *NaiveHistory {
 	return &NaiveHistory{Date: time.Now(), Cmds: cmds, Description: desc}
 }
-func (c *NaiveHistory) SetShell(shell string) {
-	c.Shell = shell
+func (nh *NaiveHistory) SetShell(shell string) {
+	nh.Shell = shell
+}
+
+func (nh *NaiveHistory) Command() string {
+	l := len(nh.Cmds)
+	symbol := ""
+	if l == 1 {
+		symbol = nh.Cmds[0]
+	} else if l > 1 {
+		for _, s := range nh.Cmds {
+			symbol += s + " => "
+		}
+		symbol = symbol[:len(symbol)-4]
+	}
+	return symbol
 }
 
 type Command struct {

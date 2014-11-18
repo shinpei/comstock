@@ -44,7 +44,6 @@ func (e *Engine) Save(command string) (err error) {
 	}
 	shellHistoryFilename := e.env.Homepath
 	handler, shellHistoryFilename := FetchShellHandler(e, shellHistoryFilename)
-	var cmd *model.Command
 
 	//check weather command has given
 	if command == "" {
@@ -78,9 +77,9 @@ func (e *Engine) Save(command string) (err error) {
 
 	err = e.storager.Push(e.userinfo, e.env.Compath, nh)
 	if e.config.verboseMode {
-		fmt.Printf("[%s]Saved command '%s'\n", e.storager.StorageType(), cmd.Cmd)
+		fmt.Printf("[%s]Saved command '%s'\n", e.storager.StorageType(), nh.Command())
 	} else {
-		fmt.Printf("Saved command '%s'\n", cmd.Cmd)
+		fmt.Printf("Saved command '%s'\n", nh.Command())
 	}
 
 	return
