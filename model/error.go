@@ -132,6 +132,19 @@ func (e *CommandNotFoundError) SetError(msg string) *CommandNotFoundError {
 	return e
 }
 
+type IllegalArgumentError struct {
+	msg string
+}
+
+func (e *IllegalArgumentError) Error() string {
+	return e.msg
+}
+
+func (e *IllegalArgumentError) SetError(msg string) *IllegalArgumentError {
+	e.msg = msg
+	return e
+}
+
 type AlreadyLoginError struct {
 	msg string
 }
