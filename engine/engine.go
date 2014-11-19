@@ -70,12 +70,10 @@ func NewEngine(version string, apiServer string) *Engine {
 	}
 
 	var isAlreadyLogin bool = false
-	authinfo, mail, _ := readAuthInfo(env)
+	token, mail, _ := readAuthInfo(env)
 	var userinfo *model.AuthInfo
-	if authinfo != "" {
-		userinfo = model.CreateUserinfo(authinfo, mail)
-		//TODO: maybe we shouldn't check session every time, e.g., --help given
-		isAlreadyLogin = s.CheckSession(userinfo)
+	if token != "" {
+		userinfo = model.CreateUserinfo(token, mail)
 		config.User.Mail = mail // apply current status
 	}
 
@@ -95,7 +93,7 @@ func NewEngine(version string, apiServer string) *Engine {
 
 	eng = &Engine{
 		App:       initApp(version),
-		authInfo:  authinfo,
+		authInfo:  token,
 		isLogin:   isAlreadyLogin,
 		userinfo:  userinfo,
 		storager:  s,
@@ -216,7 +214,14 @@ func (e *Engine) Config() {
 }
 
 func (e *Engine) IsRequireLoginOrDie() {
-	if e.storager.IsRequireLogin() == true && e.isLogin == false {
-		log.Fatal("You haven't login. Please login first.")
+
+	if e.storager.IsRequireLogin() == true {
+		if e.userinfo == nil {
+			e.userinfo = model.CreateUserinfo(e.authInfo, e.config.User.Mail)
+		}
+		e.isLogin = e.storager.CheckSession(e.userinfo)
+		if e.isLogin == false {
+			log.Fatal("You haven't login. Please login first.")
+		}
 	}
 }
