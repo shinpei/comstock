@@ -32,7 +32,7 @@ type Engine struct {
 	storager  storage.Storager // storage
 	userinfo  *model.AuthInfo
 	isLogin   bool
-	authInfo  string
+	token     string
 	config    *Config
 	env       *Env
 	apiServer string
@@ -48,10 +48,10 @@ func (e *Engine) SetLogout() {
 	e.isLogin = false
 }
 func (e *Engine) AuthInfo() string {
-	return e.authInfo
+	return e.token
 }
-func (e *Engine) SetAuthInfo(auth string) {
-	e.authInfo = auth
+func (e *Engine) SetAuthInfo(tk string) {
+	e.token = tk
 }
 
 func NewEngine(version string, apiServer string) *Engine {
@@ -93,7 +93,7 @@ func NewEngine(version string, apiServer string) *Engine {
 
 	eng = &Engine{
 		App:       initApp(version),
-		authInfo:  token,
+		token:     token,
 		isLogin:   isAlreadyLogin,
 		userinfo:  userinfo,
 		storager:  s,
@@ -113,7 +113,7 @@ func getVersion(path string) string {
 	return string(versioninfo)
 }
 
-func readAuthInfo(env *Env) (authinfo string, mail string, err error) {
+func readAuthInfo(env *Env) (tk string, mail string, err error) {
 	authFilePath := env.Compath + "/" + AuthFile
 	fi, err := os.Open(authFilePath)
 	if err != nil {
@@ -132,10 +132,10 @@ func readAuthInfo(env *Env) (authinfo string, mail string, err error) {
 		// for safety.
 		if 1 < len(auths) {
 			mail = auths[0]
-			authinfo = auths[1]
+			tk = auths[1]
 		} else {
 			fmt.Println("comstock version is too old, consider upgrading it.")
-			authinfo = auths[0]
+			tk = auths[0]
 		}
 
 	}
@@ -217,7 +217,7 @@ func (e *Engine) IsRequireLoginOrDie() {
 
 	if e.storager.IsRequireLogin() == true {
 		if e.userinfo == nil {
-			e.userinfo = model.CreateUserinfo(e.authInfo, e.config.User.Mail)
+			e.userinfo = model.CreateUserinfo(e.token, e.config.User.Mail)
 		}
 		e.isLogin = e.storager.CheckSession(e.userinfo)
 		if e.isLogin == false {

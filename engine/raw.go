@@ -32,14 +32,11 @@ func RawAction(c *cli.Context) {
 
 func (e *Engine) Raw(host string, cmd string) (err error) {
 
-	if e.isLogin == false {
-		err = errors.New("Login required")
-		return
-	}
+	e.IsRequireLoginOrDie()
 	if strings.HasPrefix(cmd, "/") == false {
 		cmd = "/" + cmd
 	}
-	vals := url.Values{"authinfo": {e.userinfo.Token()}}.Encode()
+	vals := url.Values{"token": {e.userinfo.Token()}}.Encode()
 	requestURI := host + cmd + "?" + vals
 	resp, err := http.Get(requestURI)
 	if err != nil {
