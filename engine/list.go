@@ -1,7 +1,6 @@
 package engine
 
 import (
-	"errors"
 	"fmt"
 	"github.com/codegangsta/cli"
 	"github.com/shinpei/comstock/model"
@@ -28,10 +27,7 @@ func ListAction(c *cli.Context) {
 }
 
 func (e *Engine) List() (err error) {
-	if e.storager.IsRequireLogin() == true && e.isLogin == false {
-		err = errors.New("Login required")
-		return
-	}
+	e.IsRequireLoginOrDie()
 	var hists []model.NaiveHistory
 	if hists, err = e.storager.List(e.userinfo); err != nil {
 		if _, ok := err.(*model.SessionExpiresError); ok {

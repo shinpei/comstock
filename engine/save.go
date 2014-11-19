@@ -2,7 +2,6 @@ package engine
 
 import (
 	"bufio"
-	"errors"
 	"fmt"
 	"github.com/codegangsta/cli"
 	"github.com/mattn/go-isatty"
@@ -38,10 +37,7 @@ func SaveAction(c *cli.Context) {
 
 func (e *Engine) Save(command string) (err error) {
 
-	if e.isLogin == false {
-		err = errors.New("Login required")
-		return
-	}
+	e.IsRequireLoginOrDie()
 	shellHistoryFilename := e.env.Homepath
 	handler, shellHistoryFilename := FetchShellHandler(e, shellHistoryFilename)
 

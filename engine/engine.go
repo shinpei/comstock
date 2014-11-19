@@ -214,3 +214,9 @@ func (e *Engine) Close() {
 func (e *Engine) Config() {
 	e.config.ShowConfig()
 }
+
+func (e *Engine) IsRequireLoginOrDie() {
+	if e.storager.IsRequireLogin() == true && e.isLogin == false {
+		log.Fatal("You haven't login. Please login first.")
+	}
+}

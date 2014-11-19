@@ -21,5 +21,7 @@ func PushAction(c *cli.Context) {
 }
 
 func (e *Engine) Push() (err error) {
+	e.IsRequireLoginOrDie()
+
 	return
 }

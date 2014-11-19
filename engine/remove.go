@@ -33,9 +33,7 @@ func RemoveAction(c *cli.Context) {
 }
 
 func (e *Engine) Remove(index int) (err error) {
-	if e.storager.IsRequireLogin() == true && e.isLogin == false {
-		log.Fatal("You have no valid access token. Please login first.")
-	}
+	e.IsRequireLoginOrDie()
 	if index < 1 {
 		log.Fatal("You cannot specify index as index < 1")
 	}
