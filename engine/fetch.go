@@ -15,6 +15,7 @@ var FetchCommand cli.Command = cli.Command{
 }
 
 func FetchAction(c *cli.Context) {
+
 	if len(c.Args()) == 0 {
 		fmt.Println("'get' requires #number argument, e.g., 'comstock get 1'.")
 		return
