@@ -1,3 +1,8 @@
+2014-11-19  Shinpei Nakata  <shinpei.nakata@gmail.com>
+	* adding Push stub
+	* Refactoring for authinfo==>token
+	* v0.2.0 basic apis are ready (save, list, remove, get)
+
 2014-10-07  Shinpei Nakata  <shinpei.nakata@gmail.com>
 
 	* Released version 0.1.9
