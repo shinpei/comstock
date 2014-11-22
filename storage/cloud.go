@@ -33,7 +33,7 @@ func CreateCloudStorager(host string) (h *CloudStorager) {
 
 func (cs *CloudStorager) Push(user *cmodel.AuthInfo, path string, ns *cmodel.NaiveHistory) (err error) {
 
-	command := "/postHistory"
+	command := "/postOne"
 	objStr, _ := json.Marshal(ns)
 
 	vals := url.Values{"history": {string(objStr)}, "token": {user.Token()}}.Encode()
@@ -94,7 +94,7 @@ func (cs *CloudStorager) List(user *cmodel.AuthInfo) (hists []cmodel.NaiveHistor
 
 func (cs *CloudStorager) FetchFromNumber(user *cmodel.AuthInfo, index int) (nh *cmodel.NaiveHistory, err error) {
 
-	command := "/fetchCommandFromNumber"
+	command := "/fetchOne"
 	vals := url.Values{"token": {user.Token()}, "number": {strconv.Itoa(index)}}.Encode()
 	requestURI := cs.StorageHost() + command + "?" + vals
 	resp, err := http.Get(requestURI)
