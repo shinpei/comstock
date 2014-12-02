@@ -1,3 +1,7 @@
+2014-12-02  Shinpei Nakata  <shinpei@Urquell.local>
+
+	* Release 0.2.0-pre released
+
 2014-11-19  Shinpei Nakata  <shinpei.nakata@gmail.com>
 	* adding Push stub
 	* Refactoring for authinfo==>token
