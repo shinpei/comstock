@@ -1,3 +1,4 @@
+// Small utilities for making unit tests easier
 package test
 
 import (

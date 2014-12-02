@@ -54,7 +54,11 @@ func (e *Engine) SetAuthInfo(tk string) {
 	e.token = tk
 }
 
-func NewEngine(version string, apiServer string) *Engine {
+// Create main instance of comstock api client
+// 1. detect environment
+// 2. check connectivity of storage engines
+// 3. prepare commands
+func CreateComstockCli(version string, apiServer string) *Engine {
 
 	env := NewEnv()
 	var config *Config
@@ -92,7 +96,7 @@ func NewEngine(version string, apiServer string) *Engine {
 	}
 
 	eng = &Engine{
-		App:       initApp(version),
+		App:       initCli(version),
 		token:     token,
 		isLogin:   isAlreadyLogin,
 		userinfo:  userinfo,
@@ -103,6 +107,7 @@ func NewEngine(version string, apiServer string) *Engine {
 	}
 	return eng
 }
+
 func createVersionFile(path string, version string) {
 	versioninfo := []byte(version)
 	ioutil.WriteFile(path, versioninfo, 0644)
@@ -156,7 +161,9 @@ func (e *Engine) flushAuthInfoOrRemove() {
 	}
 
 }
-func initApp(version string) *cli.App {
+
+//
+func initCli(version string) *cli.App {
 	app := cli.NewApp()
 	app.Version = version
 	app.Name = AppName

@@ -1,4 +1,4 @@
-// shell script parser
+// Shell script parser : will support bash/zsh
 package parser
 
 import ()
