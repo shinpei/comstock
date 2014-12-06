@@ -156,20 +156,20 @@ func getShell() (shell string) {
 		// this case, it's wrapper
 		ppid, err = getPPID(ppid)
 		if err != nil {
-			panic(err)
+			log.Fatal(err)
 		}
 		shell, err = getShellProcessName(ppid)
 	} else if strings.HasSuffix(shell, "sh") && !strings.HasSuffix(shell, "bash") {
 		// this case, it's wrapper
 		ppid, err = getPPID(ppid)
 		if err != nil {
-			panic(err)
+			log.Fatal(err)
 		}
 		shell, err = getShellProcessName(ppid)
 	}
 
 	if err != nil {
-		panic(err)
+		log.Fatal(err)
 	}
 	return
 }
