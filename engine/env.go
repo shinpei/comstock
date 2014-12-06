@@ -142,7 +142,8 @@ func getPPID(target int) (ppid int, err error) {
 	return
 }
 
-// get executing shell from ppid
+// Get parent shell from parent process.
+// This is critical for comstock
 func getShell() (shell string) {
 
 	shell = "unknown"
@@ -150,17 +151,18 @@ func getShell() (shell string) {
 	shell, err := getShellProcessName(ppid)
 	if err != nil {
 		// Couldn't get parent shell
+		log.Fatal("Coulnd't get parent shell")
 		return
 	}
 	if strings.HasSuffix(shell, "comstock") {
-		// this case, it's wrapper
+		// this case, it's a wrapper
 		ppid, err = getPPID(ppid)
 		if err != nil {
 			log.Fatal(err)
 		}
 		shell, err = getShellProcessName(ppid)
 	} else if strings.HasSuffix(shell, "sh") && !strings.HasSuffix(shell, "bash") {
-		// this case, it's wrapper
+		// this case, it's also a wrapper
 		ppid, err = getPPID(ppid)
 		if err != nil {
 			log.Fatal(err)
