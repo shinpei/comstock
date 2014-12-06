@@ -7,7 +7,7 @@ import (
 	"errors"
 	"fmt"
 	"io"
-
+	"log"
 	"os"
 	"os/exec"
 	"os/user"
@@ -29,7 +29,7 @@ func NewEnv() *Env {
 	var homeDir string
 	if err != nil {
 		// should warn?
-		homeDir = os.Getenv("HOME")
+		log.Fatal("Couldn't fetch user")
 	} else {
 		homeDir = user.HomeDir
 	}
