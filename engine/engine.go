@@ -60,7 +60,7 @@ func (e *Engine) SetAuthInfo(tk string) {
 // 3. prepare commands
 func CreateComstockCli(version string, apiServer string) *Engine {
 
-	env := NewEnv()
+	env := CreateEnv()
 	var config *Config
 	configPath := env.Compath + "/" + ConfigFileDefault
 	var s storage.Storager

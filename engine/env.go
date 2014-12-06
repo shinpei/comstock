@@ -24,7 +24,7 @@ type Env struct {
 	Shell    string
 }
 
-func NewEnv() *Env {
+func CreateEnv() *Env {
 	user, err := user.Current()
 	var homeDir string
 	if err != nil {
