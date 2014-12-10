@@ -204,8 +204,8 @@ func initCli(version string) *cli.App {
 }
 
 func (e *Engine) Run(args []string) error {
-	// initiation
 
+	// initiation
 	err := e.App.Run(args)
 	e.Close()
 	return err
