@@ -14,9 +14,11 @@ import (
 var ListCommand cli.Command = cli.Command{
 	Name:        "list",
 	ShortName:   "ls",
-	Description: "Show the list of stocked commands",
-	Usage:       "List stocked command",
-	Action:      ListAction,
+	Description: "List stocked commands",
+	Usage:       "List stocked command, default value is 15.",
+	Flags: []cli.Flag{
+		cli.IntFlag{Name: "number,n", Value: 15, Usage: "Give a number of how many items to list."}},
+	Action: ListAction,
 }
 
 func ListAction(c *cli.Context) {
