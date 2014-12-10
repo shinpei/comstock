@@ -13,9 +13,8 @@ import (
 )
 
 var ActionCommand cli.Command = cli.Command{
-	Name:      "save",
-	ShortName: "sv",
-	Usage:     "Save last executed command",
+	Name:  "save",
+	Usage: "Save last executed command",
 	Flags: []cli.Flag{
 		cli.StringFlag{Name: "shell, s", Value: "", Usage: "Forcly change the shell handler. for example, bash compatible shell can use 'bash'"},
 	},
