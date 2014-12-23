@@ -12,4 +12,6 @@ rm -rf pkg/
 gox \
     -os="${XC_OS}" \
     -arch="${XC_ARCH}" \
-    -output "pkg/{{.OS}}_{{.Arch}}/{{.Dir}}-cli"
+    -output "pkg/{{.OS}}_{{.Arch}}/{{.Dir}}-cli" \
+    -ldflags '-s'
+
