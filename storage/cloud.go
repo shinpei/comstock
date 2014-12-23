@@ -82,7 +82,8 @@ func (cs *CloudStorager) List(user *cmodel.AuthInfo) (hists []cmodel.NaiveHistor
 		err = &cmodel.SessionInvalidError{}
 		return
 	case http.StatusInternalServerError:
-		err = &cmodel.SessionExpiresError{}
+		// TODO: we have to move this for specific status code. 500 is too ambigous
+		err = (&cmodel.SessionExpiresError{}).SetError("Session expires, please login again with 'comstock login'")
 		return
 	default:
 		fmt.Println("Failed to fetch")
