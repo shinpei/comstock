@@ -35,8 +35,21 @@ func LoginAction(c *cli.Context) {
 }
 
 func (e *Engine) Login(loginServer string, u string, p string) {
-	// check login
-	// TODO: does storager requires login?
+
+	// TODO: integrate with isrequireLoginordie
+	if e.storager.IsRequireLogin() == false {
+		fmt.Println("Your storager doesn't require login")
+		return
+	}
+	if e.userinfo != nil {
+		// possibly already login
+		e.isLoginPolled = true
+		e.isLogin = e.storager.CheckSession(e.userinfo)
+		if e.isLogin == true {
+			fmt.Println("You already logged in. 'comstock logout' for force logout")
+			return
+		}
+	}
 
 	var mail string
 	var registeredNewMail bool
@@ -51,6 +64,7 @@ func (e *Engine) Login(loginServer string, u string, p string) {
 		mail = scanner.Text()
 		registeredNewMail = true
 	}
+
 	var password string
 	if p != "" {
 		password = p
@@ -58,6 +72,7 @@ func (e *Engine) Login(loginServer string, u string, p string) {
 		fmt.Printf("Password for %s?:", mail)
 		password, _ = gopass.GetPass("")
 	}
+	e.isLoginPolled = true
 	token, err := tryLoginWithMail(loginServer, mail, password)
 	if err != nil {
 		// TODO: register?

@@ -12,10 +12,15 @@ var LogoutCommand cli.Command = cli.Command{
 }
 
 func LogoutAction(c *cli.Context) {
-	if eng.IsLogin() == false {
-		fmt.Println("Already logout.")
+	if !eng.storager.IsRequireLogin() {
+		fmt.Println("You don't need to login for storager you set:", eng.storager.StorageType())
+	}
+	if eng.userinfo == nil {
+		fmt.Println("You're already logged out.")
 		return
 	}
+
+	eng.isLoginPolled = true
 	eng.Logout(eng.apiServer)
 	fmt.Println("Logout, done.")
 

@@ -28,14 +28,15 @@ var (
 )
 
 type Engine struct {
-	App       *cli.App
-	storager  storage.Storager // storage
-	userinfo  *model.AuthInfo
-	isLogin   bool
-	token     string
-	config    *Config
-	env       *Env
-	apiServer string
+	App           *cli.App
+	storager      storage.Storager // storage
+	userinfo      *model.AuthInfo
+	isLogin       bool
+	isLoginPolled bool
+	token         string
+	config        *Config
+	env           *Env
+	apiServer     string
 }
 
 func (e *Engine) IsLogin() bool {
@@ -95,14 +96,15 @@ func CreateComstockCli(version string, apiServer string) *Engine {
 	}
 
 	eng = &Engine{
-		App:       initCli(version),
-		token:     token,
-		isLogin:   false,
-		userinfo:  userinfo,
-		storager:  s,
-		env:       env,
-		config:    config,
-		apiServer: apiServer,
+		App:           initCli(version),
+		token:         token,
+		isLogin:       false,
+		isLoginPolled: false,
+		userinfo:      userinfo,
+		storager:      s,
+		env:           env,
+		config:        config,
+		apiServer:     apiServer,
 	}
 	return eng
 }
@@ -149,8 +151,10 @@ func readAuthInfo(env *Env) (tk string, mail string, err error) {
 func (e *Engine) RemoveLoginInfo() {
 	authFilePath := e.env.Compath + "/" + AuthFile
 	if _, err := os.Stat(authFilePath); os.IsNotExist(err) {
-		os.Remove(authFilePath)
+		// not exists
+		return
 	}
+	os.Remove(authFilePath)
 }
 
 // TODO: refact. make more low-level functions first
@@ -213,9 +217,15 @@ func (e *Engine) Run(args []string) error {
 	// initiation
 	err := e.App.Run(args)
 	if err != nil {
-		e.RemoveLoginInfo()
+		if e.isLoginPolled && !e.isLogin {
+			e.RemoveLoginInfo()
+		}
 	} else {
-		e.FlushLoginInfo()
+		if e.isLoginPolled && e.isLogin {
+			e.FlushLoginInfo()
+		} else if e.isLoginPolled && e.isLogin == false {
+			e.RemoveLoginInfo()
+		}
 	}
 	e.storager.Close()
 	return err
@@ -231,6 +241,7 @@ func (e *Engine) IsRequireLoginOrDie() {
 		if e.userinfo == nil {
 			e.userinfo = model.CreateUserinfo(e.token, e.config.User.Mail)
 		}
+		e.isLoginPolled = true
 		e.isLogin = e.storager.CheckSession(e.userinfo)
 		if e.isLogin == false {
 			log.Fatal("You haven't login. Please login first.")
