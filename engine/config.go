@@ -8,8 +8,9 @@ import (
 )
 
 var ConfigCommand cli.Command = cli.Command{
-	Name:  "config",
-	Usage: "Show comstock configuration",
+	Name:      "config",
+	ShortName: "cfg",
+	Usage:     "Show comstock configuration",
 	Action: func(c *cli.Context) {
 		eng.Config()
 	},

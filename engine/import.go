@@ -1,7 +1,6 @@
 package engine
 
 import (
-	"errors"
 	"fmt"
 	"github.com/codegangsta/cli"
 )
@@ -28,11 +27,7 @@ func ImportAction(c *cli.Context) {
 
 func (e *Engine) Import() (err error) {
 
-	if e.isLogin == false {
-		err = errors.New("Login required")
-		return
-	}
-
+	e.IsRequireLoginOrDie()
 	histFile := e.env.Homepath
 	handler, histFile := FetchShellHandler(e, histFile)
 	cmds, err := handler.ReadEveryHistory(histFile)

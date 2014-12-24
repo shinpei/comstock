@@ -73,7 +73,6 @@ func CreateComstockCli(version string, apiServer string) *Engine {
 		s = storage.CreateMongoStorager()
 	}
 
-	var isAlreadyLogin bool = false
 	token, mail, _ := readAuthInfo(env)
 	var userinfo *model.AuthInfo
 	if token != "" {
@@ -98,7 +97,7 @@ func CreateComstockCli(version string, apiServer string) *Engine {
 	eng = &Engine{
 		App:       initCli(version),
 		token:     token,
-		isLogin:   isAlreadyLogin,
+		isLogin:   false,
 		userinfo:  userinfo,
 		storager:  s,
 		env:       env,
@@ -147,19 +146,25 @@ func readAuthInfo(env *Env) (tk string, mail string, err error) {
 	return
 }
 
-func (e *Engine) flushAuthInfoOrRemove() {
+func (e *Engine) RemoveLoginInfo() {
+	authFilePath := e.env.Compath + "/" + AuthFile
+	if _, err := os.Stat(authFilePath); os.IsNotExist(err) {
+		os.Remove(authFilePath)
+	}
+}
+
+// TODO: refact. make more low-level functions first
+func (e *Engine) FlushLoginInfo() {
 	// write auth token
 	authFilePath := e.env.Compath + "/" + AuthFile
 	if e.IsLogin() {
+		// flush login info
 		buffer := bytes.NewBufferString("")
 		buffer.WriteString(e.config.User.Mail)
 		buffer.WriteString(SPLITTER)
 		buffer.WriteString(e.AuthInfo())
 		ioutil.WriteFile(authFilePath, []byte(buffer.String()), 0644)
-	} else {
-		os.Remove(authFilePath)
 	}
-
 }
 
 //
@@ -207,13 +212,13 @@ func (e *Engine) Run(args []string) error {
 
 	// initiation
 	err := e.App.Run(args)
-	e.Close()
-	return err
-}
-
-func (e *Engine) Close() {
+	if err != nil {
+		e.RemoveLoginInfo()
+	} else {
+		e.FlushLoginInfo()
+	}
 	e.storager.Close()
-	e.flushAuthInfoOrRemove()
+	return err
 }
 
 func (e *Engine) Config() {
