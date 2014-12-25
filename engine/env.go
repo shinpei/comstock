@@ -25,12 +25,15 @@ type Env struct {
 }
 
 func CreateEnv() *Env {
+
 	user, err := user.Current()
 	var homeDir string
 	if err != nil {
 		// should warn?
 		if runtime.GOOS != "linux" {
 			log.Fatal("Couldn't fetch user", err)
+		} else {
+			homeDir = os.Getenv("HOME")
 		}
 	} else {
 		homeDir = user.HomeDir

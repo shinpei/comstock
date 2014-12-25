@@ -3,4 +3,4 @@
 # shinpei(c)2014
 
 set -e 
-fc -l -n | tail -n 2 | head -n 1 | sed -e 's/^[[:space:]]*//'  | comstock-cli --shell bash save
+fc -l -n | tail -n 2 | head -n 1 | sed -e 's/^[[:space:]]*//'  | comstock-cli save --shell bash
