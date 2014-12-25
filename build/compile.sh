@@ -13,5 +13,6 @@ gox \
     -os="${XC_OS}" \
     -arch="${XC_ARCH}" \
     -output "pkg/{{.OS}}_{{.Arch}}/{{.Dir}}-cli" \
-    -ldflags '-s'
+    -ldflags '-w -s'
+
 

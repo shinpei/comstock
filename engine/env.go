@@ -29,7 +29,9 @@ func CreateEnv() *Env {
 	var homeDir string
 	if err != nil {
 		// should warn?
-		log.Fatal("Couldn't fetch user")
+		if runtime.GOOS != "linux" {
+			log.Fatal("Couldn't fetch user", err)
+		}
 	} else {
 		homeDir = user.HomeDir
 	}
